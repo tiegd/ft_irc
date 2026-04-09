@@ -9,3 +9,6 @@
 ## Ressources
 
 - https://ubuntu.com/tutorials/irc-server#1-overview
+- https://datatracker.ietf.org/doc/html/rfc1459
+- https://en.wikipedia.org/wiki/IRC
+- https://celeo.github.io/2021/06/18/Implementing-an-IRC-server-from-scratch-part-1/
