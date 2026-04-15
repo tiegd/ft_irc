@@ -14,3 +14,4 @@
 - https://broux.developpez.com/articles/c/sockets/
 - https://en.wikipedia.org/wiki/IRC
 - https://celeo.github.io/2021/06/18/Implementing-an-IRC-server-from-scratch-part-1/
+- https://mathieu-lemoine.developpez.com/tutoriels/irc/protocole/?page=page-3
