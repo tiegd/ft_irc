@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: amerzone <amerzone@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/09 12:20:30 by amerzone          #+#    #+#             */
-/*   Updated: 2026/04/14 13:28:20 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/04/15 16:00:37 by amerzone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,12 @@
 #include <netinet/in.h>
 #include <iostream>
 #include <unistd.h>
+#include <poll.h>
 
 // #define SERVER_PORT 1800
 #define	SOCKET int
 #define MAXLINE	4096
+#define MAXCLIENTS 10
 
 class Client;
 class Channel;
@@ -38,20 +40,34 @@ class Channel;
 class Server
 {
 	private:
-		SOCKET							_servSocket;
 		std::string						_name;
+		u_int16_t						_port;
 		std::string						_password;
-		std::map<std::string, Client>	_clients;
 
-		/*Une liste d'operator, a voir si on creer une class operator ou on utilise client*/
-		std::map<std::string, Channel>	_channels;
+		SOCKET							_socketServ;
+
+		std::vector<struct pollfd>		_fds;
+		// std::string						_addressIP;
+
+		// /*Une liste d'operator, a voir si on creer une class operator ou on utilise client*/
+		// std::map<std::string, Client>	_clients;
+		// std::map<std::string, Channel>	_channels;
 	
-		u_int64_t						_numberClients;
+		// u_int64_t						_numberClients;
 
-		std::string						_addressIP;
-		u_int8_t						_port;
+		Server( void );
+		Server( Server & copy );
+		Server & operator=( Server & rightSide );
 
 	public:
+		Server( std::string name, u_int16_t port, std::string password );
+		~Server( void );
+
+		/* SETTER */
+		void	setSocketServ( void );
+		// void	setPort( unsigned int port );
+		// void	setPassword( std::string password );
+
 	/* Fonction necessaire
 
 	{ PARSING }

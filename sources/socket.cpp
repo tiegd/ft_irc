@@ -12,6 +12,7 @@
 #define	SOCKET int
 #define MAXLINE	1024
 
+
 int main(void)
 {
 	SOCKET				listenfd, connfd, n;
@@ -21,9 +22,9 @@ int main(void)
 
 	// AF_INET => IPv4 Internet Protocol & SOCK_STREAM => it's a TCP socket
 	if ((listenfd = socket(AF_INET, SOCK_STREAM, 0)) < 0)
-	
+	{
 		std::cout << "Socket error" << std::endl;
-	
+	}
 	bzero(&servaddr, sizeof(servaddr));
 	servaddr.sin_family			= AF_INET;
 	servaddr.sin_addr.s_addr	= htonl(INADDR_ANY);
@@ -81,7 +82,7 @@ int main(void)
 					client = accept(listenfd, (struct sockaddr *) &client_addr, &addr_len);
 
 					// on l'ajoute au vector de tous nos client.
-					fds.push_back({client, POLLIN, 0});
+					fds.push_back({client, POLLIN, 0}); 
 					std::cout << "New client connected" << std::endl;
 				}
 				else // si le client existe deja
