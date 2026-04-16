@@ -7,6 +7,7 @@
 #include <unistd.h>
 #include <poll.h>
 #include <vector>
+#include <cerrno>
 
 #define SERVER_PORT 1800
 #define	SOCKET int
@@ -60,7 +61,7 @@ int main(void)
 	
 	for ( ; ; )
 	{
-		// Attendre un evenement sur les fds
+		// Attendre un evenement sur les fds, sinon bloque le temps que ca arrive
 		if (poll(fds.data(), fds.size(), -1) < 0)
 		{
 			std::cout << "poll error" << std::endl;
@@ -72,9 +73,9 @@ int main(void)
 		{
 			if (fds[i].revents & POLLIN) //Verifie dans revents si le POLLIN events est arrivé.
 			{
-				if (fds[i].fd == listenfd) // si on est sur le fd d'ecoute ca veut dire qu'un nouveau client essaye de communiquer
+				if (fds[i].fd == listenfd) // si c'est le fd d'ecoute qui declancher l'evenement pollin ca veut dire qu'un nouveau client essaye de se connecter.
 				{
-					// on creer le nouveau client.
+					// on ajoute le socket de la nouvelle connexion au vector de socket (fds).
 					struct sockaddr_in	client_addr;
 					socklen_t 			addr_len = sizeof(client_addr);
 					SOCKET				client;
@@ -105,17 +106,22 @@ int main(void)
 						std::string	message;
 						buff[bytes] = '\0';
 						message += buff;
-            			size_t pos;
-            			while ((pos = message.find('\n')) != std::string::npos) 
+						size_t pos;
+						while ((pos = message.find('\n')) != std::string::npos) 
 						{
-            			    std::string line = message.substr(0, pos);
-            			    message.erase(0, pos + 1);
-						
-            			    std::cout << "Client " << i << " dit : "  << line << std::endl;
+							std::string line = message.substr(0, pos);
+							message.erase(0, pos + 1);
+							parseCommand(line, _clients[fds[i].fd]);
+							std::cout << "Client " << i << " dit : "  << line << std::endl;
 						}
 					}
 				}
 			}
 		}
 	}
+}
+
+void	parseCommand( std::string const & line, Client *client )
+{
+
 }

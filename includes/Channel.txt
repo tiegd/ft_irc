@@ -6,12 +6,12 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 13:17:04 by amerzone          #+#    #+#             */
-/*   Updated: 2026/04/14 13:27:15 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/04/16 18:10:46 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef	CHANNEL.HPP
-#define CHANNEL.HPP
+#ifndef	CHANNEL_HPP
+#define CHANNEL_HPP
 
 #include "Server.hpp"
 #include "Client.hpp"

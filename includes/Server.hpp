@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amerzone <amerzone@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/09 12:20:30 by amerzone          #+#    #+#             */
-/*   Updated: 2026/04/15 16:00:37 by amerzone         ###   ########.fr       */
+/*   Updated: 2026/04/16 18:18:45 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@
 #define MAXCLIENTS 10
 
 class Client;
-class Channel;
+// class Channel;
 
 class Server
 {
@@ -50,9 +50,10 @@ class Server
 		// std::string						_addressIP;
 
 		// /*Une liste d'operator, a voir si on creer une class operator ou on utilise client*/
-		// std::map<std::string, Client>	_clients;
+		std::map<SOCKET, Client*>		_clients;
 		// std::map<std::string, Channel>	_channels;
-	
+		std::vector<std::string>		_nicknameAlreadyUsed;
+		
 		// u_int64_t						_numberClients;
 
 		Server( void );
@@ -67,6 +68,10 @@ class Server
 		void	setSocketServ( void );
 		// void	setPort( unsigned int port );
 		// void	setPassword( std::string password );
+
+		void	runServer( void );
+		void	addClientSocket( void );
+		void	parseCommand( std::string const & line, Client *client );
 
 	/* Fonction necessaire
 
@@ -86,7 +91,6 @@ class Server
 	- Checker si le channel est en invite-only.
 	- LIST : permet de connaitre tous les channels disponnible sur le server. (optionnel)
 	- PART : quitter le channel actuel. (optionnel)
-
 	*/
 };
 

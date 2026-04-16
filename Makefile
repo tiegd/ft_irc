@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: amerzone <amerzone@student.42.fr>          +#+  +:+       +#+         #
+#    By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/04/15 14:12:34 by amerzone          #+#    #+#              #
-#    Updated: 2026/04/15 15:00:29 by amerzone         ###   ########.fr        #
+#    Updated: 2026/04/16 18:18:19 by jpiquet          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,8 @@ OBJDIR = obj/
 
 SRC =	main.cpp \
 		sources/parsingArguments.cpp \
-		sources/Server.cpp
+		sources/Server.cpp \
+		sources/Client.cpp
 
 OBJ := $(addprefix $(OBJDIR), $(SRC:.cpp=.o))
 DEPS = $(OBJ:.o=.d)
