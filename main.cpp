@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amerzone <amerzone@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/15 12:32:06 by amerzone          #+#    #+#             */
-/*   Updated: 2026/04/15 15:00:04 by amerzone         ###   ########.fr       */
+/*   Updated: 2026/04/17 10:43:22 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,14 @@ int main( int ac, char **av )
 	}
 	// std::cout << " PORT : " << port << " PWD : " << pwd << std::endl;
 
-	Server	serv("CACA", port, pwd);
+	try
+	{
+		Server	serv("CACA", port, pwd);
+	}
+	catch(const std::exception& e)
+	{
+		std::cout << e.what() << std::endl;
+	}
 
 	return (0);
 }

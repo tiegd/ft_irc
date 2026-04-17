@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/09 12:18:51 by amerzone          #+#    #+#             */
-/*   Updated: 2026/04/16 18:19:28 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/04/17 10:57:46 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@ class Client
 		/*Username ne peut pas etre modifier mais n'est pas forcement unique*/
 		std::string						_username;
 		std::string						_hostname;
-		
 
+		bool							_registered;
 		/*Map de tous les channels rejoint par le client.*/
 		// std::map<std::string, Channel>	_joined;
 
@@ -36,12 +36,15 @@ class Client
 
 		Client( SOCKET sockClient );
 		~Client( void );
-		/* Fonction necessaire
 		
-		- Changer son nickname.
-		
-		*/
-		
+		/* GETTER */
+		SOCKET		getSocketClient( void ) const;
+		std::string	getNickname( void ) const;
+		bool		getRegister( void ) const;
+
+		/* SETTER */
+		void	setNickname( std::string const & newNickname );
+		void	setRegister( bool val );
 			
 };
 
