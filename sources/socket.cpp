@@ -111,7 +111,7 @@ int main(void)
 						{
 							std::string line = message.substr(0, pos);
 							message.erase(0, pos + 1);
-							parseCommand(line, _clients[fds[i].fd]);
+							// parseCommand(line, _clients[fds[i].fd]);
 							std::cout << "Client " << i << " dit : "  << line << std::endl;
 						}
 					}
@@ -119,9 +119,4 @@ int main(void)
 			}
 		}
 	}
-}
-
-void	parseCommand( std::string const & line, Client *client )
-{
-
 }

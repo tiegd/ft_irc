@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/09 12:20:30 by amerzone          #+#    #+#             */
-/*   Updated: 2026/04/17 11:02:48 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/04/20 19:02:31 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,12 @@
 #define	SOCKET int
 #define MAXLINE	4096
 #define MAXCLIENTS 10
+
+#define SPACE ' '
+
+#define FIRST_VALID_CHAR "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz{}|\\[]^_"
+#define ALL_VALID_CHAR "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789{}|\\[]^_"
+#define	INVALID_CHAR ": *?@!"
 
 class Client;
 // class Channel;
@@ -72,7 +78,17 @@ class Server
 
 		void	runServer( void );
 		void	addClientSocket( void );
-		void	parseCommand( std::string const & line, Client *client );
+		
+		// { PARSING }
+		void	parseCommand( std::string const & line, Client* client );
+		
+		// { COMMAND }
+		
+		void	PASS( std::string const & line, Client* client );
+		void	NICK( std::string const & line, Client* client );
+		// bool	validNickname( std::string const & line);
+		// bool	nicknameIsAvailable( std::string const & line );
+		// bool	noNicknameGiven( std::string const & line);
 
 	/* Fonction necessaire
 

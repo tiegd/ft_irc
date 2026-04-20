@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/16 17:03:42 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/04/17 10:59:32 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/04/20 17:53:44 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ Client::Client( void ) {}
 // 	return *this;
 // }
 
-Client::Client( SOCKET sockClient ) : _clientSocket(sockClient) {}
+Client::Client( SOCKET sockClient ) : _clientSocket(sockClient), _nickname("*") {}
 
 SOCKET		Client::getSocketClient( void ) const
 {
