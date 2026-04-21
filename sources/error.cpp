@@ -1,23 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   function.hpp                                       :+:      :+:    :+:   */
+/*   error.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/04/15 12:35:18 by amerzone          #+#    #+#             */
-/*   Updated: 2026/04/20 18:42:31 by jpiquet          ###   ########.fr       */
+/*   Created: 2026/04/20 16:27:20 by jpiquet           #+#    #+#             */
+/*   Updated: 2026/04/20 18:42:44 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FUNCTION_HPP
-#define FUNCTION_HPP
-
-#include <exception>
-#include <stdexcept>
-#include <iostream>
+#include "error.hpp"
 #include "Server.hpp"
+#include "Client.hpp"
 
-void	parseArg( int ac, char **av, u_int16_t & port, std::string & password );
-
-#endif
+/* FORMAT ERREUR : { :PREFIX CODE TARGET :message de l'erreur\r\n }*/
+void	sendError( Client *client, std::string prefix, std::string codeError ,std::string messageError)
+{
+	std::string msgToCLient = ":" + prefix + SPACE + codeError + SPACE + client->getNickname() + messageError;
+	send(client->getSocketClient(), msgToCLient.c_str(), msgToCLient.size(), 0);
+}

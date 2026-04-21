@@ -6,12 +6,14 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/15 12:42:23 by amerzone          #+#    #+#             */
-/*   Updated: 2026/04/16 18:13:32 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/04/20 19:10:19 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/Server.hpp"
-#include "../includes/Client.hpp"
+#include "Server.hpp"
+#include "Client.hpp"
+#include "function.hpp"
+#include "error.hpp"
 
 Server::Server( void ) {};
 
@@ -109,14 +111,39 @@ void	Server::runServer( void )
 	}
 }
 
-void	Server::parseCommand( std::string const & line , Client *client )
+bool	correctPassword( std::string const & line, std::string const & password)
 {
-	(void)client;
-	if (line == "PASS" && line == _password)
+	std::string temp(line);
+	
+	temp = temp.erase(0, 4);
+	if (temp.compare(password) == 0)
 	{
-		std::cout << "SAUCISSE" << std::endl;
+		return true;
+	}
+	else
+		return false;
+}
+
+void	Server::parseCommand( std::string const & line , Client* client )
+{
+	if (client->getRegister() == false)
+	{
+		/* VERIFY PASSWORD */
+		if (line.substr(0, 3) == "PASS" && line[4] == ' ')
+		{
+			PASS(line, client);
+		}
+		if (line.substr(0, 3) == "NICK" && line[4] == ' ')
+		{
+			NICK(line, client);
+		}
+		if (line.substr(0, 3) == "USER" && line[4] == ' ')
+		{
+			
+		}
 	}
 }
+
 
 void	Server::addClientSocket( void )
 {
@@ -136,7 +163,7 @@ void	Server::addClientSocket( void )
 	t_fd.revents = 0;
 	_fds.push_back(t_fd);
 
-	Client *newClient = new Client(client);
+	Client* newClient = new Client(client);
 	_clients[client] = newClient;
 
 	std::cout << "New client connected" << std::endl;
