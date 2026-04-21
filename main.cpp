@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/15 12:32:06 by amerzone          #+#    #+#             */
-/*   Updated: 2026/04/17 10:43:22 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/04/21 17:55:36 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ int main( int ac, char **av )
 	try
 	{
 		Server	serv("CACA", port, pwd);
+		serv.runServer();
 	}
 	catch(const std::exception& e)
 	{

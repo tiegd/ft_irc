@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/09 12:20:30 by amerzone          #+#    #+#             */
-/*   Updated: 2026/04/20 19:02:31 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/04/21 17:19:42 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,20 +15,23 @@
 
 /* GLOBAL */
 
+#include <iostream>
 #include <string>
 #include <vector>
 #include <map>
-#include <cstdbool>
+#include <stdbool.h>
 
 /* SOCKET */
 #include <sys/socket.h>
 #include <sys/types.h>
+#include <netinet/in.h>
+#include <poll.h>
 #include <string.h>
 #include <stdlib.h>
-#include <netinet/in.h>
-#include <iostream>
 #include <unistd.h>
-#include <poll.h>
+
+/* {MY HEADERS} */
+#include "error_IRC.hpp"
 
 // #define SERVER_PORT 1800
 #define	SOCKET int
@@ -86,6 +89,7 @@ class Server
 		
 		void	PASS( std::string const & line, Client* client );
 		void	NICK( std::string const & line, Client* client );
+		void	USER( std::string const & line, Client* client );
 		// bool	validNickname( std::string const & line);
 		// bool	nicknameIsAvailable( std::string const & line );
 		// bool	noNicknameGiven( std::string const & line);

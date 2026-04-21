@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/16 17:03:42 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/04/20 17:53:44 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/04/21 18:12:07 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ Client::Client( void ) {}
 
 // Client::Client( Client const & src )
 // {
-// 	//std::cout << "Copy constructor called" << std::endl;
 // }
 
 // Client & Client::operator=( Client const & rightSide )
@@ -26,33 +25,18 @@ Client::Client( void ) {}
 // 	return *this;
 // }
 
-Client::Client( SOCKET sockClient ) : _clientSocket(sockClient), _nickname("*") {}
+Client::Client( SOCKET sockClient ) : _clientSocket(sockClient), _nickname("*"), _username("*"), _registered(false) {}
 
-SOCKET		Client::getSocketClient( void ) const
-{
-	return _clientSocket;
-}
+/* { SETTER } */
+void		Client::setNickname( std::string const & newNickname )	{ _nickname = newNickname; }
+void		Client::setRegister( bool val )							{ _registered = val; }
+void		Client::setUsername( std::string const & username )		{ _username = username; }
+void		Client::setHostname( std::string const & hostname )		{ _hostname = hostname; }
 
-void		Client::setNickname( std::string const & newNickname )
-{
-	_nickname = newNickname;
-}
-
-std::string	Client::getNickname( void ) const
-{
-	return _nickname;
-}
-
-bool		Client::getRegister( void ) const
-{
-	return _registered;
-}
-
-void		Client::setRegister( bool val )
-{
-	_registered = val;
-}
-
-
+/* { GETTER } */
+SOCKET		Client::getSocketClient( void ) const					{ return _clientSocket; }
+std::string	Client::getNickname( void ) const						{ return _nickname; }
+bool		Client::getRegister( void ) const						{ return _registered; }
+std::string	Client::getUsername( void ) const						{ return _username; }
 
 Client::~Client( void ) {}
