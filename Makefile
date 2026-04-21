@@ -14,6 +14,7 @@ NAME = ft_irc
 
 CXX = c++
 
+#FLAGS = -Wall -Wextra -Werror -MMD -std=c++98 -g3
 FLAGS = -Wall -Wextra -Werror -MMD -std=c++98 -g3
 
 INC = includes
