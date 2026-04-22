@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/15 12:42:23 by amerzone          #+#    #+#             */
-/*   Updated: 2026/04/22 18:17:10 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/04/22 19:13:07 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,11 @@ void	Server::parseCommand( std::string const & line , Client* client )
 		}
 		if (line.compare(0, 4, "JOIN") && (line[4] == ' ' || line.size() == 4))
 		{
-			// JOIN();
+			JOIN(line, client);
+		}
+		if (line.compare(0, 4, "PRIVMSG") && (line[4] == ' ' || line.size() == 4))
+		{
+			PRIVMSG(line, client);
 		}
 	}
 }
