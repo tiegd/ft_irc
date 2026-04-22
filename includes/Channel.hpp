@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/08 13:17:04 by amerzone          #+#    #+#             */
-/*   Updated: 2026/04/16 18:10:46 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/04/22 18:29:42 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,13 @@ class Channel
 		
 		- NAMES: afficher toutes la liste des personnes presentes sur le channel. (optionnel)
 
+		- Fonction permettant de supprimer un client du channel.
 		*/
+
+		// { GETTER }
+		bool	hasPassword( void ) const;
+
+		// { SETTER }
 		
 };
 

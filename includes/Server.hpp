@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/09 12:20:30 by amerzone          #+#    #+#             */
-/*   Updated: 2026/04/21 17:19:42 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/04/22 18:02:08 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@
 
 /* {MY HEADERS} */
 #include "error_IRC.hpp"
+#include "Channel.hpp"
 
 // #define SERVER_PORT 1800
 #define	SOCKET int
@@ -61,7 +62,7 @@ class Server
 
 		// /*Une liste d'operator, a voir si on creer une class operator ou on utilise client*/
 		std::map<SOCKET, Client*>		_clients;
-		// std::map<std::string, Channel>	_channels;
+		std::map<std::string, Channel*>	_channels;
 		std::vector<std::string>		_nicknameAlreadyUsed;
 		
 		// u_int64_t						_numberClients;
@@ -90,10 +91,13 @@ class Server
 		void	PASS( std::string const & line, Client* client );
 		void	NICK( std::string const & line, Client* client );
 		void	USER( std::string const & line, Client* client );
+		void	JOIN( std::string const & line, Client* client );
 		// bool	validNickname( std::string const & line);
 		// bool	nicknameIsAvailable( std::string const & line );
 		// bool	noNicknameGiven( std::string const & line);
 
+		void	createChannel(std::string nameChannel);
+	
 	/* Fonction necessaire
 
 	{ PARSING }

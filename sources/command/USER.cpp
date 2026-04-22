@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/21 09:44:33 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/04/21 19:09:02 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/04/22 13:39:44 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	Server::USER( std::string const & line, Client* client )
 	std::cout << first_part << std::endl;
 	std::cout << realname << std::endl;
 
-	std::vector<std::string>	splitParams = split(first_part);
+	std::vector<std::string>	splitParams = split(first_part, SPACE);
 	if (splitParams.size() != 3)
 	{
 		sendError(client, _name, ERR_NEEDMOREPARAMS, "USER :Not enough parameters");
@@ -54,7 +54,7 @@ void	Server::USER( std::string const & line, Client* client )
 	client->setHostname(splitParams[1]);
 }
 
-std::vector<std::string>	split( std::string & str )
+std::vector<std::string>	split( std::string & str, char c )
 {
 	std::vector<std::string>	strvec;
 	size_t index = 0;
@@ -62,7 +62,7 @@ std::vector<std::string>	split( std::string & str )
 
 	while (index < str.size())
 	{
-		pos = str.find(' ', index);
+		pos = str.find(c, index);
 		if (pos == std::string::npos)
 		{
 			strvec.push_back(str.substr(index, str.size()));

@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/09 12:18:51 by amerzone          #+#    #+#             */
-/*   Updated: 2026/04/21 18:05:05 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/04/22 18:18:51 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,11 @@ class Client
 		bool							_registered;
 		/*Map de tous les channels rejoint par le client.*/
 		// std::map<std::string, Channel>	_joined;
+		// peut rejoindre 10 channel maximum
 
 		Client( void );
+		Client( Client const& src );
+		Client & operator=(Client const& rightSide);
 		
 	public:
 

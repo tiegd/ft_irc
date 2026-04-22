@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/15 12:42:23 by amerzone          #+#    #+#             */
-/*   Updated: 2026/04/21 19:16:21 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/04/22 18:17:10 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,22 +113,27 @@ void	Server::runServer( void )
 
 void	Server::parseCommand( std::string const & line , Client* client )
 {
-	// std::cout << "HELLO"
-	if (line.substr(0, 4) == "PASS" && (line[4] == ' ' || line[4] == '\0'))
+	if (line.size() >= 4)
 	{
-		PASS(line, client);
-		std::cout << "parseCommand => PASS " << std::endl;
-	}
-	if (line.substr(0, 4) == "NICK" && line[4] == ' ')
-	{
-		NICK(line, client);
-	}
-	if (line.substr(0, 4) == "USER" && line[4] == ' ')
-	{
-		USER(line, client);
+		if (line.compare(0, 4, "PASS") && (line[4] == ' ' || line.size() == 4))
+		{
+			PASS(line, client);
+			std::cout << "parseCommand => PASS " << std::endl;
+		}
+		if (line.compare(0, 4, "NICK") && (line[4] == ' ' || line.size() == 4))
+		{
+			NICK(line, client);
+		}
+		if (line.compare(0, 4, "USER") && (line[4] == ' ' || line.size() == 4))
+		{
+			USER(line, client);
+		}
+		if (line.compare(0, 4, "JOIN") && (line[4] == ' ' || line.size() == 4))
+		{
+			// JOIN();
+		}
 	}
 }
-
 
 void	Server::addClientSocket( void )
 {
@@ -167,4 +172,9 @@ void	Server::addClientSocket( void )
 	// 	message.erase(0, pos + 1);
 	// 	createClient(line);
 	// }
+}
+
+void	Server::createChannel( std::string nameChannel )
+{
+	_channels[nameChannel] = new Channel(nameChannel);
 }

@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/20 17:33:30 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/04/21 17:26:51 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/04/22 17:33:05 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,9 @@
 
 #define ERR_PASSWDMISMATCH		"464" // :Password incorrect
 #define ERR_NEEDMOREPARAMS		"461" // <command> :Not enough parameters
+
+#define ERR_BADCHANMASK			"476" // :Bad channel mask
+#define	ERR_BADCHANNELKEY		"475" // <channel> :Cannot join channel (+k)
 
 class Client;
 #include <string>
