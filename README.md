@@ -51,8 +51,18 @@ flowchart TB
         S1@{label: list cmd}
         S2@{label: list channels}
         S3@{label: list clients}
+        subgraph channels
+            C1@{label: Channel_1}
+            C2@{label: Channel_2}
+            C3@{label: Channel_3}
+        end
     end
-    A@{ shape: stadium, label: Client}
+    subgraph clients
+        Cl1@{label: Client_1}
+        Cl2@{label: Client_2}
+        Cl3@{label: Client_3}
+    end
+    %% A@{ shape: stadium, label: Client}
     C@{label: Parser prompt}
     D@{label: Parser cmd}
     E@{label: Msg}
@@ -72,7 +82,7 @@ flowchart TB
     Q@{label: call some methode depending of parameters}
 
 
-    A --> |prompt| Server
+    clients --> |prompt| Server
     Server --> C
     C --> E
     C --> F
