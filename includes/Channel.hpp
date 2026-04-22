@@ -28,7 +28,8 @@ class Channel
 
 		void addUser(Client client); //add a new user whene a client use join
 		void kick(Client client); //Remove the client specified in parameter and call the destructor if _n_members == 0
-		void invite(Client client);
+		// void invite(Client client);
+		void displayTopic();
 		void changeTopic();
 		void setPassword(std::string password); //set the password if mode's parameter is +k
 		void rmPassword(); //remove the password if mode's parameter is -k
@@ -36,5 +37,7 @@ class Channel
 		void rmOperator(Client client);
 		void limitNbUsers(int nb_user);
 		void listUsers();
+
+		std::vector<Client> getUsers();
 };
 

@@ -45,6 +45,54 @@ flowchart LR
     linkStyle 9 stroke:#00ffff
 ```
 
+```mermaid
+flowchart TB
+    subgraph Server
+        S1@{label: list cmd}
+        S2@{label: list channels}
+        S3@{label: list clients}
+    end
+    A@{ shape: stadium, label: Client}
+    C@{label: Parser prompt}
+    D@{label: Parser cmd}
+    E@{label: Msg}
+    F@{label: Cmd}
+
+    H@{label: JOIN}
+    I@{label: KICK}
+    J@{label: INVITE}
+    K@{label: TOPIC}
+    L@{label: MODE}
+
+    M@{label: channel.addUser}
+    MM@{label: Channel constructor}
+    N@{label: channel.kick}
+    O@{label: }
+    P@{label: channel.displayTopic}
+    Q@{label: call some methode depending of parameters}
+
+
+    A --> |prompt| Server
+    Server --> C
+    C --> E
+    C --> F
+    F --> D
+    D -.- |match checker| Server
+
+    S1 --- H
+    S1 --- I
+    S1 --- J
+    S1 --- K
+    S1 --- L
+
+    H -.- M
+    H -.- MM
+    I -.- N
+    J -.- O
+    K -.- P
+    L -.- Q
+```
+
 ## Instruction
 
 ## Ressources
