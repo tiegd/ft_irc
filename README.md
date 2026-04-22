@@ -25,7 +25,7 @@ flowchart LR
 
     D e3@-->|Connect to server| A
     e3@{ animate: true }
-    linkStyle 2 stroke:#fff000
+    linkStyle 2 stroke:#00ffff
 
     A e4@-->E
     linkStyle 3 stroke:#ff0000
@@ -37,12 +37,12 @@ flowchart LR
     A e5@-->F
     linkStyle 6 stroke:#00ff00
     A e5@-->F
-    linkStyle 7 stroke:#fff000
+    linkStyle 7 stroke:#00ffff
 
     A e5@-->G
     linkStyle 8 stroke:#00ff00
     A e5@-->G
-    linkStyle 9 stroke:#fff000
+    linkStyle 9 stroke:#00ffff
 ```
 
 ## Instruction
