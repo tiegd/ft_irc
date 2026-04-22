@@ -4,6 +4,47 @@
 
 ## Description
 
+```mermaid
+flowchart LR
+    A@{ shape: cyl, label: "Server" }
+    B@{ shape: stadium, label: "Client_1" }
+    C@{ shape: stadium, label: "Client_2" }
+    D@{ shape: stadium, label: "Client_3" }
+
+    E@{ shape: circle, label: "Channel_1" }
+    F@{ shape: circle, label: "Channel_2" }
+    G@{ shape: circle, label: "Channel_3" }
+
+    B e1@-->|Connect to server| A
+    e1@{ animate: true }
+    linkStyle 0 stroke:#ff0000
+
+    C e2@-->|Connect to server| A
+    e2@{ animate: true }
+    linkStyle 1 stroke:#00ff00
+
+    D e3@-->|Connect to server| A
+    e3@{ animate: true }
+    linkStyle 2 stroke:#fff000
+
+    A e4@-->E
+    linkStyle 3 stroke:#ff0000
+    A e5@-->E
+    linkStyle 4 stroke:#00ff00
+
+    A e4@-->F
+    linkStyle 5 stroke:#ff0000
+    A e5@-->F
+    linkStyle 6 stroke:#00ff00
+    A e5@-->F
+    linkStyle 7 stroke:#fff000
+
+    A e5@-->G
+    linkStyle 8 stroke:#00ff00
+    A e5@-->G
+    linkStyle 9 stroke:#fff000
+```
+
 ## Instruction
 
 ## Ressources

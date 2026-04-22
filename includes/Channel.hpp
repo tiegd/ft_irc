@@ -23,9 +23,10 @@ class Channel
 		std::map<std::string, void (*)()>	_mode;
 		unsigned int				_n_members;
 	public:
-		Channel();
+		Channel(std::string channel_name, Client client);
 		~Channel();
 
+		void addUser(Client client); //add a new user whene a client use join
 		void kick(Client client); //Remove the client specified in parameter and call the destructor if _n_members == 0
 		void invite(Client client);
 		void changeTopic();
@@ -34,5 +35,6 @@ class Channel
 		void addOperator(Client client);
 		void rmOperator(Client client);
 		void limitNbUsers(int nb_user);
+		void listUsers();
 };
 
