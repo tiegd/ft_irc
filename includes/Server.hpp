@@ -18,7 +18,7 @@
 #include <string>
 #include <vector>
 #include <map>
-#include <cstdbool>
+// #include <cstdbool>
 
 /* SOCKET */
 #include <sys/socket.h>

@@ -12,12 +12,23 @@
 
 #include "Channel.hpp"
 
-Channel::Channel(std::string channel_name, Client operator) : _name(channel_name), _operator(operator), _n_members(1)
+Channel::Channel()
 {
+}
 
+Channel::Channel(std::string channel_name, Client operator) : _name(channel_name), _n_members(1), _invite_only(false), _n_members(1), _inviteOnly(false), _restrictionTopic(false), _hasPassword(false), _hasTopic(false), _hasLimit(false) 
+{
+	// Ajouter l'operator dans la liste des operator et celle des users
+	// Initialiser la map de modes.
 }
 
 Channel::~Channel()
 {
+	// Delete les vectors et maps.
+}
+
+std::string Channel::setName(std::string name)
+{
+	this._name = name;
 }
 

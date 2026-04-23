@@ -10,7 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#ifndef CHANNEL_HPP
+#define CHANNEL_HPP
+
 #include "Client.hpp"
+#include <sys/types.h>
 
 class Channel
 {
@@ -21,23 +25,58 @@ class Channel
 		std::vector<Client>			_operator;
 		std::string				_topic;
 		std::map<std::string, void (*)()>	_mode;
-		unsigned int				_n_members;
+		unsigned int				_nbMembers;
+
+		bool					_inviteOnly; //i
+		bool					_restrictionTopic; //t
+		bool					_hasPassword; //k
+		bool					_hasTopic;
+		bool					_hasLimit;
+		u_int64_t				_userLimit; //l
+
+		Channel();
 	public:
-		Channel(std::string channel_name, Client client);
+		Channel(std::string channel_name, Client opperator);
 		~Channel();
 
-		void addUser(Client client); //add a new user whene a client use join
-		void kick(Client client); //Remove the client specified in parameter and call the destructor if _n_members == 0
 		// void invite(Client client);
 		void displayTopic();
 		void changeTopic();
-		void setPassword(std::string password); //set the password if mode's parameter is +k
-		void rmPassword(); //remove the password if mode's parameter is -k
-		void addOperator(Client client);
-		void rmOperator(Client client);
+		
 		void limitNbUsers(int nb_user);
 		void listUsers();
 
-		std::vector<Client> getUsers();
+		//getters
+		std::string				getName();
+		std::string				getPassword();
+		std::vector<Client>			getUsers();
+		std::vector<Client>			getOperators();
+		std::string				getTopic();
+		std::map<std::string, void (*)()>	getMode();
+		unsigned int				getNbMembers();
+		bool					getInvitOnly();
+		bool					getResTopic();
+		bool					getHasPassword();
+		bool					getHasTopic();
+		bool					getHasLimit();
+		u_int64_t				getUserLimit();
+
+		//setters
+		void	setName(std::string name);
+		void	setPassword(std::string password); //set the password if mode's parameter is +k
+		void	rmPassword(); //remove the password if mode's parameter is -k
+		void	addUser(Client client); //add a new user whene a client use join
+		void	kick(Client client); //Remove the client specified in parameter and call the destructor if _n_members == 0
+		void	addOperator(Client client);
+		void	rmOperator(Client client);
+		void	setTopic(std::string topic);
+		void	setInvitOnly(bool arg);
+		void	setResTopic(bool arg);
+		void	setHasPassword(bool arg);
+		void	setHasTopic(bool arg);
+		void	setHasLimit(bool arg);
+		void	setUserLimit(u_int64_t nb);
 };
+
+#endif
 
