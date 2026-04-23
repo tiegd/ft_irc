@@ -6,18 +6,22 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/20 18:34:09 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/04/20 19:06:01 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/04/23 09:15:54 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 #include "Client.hpp"
-#include "error.hpp"
+
+bool	correctPassword( std::string const & line, std::string const & password);
 
 void	Server::PASS(std::string const & line, Client* client)
 {
 	if (client->getRegister() == true)
+	{
 		sendError(client, _name, ERR_ALREADYREGISTRED, ":You may not reregister");
+		throw std::invalid_argument("already registered");
+	}
 	if (correctPassword(line, _password) == false)
 	{
 		sendError(client, _name, ERR_PASSWDMISMATCH, ":Password incorrect");
@@ -29,7 +33,8 @@ bool	correctPassword( std::string const & line, std::string const & password)
 {
 	std::string temp(line);
 	
-	temp = temp.erase(0, 4);
+	temp.erase(0, 5);
+	std::cout << "pass receive : " << temp << std::endl;
 	if (temp.compare(password) == 0)
 	{
 		return true;

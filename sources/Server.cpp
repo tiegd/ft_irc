@@ -6,14 +6,13 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/15 12:42:23 by amerzone          #+#    #+#             */
-/*   Updated: 2026/04/20 19:10:19 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/04/23 13:14:21 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 #include "Client.hpp"
 #include "function.hpp"
-#include "error.hpp"
 
 Server::Server( void ) {};
 
@@ -58,7 +57,6 @@ void	Server::setSocketServ( void )
 void	Server::runServer( void )
 {
 	char	buff[1024];
-	// SOCKET	socketServ = _fds[0].fd;
 	
 	while (true)
 	{
@@ -100,9 +98,11 @@ void	Server::runServer( void )
 						while ((pos = message.find("\r\n")) != std::string::npos) 
 						{
 							std::string line = message.substr(0, pos);
-							message.erase(0, pos + 2);
-							parseCommand(line, _clients[_fds[i].fd]);
 							std::cout << "Client " << i << " dit : "  << line << std::endl;
+							message.erase(0, pos + 1);
+							parseCommand(line, _clients[_fds[i].fd]);
+							if (_clients[_fds[i].fd]->getNickname() != "*" && _clients[_fds[i].fd]->getUsername() != "*")
+								_clients[_fds[i].fd]->setRegister(true);
 						}
 					}
 				}
@@ -111,39 +111,33 @@ void	Server::runServer( void )
 	}
 }
 
-bool	correctPassword( std::string const & line, std::string const & password)
-{
-	std::string temp(line);
-	
-	temp = temp.erase(0, 4);
-	if (temp.compare(password) == 0)
-	{
-		return true;
-	}
-	else
-		return false;
-}
-
 void	Server::parseCommand( std::string const & line , Client* client )
 {
-	if (client->getRegister() == false)
+	if (line.size() >= 4)
 	{
-		/* VERIFY PASSWORD */
-		if (line.substr(0, 3) == "PASS" && line[4] == ' ')
+		if (line.compare(0, 4, "PASS") && (line[4] == ' ' || line.size() == 4))
 		{
 			PASS(line, client);
+			std::cout << "parseCommand => PASS " << std::endl;
 		}
-		if (line.substr(0, 3) == "NICK" && line[4] == ' ')
+		if (line.compare(0, 4, "NICK") && (line[4] == ' ' || line.size() == 4))
 		{
 			NICK(line, client);
 		}
-		if (line.substr(0, 3) == "USER" && line[4] == ' ')
+		if (line.compare(0, 4, "USER") && (line[4] == ' ' || line.size() == 4))
 		{
-			
+			USER(line, client);
+		}
+		if (line.compare(0, 4, "JOIN") && (line[4] == ' ' || line.size() == 4))
+		{
+			JOIN(line, client);
+		}
+		if (line.compare(0, 4, "PRIVMSG") && (line[4] == ' ' || line.size() == 4))
+		{
+			PRIVMSG(line, client);
 		}
 	}
 }
-
 
 void	Server::addClientSocket( void )
 {
@@ -182,4 +176,9 @@ void	Server::addClientSocket( void )
 	// 	message.erase(0, pos + 1);
 	// 	createClient(line);
 	// }
+}
+
+void	Server::createChannel( std::string nameChannel )
+{
+	_channels[nameChannel] = new Channel(nameChannel);
 }

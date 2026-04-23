@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/09 12:18:51 by amerzone          #+#    #+#             */
-/*   Updated: 2026/04/17 10:57:46 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/04/22 18:18:51 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #define CLIENT_HPP
 
 #include "Server.hpp"
+#define	SOCKET int
 // #include "Channel.hpp"
 
 class Client
@@ -29,8 +30,11 @@ class Client
 		bool							_registered;
 		/*Map de tous les channels rejoint par le client.*/
 		// std::map<std::string, Channel>	_joined;
+		// peut rejoindre 10 channel maximum
 
 		Client( void );
+		Client( Client const& src );
+		Client & operator=(Client const& rightSide);
 		
 	public:
 
@@ -40,10 +44,13 @@ class Client
 		/* GETTER */
 		SOCKET		getSocketClient( void ) const;
 		std::string	getNickname( void ) const;
+		std::string	getUsername( void ) const;
 		bool		getRegister( void ) const;
 
 		/* SETTER */
 		void	setNickname( std::string const & newNickname );
+		void	setUsername( std::string const & newNickname );
+		void	setHostname( std::string const & newNickname );
 		void	setRegister( bool val );
 			
 };
