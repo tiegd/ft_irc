@@ -6,88 +6,79 @@
 
 ```mermaid
 flowchart LR
-    A@{ shape: cyl, label: "Server" }
-    B@{ shape: stadium, label: "Client_1" }
-    C@{ shape: stadium, label: "Client_2" }
-    D@{ shape: stadium, label: "Client_3" }
-
-    E@{ shape: circle, label: "Channel_1" }
-    F@{ shape: circle, label: "Channel_2" }
-    G@{ shape: circle, label: "Channel_3" }
-
-    B e1@-->|Connect to server| A
-    e1@{ animate: true }
-    linkStyle 0 stroke:#ff0000
-
-    C e2@-->|Connect to server| A
-    e2@{ animate: true }
-    linkStyle 1 stroke:#00ff00
-
-    D e3@-->|Connect to server| A
-    e3@{ animate: true }
-    linkStyle 2 stroke:#00ffff
-
-    A e4@-->E
-    linkStyle 3 stroke:#ff0000
-    A e5@-->E
-    linkStyle 4 stroke:#00ff00
-
-    A e4@-->F
-    linkStyle 5 stroke:#ff0000
-    A e5@-->F
-    linkStyle 6 stroke:#00ff00
-    A e5@-->F
-    linkStyle 7 stroke:#00ffff
-
-    A e5@-->G
-    linkStyle 8 stroke:#00ff00
-    A e5@-->G
-    linkStyle 9 stroke:#00ffff
-```
-
-```mermaid
-flowchart TB
     subgraph Server
         S1@{label: list cmd}
-        S2@{label: list channels}
-        S3@{label: list clients}
         subgraph channels
-            C1@{label: Channel_1}
-            C2@{label: Channel_2}
-            C3@{label: Channel_3}
+            subgraph channel_1
+                C01@{label: Client_1}
+                style C01 fill:#ff0000,stroke:#333,stroke-width:4px
+                C02@{label: Client_2}
+                style C02 fill:#66cc99,stroke:#333,stroke-width:4px
+            end
+            subgraph channel_2
+                C11@{label: Client_1}
+                style C11 fill:#ff0000,stroke:#333,stroke-width:4px
+                C12@{label: Client_2}
+                style C12 fill:#66cc99,stroke:#333,stroke-width:4px
+                C13@{label: Client_3}
+                style C13 fill:#99ccff,stroke:#333,stroke-width:4px
+            end
+            subgraph channel_3
+                C22@{label: Client_2}
+                style C22 fill:#66cc99,stroke:#333,stroke-width:4px
+                C23@{label: Client_3}
+                style C23 fill:#99ccff,stroke:#333,stroke-width:4px
+            end
         end
+        subgraph lst[list cmd]
+            H@{label: JOIN}
+            I@{label: KICK}
+            J@{label: INVITE}
+            K@{label: TOPIC}
+            L@{label: MODE}
+            M@{label: channel.addUser}
+            MM@{label: Channel constructor}
+            N@{label: channel.kick}
+            O@{label: }
+            P@{label: channel.displayTopic}
+            Q@{label: call some methode depending of parameters}
+        end
+        C@{label: Parser prompt}
+        D@{label: Parser cmd}
+        E@{label: Msg}
+        F@{label: Cmd}
+        subgraph lstclt[list clients]
+            Cl11@{label: Client_1}
+            style Cl11 fill:#ff0000,stroke:#333,stroke-width:4px
+            Cl12@{label: Client_2}
+            style Cl12 fill:#66cc99,stroke:#333,stroke-width:4px
+            Cl13@{label: Client_3}
+            style Cl13 fill:#99ccff,stroke:#333,stroke-width:4px
+        end
+
     end
-    subgraph clients
-        Cl1@{label: Client_1}
-        Cl2@{label: Client_2}
-        Cl3@{label: Client_3}
-    end
-    %% A@{ shape: stadium, label: Client}
-    C@{label: Parser prompt}
-    D@{label: Parser cmd}
-    E@{label: Msg}
-    F@{label: Cmd}
+    Cl1@{label: Client_1}
+    style Cl1 fill:#ff0000,stroke:#333,stroke-width:4px
+    Cl2@{label: Client_2}
+    style Cl2 fill:#66cc99,stroke:#333,stroke-width:4px
+    Cl3@{label: Client_3}
+    style Cl3 fill:#99ccff,stroke:#333,stroke-width:4px
 
-    H@{label: JOIN}
-    I@{label: KICK}
-    J@{label: INVITE}
-    K@{label: TOPIC}
-    L@{label: MODE}
+    style Server fill:#003366,stroke:#333,stroke-width:4px
+    style lst fill:#336633,stroke:#333,stroke-width:4px
+    style channels fill:#330033,stroke:#333,stroke-width:4px
+    style lstclt fill:#330000,stroke:#333,stroke-width:4px
 
-    M@{label: channel.addUser}
-    MM@{label: Channel constructor}
-    N@{label: channel.kick}
-    O@{label: }
-    P@{label: channel.displayTopic}
-    Q@{label: call some methode depending of parameters}
+    S11[(Another Server)] 
+    S12[(Another Server)] 
 
-
-    clients --> |prompt| Server
-    Server --> C
+    Cl1 --> |prompt| C
+    Cl2 --> |prompt| C
+    Cl3 --> |prompt| C
     C --> E
     C --> F
     F --> D
-    D -.- |match checker| Server
+    D -.- |match checker| S1
 
     S1 --- H
     S1 --- I
@@ -101,6 +92,12 @@ flowchart TB
     J -.- O
     K -.- P
     L -.- Q
+
+    E --> |send message| channel_1
+    lst --> |execute command| channel_1
+
+    Server --- S11
+    Server --- S12 
 ```
 
 ## Instruction
