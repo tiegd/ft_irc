@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/20 18:34:09 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/04/21 19:04:39 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/04/23 09:15:54 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ bool	correctPassword( std::string const & line, std::string const & password)
 {
 	std::string temp(line);
 	
-	temp = temp.erase(0, 5);
+	temp.erase(0, 5);
 	std::cout << "pass receive : " << temp << std::endl;
 	if (temp.compare(password) == 0)
 	{

@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/09 12:20:30 by amerzone          #+#    #+#             */
-/*   Updated: 2026/04/22 18:02:08 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/04/23 14:07:10 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@
 /* {MY HEADERS} */
 #include "error_IRC.hpp"
 #include "Channel.hpp"
+#include "FunctionError.hpp"
 
 // #define SERVER_PORT 1800
 #define	SOCKET int
@@ -76,28 +77,34 @@ class Server
 		~Server( void );
 
 		/* SETTER */
-		void	setSocketServ( void );
+		void			setSocketServ( void );
 		// void	setPort( unsigned int port );
 		// void	setPassword( std::string password );
 
-		void	runServer( void );
-		void	addClientSocket( void );
-		
-		// { PARSING }
-		void	parseCommand( std::string const & line, Client* client );
-		
-		// { COMMAND }
-		
-		void	PASS( std::string const & line, Client* client );
-		void	NICK( std::string const & line, Client* client );
-		void	USER( std::string const & line, Client* client );
-		void	JOIN( std::string const & line, Client* client );
-		// bool	validNickname( std::string const & line);
-		// bool	nicknameIsAvailable( std::string const & line );
-		// bool	noNicknameGiven( std::string const & line);
+		void			runServer( void );
+		void			addClientSocket( void );
 
-		void	createChannel(std::string nameChannel);
-	
+		// { PARSING }
+		void			parseCommand( std::string const & line, Client* client );
+
+		// { COMMAND }
+		void			PASS( std::string const & line, Client* client );
+
+		void			NICK( std::string const & line, Client* client );
+
+		void			USER( std::string const & line, Client* client );
+
+		void			JOIN( std::string const & line, Client* client );
+			void			createChannel( std::string nameChannel );
+		
+		void			PRIVMSG( std::string const& line, Client* client );
+			void			sendMessage( Client *client, std::string recipient, std::string message);
+			SOCKET	const&	searchClient( std::string nicknameRecipient );
+			bool			channelExist( std::string channelName );
+			
+			// bool	validNickname( std::string const & line);
+			// bool	nicknameIsAvailable( std::string const & line );
+			// bool	noNicknameGiven( std::string const & line);
 	/* Fonction necessaire
 
 	{ PARSING }

@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/20 18:34:09 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/04/21 17:13:40 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/04/23 09:15:48 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	Server::NICK( std::string const & line, Client* client )
 {
 	std::string temp(line);
 
-	temp = temp.erase(0, 5);
+	temp.erase(0, 5);
 	if (noNicknameGiven(temp) == true)
 	{
 		sendError(client, _name, ERR_ERRONEUSNICKNAME, ":No nickname given");

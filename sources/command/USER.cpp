@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/21 09:44:33 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/04/22 13:39:44 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/04/23 09:16:04 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	Server::USER( std::string const & line, Client* client )
 	}
 
 	std::string temp(line);
-	temp = temp.erase(0, 5);	
+	temp.erase(0, 5);	
 	size_t pos = temp.find_first_of(':', 0);
 	if (pos == std::string::npos)
 	{

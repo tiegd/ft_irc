@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 11:13:50 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/04/22 18:25:58 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/04/23 09:15:39 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,8 @@ void	Server::JOIN(std::string const& line, Client* client)
 		throw std::invalid_argument("Not enough parameters");		
 	}
 
-	std::string	temp = line.substr(0, 5);
+	std::string	temp(line);
+	temp.erase(0, 5);
 
 	std::vector<std::string>	splitArgs = split(temp, SPACE);
 	std::string					strChannel = splitArgs[0];
