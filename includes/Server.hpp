@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/09 12:20:30 by amerzone          #+#    #+#             */
-/*   Updated: 2026/04/23 16:34:50 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/04/20 19:02:31 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 
 /* GLOBAL */
 
-#include <iostream>
 #include <string>
 #include <vector>
 #include <map>
@@ -24,16 +23,12 @@
 /* SOCKET */
 #include <sys/socket.h>
 #include <sys/types.h>
-#include <netinet/in.h>
-#include <poll.h>
 #include <string.h>
 #include <stdlib.h>
+#include <netinet/in.h>
+#include <iostream>
 #include <unistd.h>
-
-/* {MY HEADERS} */
-#include "error_IRC.hpp"
-#include "Channel.hpp"
-#include "FunctionError.hpp"
+#include <poll.h>
 
 // #define SERVER_PORT 1800
 #define	SOCKET int
@@ -63,7 +58,7 @@ class Server
 
 		// /*Une liste d'operator, a voir si on creer une class operator ou on utilise client*/
 		std::map<SOCKET, Client*>		_clients;
-		std::map<std::string, Channel*>	_channels;
+		// std::map<std::string, Channel>	_channels;
 		std::vector<std::string>		_nicknameAlreadyUsed;
 		
 		// u_int64_t						_numberClients;
@@ -77,34 +72,24 @@ class Server
 		~Server( void );
 
 		/* SETTER */
-		void			setSocketServ( void );
+		void	setSocketServ( void );
 		// void	setPort( unsigned int port );
 		// void	setPassword( std::string password );
 
-		void			runServer( void );
-		void			addClientSocket( void );
-
-		// { PARSING }
-		void			parseCommand( std::string const & line, Client* client );
-
-		// { COMMAND }
-		void			PASS( std::string const & line, Client* client );
-
-		void			NICK( std::string const & line, Client* client );
-
-		void			USER( std::string const & line, Client* client );
-
-		void			JOIN( std::string const & line, Client* client );
-			void			createChannel( std::string nameChannel );
+		void	runServer( void );
+		void	addClientSocket( void );
 		
-		void			PRIVMSG( std::string const& line, Client* client );
-			void			sendMessage( Client *client, std::string recipient, std::string message);
-			SOCKET	const&	searchClient( std::string nicknameRecipient );
-			bool			channelExist( std::string channelName );
-			
-			// bool	validNickname( std::string const & line);
-			// bool	nicknameIsAvailable( std::string const & line );
-			// bool	noNicknameGiven( std::string const & line);
+		// { PARSING }
+		void	parseCommand( std::string const & line, Client* client );
+		
+		// { COMMAND }
+		
+		void	PASS( std::string const & line, Client* client );
+		void	NICK( std::string const & line, Client* client );
+		// bool	validNickname( std::string const & line);
+		// bool	nicknameIsAvailable( std::string const & line );
+		// bool	noNicknameGiven( std::string const & line);
+
 	/* Fonction necessaire
 
 	{ PARSING }

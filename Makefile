@@ -29,6 +29,7 @@ SRC =	main.cpp \
 		sources/command/NICK.cpp \
 		sources/command/PASS.cpp \
 		sources/command/USER.cpp \
+		sources/Channel.cpp \
 
 OBJ := $(addprefix $(OBJDIR), $(SRC:.cpp=.o))
 DEPS = $(OBJ:.o=.d)

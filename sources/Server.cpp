@@ -13,6 +13,7 @@
 #include "Server.hpp"
 #include "Client.hpp"
 #include "function.hpp"
+#include "Channel.hpp"
 
 Server::Server( void ) {};
 
@@ -178,7 +179,7 @@ void	Server::addClientSocket( void )
 	// }
 }
 
-void	Server::createChannel( std::string nameChannel )
+void	Server::createChannel( std::string nameChannel, Client op)
 {
-	_channels[nameChannel] = new Channel(nameChannel);
+	_channels[nameChannel] = new Channel(nameChannel, op);
 }

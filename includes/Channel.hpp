@@ -36,7 +36,7 @@ class Channel
 
 		Channel();
 	public:
-		Channel(std::string channel_name, Client opperator);
+		Channel(std::string channel_name, Client op);
 		~Channel();
 
 		// void invite(Client client);

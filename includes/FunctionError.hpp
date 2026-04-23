@@ -23,6 +23,7 @@ class	FunctionError : public std::exception
 	public:
 		FunctionError( std::string functionName );
 		const char* what( void ) const throw();
-}
+		virtual ~FunctionError() throw();
+};
 
 #endif
