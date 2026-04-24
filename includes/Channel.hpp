@@ -40,33 +40,33 @@ class Channel
 		~Channel();
 
 		// void invite(Client client);
-		void displayTopic();
-		void changeTopic();
+		// void displayTopic();
+		// void changeTopic();
 		
-		void limitNbUsers(int nb_user);
-		void listUsers();
+		// void limitNbUsers(int nb_user);
+		// void listUsers();
 
 		//getters
-		std::string				getName();
-		std::string				getPassword();
-		std::vector<Client>			getUsers();
-		std::vector<Client>			getOperators();
-		std::string				getTopic();
-		std::map<std::string, void (*)()>	getMode();
-		unsigned int				getNbMembers();
-		bool					getInvitOnly();
-		bool					getResTopic();
-		bool					getHasPassword();
-		bool					getHasTopic();
-		bool					getHasLimit();
-		u_int64_t				getUserLimit();
+		std::string				getName() const;
+		std::string				getPassword() const;
+		std::vector<Client>			getUsers() const;
+		std::vector<Client>			getOperators() const;
+		std::string				getTopic() const;
+		std::map<std::string, void (*)()>	getMode() const;
+		unsigned int				getNbMembers() const;
+		bool					getInviteOnly() const;
+		bool					getResTopic() const;
+		bool					getHasPassword() const;
+		bool					getHasTopic() const;
+		bool					getHasLimit() const;
+		u_int64_t				getUserLimit() const;
 
 		//setters
 		void	setName(std::string name);
 		void	setPassword(std::string password); //set the password if mode's parameter is +k
 		void	rmPassword(); //remove the password if mode's parameter is -k
-		void	addUser(Client client); //add a new user whene a client use join
-		void	kick(Client client); //Remove the client specified in parameter and call the destructor if _n_members == 0
+		void	addUser(Client user); //add a new user whene a client use join
+		void	kick(Client user); //Remove the client specified in parameter and call the destructor if _n_members == 0
 		void	addOperator(Client client);
 		void	rmOperator(Client client);
 		void	setTopic(std::string topic);
