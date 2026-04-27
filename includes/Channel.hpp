@@ -27,7 +27,7 @@ class Channel
 		std::map<std::string, void (*)()>	_mode;
 		unsigned int				_nbMembers;
 
-		bool					_inviteOnly; //i
+		bool					_invitOnly; //i
 		bool					_restrictionTopic; //t
 		bool					_hasPassword; //k
 		bool					_hasTopic;
@@ -54,7 +54,7 @@ class Channel
 		std::string				getTopic() const;
 		std::map<std::string, void (*)()>	getMode() const;
 		unsigned int				getNbMembers() const;
-		bool					getInviteOnly() const;
+		bool					getInvitOnly() const;
 		bool					getResTopic() const;
 		bool					getHasPassword() const;
 		bool					getHasTopic() const;
@@ -65,13 +65,14 @@ class Channel
 		void	setName(std::string name);
 		void	setPassword(std::string password); //set the password if mode's parameter is +k
 		void	rmPassword(); //remove the password if mode's parameter is -k
-		void	addUser(Client user); //add a new user whene a client use join
-		void	kick(Client user); //Remove the client specified in parameter and call the destructor if _n_members == 0
-		void	addOperator(Client client);
-		void	rmOperator(Client client);
+		void	addUser(Client target); //add a new user whene a client use join
+		void	kick(Client target, Client op); //Remove the client specified in parameter and call the destructor if _n_members == 0
+		void	addOperator(Client target);
+		void	rmOperator(Client target);
 		void	setTopic(std::string topic);
+		void	rmTopic();
 		void	setInvitOnly(bool arg);
-		void	setResTopic(bool arg);
+		void	setRestrictionTopic(bool arg);
 		void	setHasPassword(bool arg);
 		void	setHasTopic(bool arg);
 		void	setHasLimit(bool arg);

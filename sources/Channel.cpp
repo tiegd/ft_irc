@@ -19,6 +19,7 @@ Channel::Channel()
 
 Channel::Channel(std::string channel_name, Client op) : _name(channel_name), _nbMembers(1), _inviteOnly(false), _restrictionTopic(false), _hasPassword(false), _hasTopic(false), _hasLimit(false) 
 {
+	this->addOperator(op);
 	// Ajouter l'operator dans la liste des operator et celle des users
 	// Initialiser la map de modes.
 	
@@ -114,15 +115,105 @@ void Channel::setPassword(std::string password)
 
 void Channel::rmPassword()
 {
-	if (this->getHasPassword() == true)
+	if (this->getHasPassword())
 	{
 		this->_password.clear();
 		this->setHasPassword(false);
 	}
 }
 
-void Channel::addUser(Client user)
+void Channel::addUser(Client target)
 {
-	this->_users.push_back(const Client& user);
+	for (int i = 0; i <= this->_users.size; i++)
+	{
+		if (this->_users[i] == target)
+			return ;
+	}
+	this->_users.push_back(const &target);
+}
+
+void Channel::kick(Client target, Client op)
+{
+	for (int i = 0; i <= this->_operator.size; i++)
+	{
+		if (this->_operator[i] == op && this->_users.size > 0) // Check if the op is an operator
+		{
+			for (int i = 0; i <= this->_users.size; i++) // Delete target from the user's list
+			{
+				if (this->_users[i] == user)
+					this->_users.erase(i);
+			}
+			for (int i = 0; i <= this->_operator.size; i++) // Delete target from the op's list
+			{
+				if (this->_operator[i] == target)
+					this->_operator.erase(i);
+			}
+		}
+	}
+}
+
+void Channel::addOperator(Client target)
+{
+	for (int i = 0; i <= this->_operator.size; i++) // Check if the target is allready op
+	{
+		if (this->_operator[i] == target)
+			return ;
+	}
+	this->_operator.push_back(const &target);
+}
+
+void Channel::rmOperator(Client target)
+{
+	for (int i = 0; i <= this->_operator.size; i++) // Check if the target is allready op
+	{
+		if (this->_operator[i] == target)
+			this->_operator.erase(i);
+	}
+}
+
+void Channel::setTopic(std::string topic)
+{
+	// parseTopic(topic)
+	this->_topic = topic;
+	setHasTopic(true);
+}
+
+void Channel::rmTopic()
+{
+	if (this->getHasTopic())
+	{
+		this->_topic.clear();
+		this->setHasTopic(false);
+	}
+}
+
+void Channel::setInvitOnly(bool arg)
+{
+	this->_invitOnly = arg;
+}
+
+void Channel::setRestrictionTopic(bool arg)
+{
+	this->_restrictionTopic = arg;
+}
+
+void Channel::setHasPassword(bool arg)
+{
+	this->_hasPassword = arg;
+}
+
+void Channel::setHasTopic(bool arg)
+{
+	this->_hasTopic = arg;
+}
+
+void Channel::setHasLimit(bool arg)
+{
+	this->_hasLimit = arg;
+}
+
+void Channel::setUserLimit(u_int64_t nb)
+{
+	this->_userLimit = nb;
 }
 
