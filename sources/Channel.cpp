@@ -132,7 +132,7 @@ void Channel::addUser(Client target)
 	this->_users.push_back(const &target);
 }
 
-void Channel::kick(Client target, Client op)
+void Channel::ejectClient(Client target, Client op)
 {
 	for (int i = 0; i <= this->_operator.size; i++)
 	{

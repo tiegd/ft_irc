@@ -10,5 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "Server.hpp"
+#include "Client.hpp"
+#include "Channel.hpp"
 
+void Server::KICK(std::string const&line, )
 
