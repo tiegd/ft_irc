@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/16 17:03:42 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/04/22 18:17:43 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/04/28 16:02:26 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,5 +38,10 @@ SOCKET		Client::getSocketClient( void ) const					{ return _clientSocket; }
 std::string	Client::getNickname( void ) const						{ return _nickname; }
 bool		Client::getRegister( void ) const						{ return _registered; }
 std::string	Client::getUsername( void ) const						{ return _username; }
+
+// bool Client::operator==(const Client& obj) const
+// {
+//     return (this->_clientSocket == obj._clientSocket);
+// }
 
 Client::~Client( void ) {}

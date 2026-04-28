@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/09 12:18:51 by amerzone          #+#    #+#             */
-/*   Updated: 2026/04/22 18:18:51 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/04/28 17:02:03 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,12 @@ class Client
 		// std::map<std::string, Channel>	_joined;
 		// peut rejoindre 10 channel maximum
 
-		Client( void );
 		Client( Client const& src );
-		Client & operator=(Client const& rightSide);
+		// Client & operator=(Client const& rightSide);
 		
 	public:
 
+		Client( void );
 		Client( SOCKET sockClient );
 		~Client( void );
 		
@@ -52,6 +52,8 @@ class Client
 		void	setUsername( std::string const & newNickname );
 		void	setHostname( std::string const & newNickname );
 		void	setRegister( bool val );
+
+		// bool	operator==(const Client& obj) const;
 			
 };
 

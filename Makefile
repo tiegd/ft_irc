@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+         #
+#    By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/04/15 14:12:34 by amerzone          #+#    #+#              #
-#    Updated: 2026/04/21 17:23:18 by jpiquet          ###   ########.fr        #
+#    Updated: 2026/04/28 16:20:34 by gaducurt         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,15 +21,16 @@ INC = includes
 
 OBJDIR = obj/
 
-SRC =	main.cpp \
-		sources/parsingArguments.cpp \
-		sources/Server.cpp \
+SRC =	main_test.cpp \
 		sources/Client.cpp \
-		sources/error.cpp \
-		sources/command/NICK.cpp \
-		sources/command/PASS.cpp \
-		sources/command/USER.cpp \
 		sources/Channel.cpp \
+# 		main.cpp \
+# 		sources/Server.cpp \
+# 		sources/parsingArguments.cpp \
+# 		sources/error.cpp \
+# 		sources/command/NICK.cpp \
+# 		sources/command/PASS.cpp \
+# 		sources/command/USER.cpp \
 
 OBJ := $(addprefix $(OBJDIR), $(SRC:.cpp=.o))
 DEPS = $(OBJ:.o=.d)

@@ -6,21 +6,22 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 11:34:51 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/04/24 14:02:36 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/04/28 17:50:26 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Channel.hpp"
 #include <sys/types.h>
+#include <algorithm>
 
 Channel::Channel()
 {
 }
 
-Channel::Channel(std::string channel_name, Client op) : _name(channel_name), _nbMembers(1), _inviteOnly(false), _restrictionTopic(false), _hasPassword(false), _hasTopic(false), _hasLimit(false) 
+Channel::Channel(std::string channel_name, Client *op) : _name(channel_name), _nbMembers(1), _invitOnly(false), _restrictionTopic(false), _hasPassword(false), _hasTopic(false), _hasLimit(false) 
 {
 	this->addOperator(op);
-	// Ajouter l'operator dans la liste des operator et celle des users
+	this->addUser(op);
 	// Initialiser la map de modes.
 	
 }
@@ -44,14 +45,28 @@ std::string Channel::getPassword() const
 	return (this->_password);
 }
 
-std::vector<Client> Channel::getUsers() const
+std::vector<Client*> Channel::getUsers() const
 {
+	this->displayUsers();
 	return (this->_users);
 }
 
-std::vector<Client> Channel::getOperators() const
+void Channel::displayUsers() const
 {
+	for (int i = 0; i < this->_users.size(); i++)
+		std::cout << "users = " << this->_users[i]->getNickname() << std::endl;
+}
+
+std::vector<Client*> Channel::getOperators() const
+{
+	this->displayOps();
 	return (this->_operator);
+}
+
+void Channel::displayOps() const
+{
+	for (int i = 0; i < this->_operator.size(); i++)
+		std::cout << "operator = " << this->_operator[i]->getNickname() << std::endl;
 }
 
 std::string Channel::getTopic() const
@@ -69,9 +84,9 @@ unsigned int Channel::getNbMembers() const
 	return (this->_nbMembers);
 }
 
-bool Channel::getInviteOnly() const
+bool Channel::getInvitOnly() const
 {
-	return (this->_inviteOnly);
+	return (this->_invitOnly);
 }
 
 bool Channel::getResTopic() const
@@ -111,6 +126,7 @@ void Channel::setName(std::string name)
 void Channel::setPassword(std::string password)
 {
 	this->_password = password;
+	setHasPassword(true);
 }
 
 void Channel::rmPassword()
@@ -122,53 +138,46 @@ void Channel::rmPassword()
 	}
 }
 
-void Channel::addUser(Client target)
+void Channel::addUser(Client *target)
 {
-	for (int i = 0; i <= this->_users.size; i++)
-	{
-		if (this->_users[i] == target)
-			return ;
-	}
-	this->_users.push_back(const &target);
+	std::vector<Client*>::iterator it;
+	it = std::find(this->_users.begin(), this->_users.end(), target);
+	if (it == this->_users.end())
+		this->_users.push_back(target);
 }
 
-void Channel::ejectClient(Client target, Client op)
+void Channel::ejectClient(Client *target, Client *op)
 {
-	for (int i = 0; i <= this->_operator.size; i++)
+	if (target == op)
+		return ;
+	std::vector<Client*>::iterator it;
+	it = std::find(this->_operator.begin(), this->_operator.end(), op);
+	if (it != this->_operator.end())
 	{
-		if (this->_operator[i] == op && this->_users.size > 0) // Check if the op is an operator
-		{
-			for (int i = 0; i <= this->_users.size; i++) // Delete target from the user's list
-			{
-				if (this->_users[i] == user)
-					this->_users.erase(i);
-			}
-			for (int i = 0; i <= this->_operator.size; i++) // Delete target from the op's list
-			{
-				if (this->_operator[i] == target)
-					this->_operator.erase(i);
-			}
-		}
+		std::cout << "ok" << std::endl;
+		it = std::find(this->_users.begin(), this->_users.end(), target);
+		if (it != this->_users.end())
+			this->_users.erase(it);
+		it = std::find(this->_operator.begin(), this->_operator.end(), target);
+		if (it != this->_operator.end())
+			this->_operator.erase(it);
 	}
 }
 
-void Channel::addOperator(Client target)
+void Channel::addOperator(Client *target)
 {
-	for (int i = 0; i <= this->_operator.size; i++) // Check if the target is allready op
-	{
-		if (this->_operator[i] == target)
-			return ;
-	}
-	this->_operator.push_back(const &target);
+	std::vector<Client*>::iterator it;
+	it = std::find(this->_operator.begin(), this->_operator.end(), target);
+	if (it == this->_operator.end())
+		this->_operator.push_back(target);
 }
 
-void Channel::rmOperator(Client target)
+void Channel::rmOperator(Client *target) // Called by another operator with mode
 {
-	for (int i = 0; i <= this->_operator.size; i++) // Check if the target is allready op
-	{
-		if (this->_operator[i] == target)
-			this->_operator.erase(i);
-	}
+	std::vector<Client*>::iterator it;
+	it = std::find(this->_operator.begin(), this->_operator.end(), target);
+	if (it != this->_operator.end())
+		this->_operator.erase(it);
 }
 
 void Channel::setTopic(std::string topic)

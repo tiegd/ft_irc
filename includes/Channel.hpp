@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/21 17:00:04 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/04/23 16:34:42 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/04/28 17:16:53 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,24 +19,24 @@
 class Channel
 {
 	private:
-		std::string				_name;
-		std::string				_password;
-		std::vector<Client>			_users;
-		std::vector<Client>			_operator;
-		std::string				_topic;
+		std::string							_name;
+		std::string							_password;
+		std::vector<Client*>				_users;
+		std::vector<Client*>				_operator;
+		std::string							_topic;
 		std::map<std::string, void (*)()>	_mode;
-		unsigned int				_nbMembers;
+		unsigned int						_nbMembers;
 
-		bool					_invitOnly; //i
-		bool					_restrictionTopic; //t
-		bool					_hasPassword; //k
-		bool					_hasTopic;
-		bool					_hasLimit;
-		u_int64_t				_userLimit; //l
+		bool								_invitOnly; //i
+		bool								_restrictionTopic; //t
+		bool								_hasPassword; //k
+		bool								_hasTopic;
+		bool								_hasLimit;
+		u_int64_t							_userLimit; //l
 
 		Channel();
 	public:
-		Channel(std::string channel_name, Client op);
+		Channel(std::string channel_name, Client *op);
 		~Channel();
 
 		// void invite(Client client);
@@ -47,28 +47,30 @@ class Channel
 		// void listUsers();
 
 		//getters
-		std::string				getName() const;
-		std::string				getPassword() const;
-		std::vector<Client>			getUsers() const;
-		std::vector<Client>			getOperators() const;
-		std::string				getTopic() const;
+		std::string							getName() const;
+		std::string							getPassword() const;
+		std::vector<Client*>				getUsers() const;
+		void								displayUsers() const;
+		std::vector<Client*>				getOperators() const;
+		void								displayOps() const;
+		std::string							getTopic() const;
 		std::map<std::string, void (*)()>	getMode() const;
-		unsigned int				getNbMembers() const;
-		bool					getInvitOnly() const;
-		bool					getResTopic() const;
-		bool					getHasPassword() const;
-		bool					getHasTopic() const;
-		bool					getHasLimit() const;
-		u_int64_t				getUserLimit() const;
+		unsigned int						getNbMembers() const;
+		bool								getInvitOnly() const;
+		bool								getResTopic() const;
+		bool								getHasPassword() const;
+		bool								getHasTopic() const;
+		bool								getHasLimit() const;
+		u_int64_t							getUserLimit() const;
 
 		//setters
 		void	setName(std::string name);
 		void	setPassword(std::string password); //set the password if mode's parameter is +k
 		void	rmPassword(); //remove the password if mode's parameter is -k
-		void	addUser(Client target); //add a new user whene a client use join
-		void	ejectClient(Client target, Client op); //Remove the client specified in parameter and call the destructor if _n_members == 0
-		void	addOperator(Client target);
-		void	rmOperator(Client target);
+		void	addUser(Client *target); //add a new user whene a client use join
+		void	ejectClient(Client *target, Client *op); //Remove the client specified in parameter and call the destructor if _n_members == 0
+		void	addOperator(Client *target);
+		void	rmOperator(Client *target);
 		void	setTopic(std::string topic);
 		void	rmTopic();
 		void	setInvitOnly(bool arg);
