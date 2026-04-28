@@ -6,7 +6,7 @@
 #    By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/04/15 14:12:34 by amerzone          #+#    #+#              #
-#    Updated: 2026/04/21 17:23:18 by jpiquet          ###   ########.fr        #
+#    Updated: 2026/04/28 16:30:21 by jpiquet          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,6 +28,10 @@ SRC =	main.cpp \
 		sources/command/NICK.cpp \
 		sources/command/PASS.cpp \
 		sources/command/USER.cpp \
+		sources/command/JOIN.cpp \
+		sources/command/NOTICE.cpp \
+		sources/command/PRIVMSG.cpp
+		
 
 OBJ := $(addprefix $(OBJDIR), $(SRC:.cpp=.o))
 DEPS = $(OBJ:.o=.d)
