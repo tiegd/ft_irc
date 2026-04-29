@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 11:34:51 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/04/29 13:17:27 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/04/29 17:04:15 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ Channel::Channel()
 Channel::Channel(std::string channel_name, Client *op) : _name(channel_name), _nbMembers(1), _hasTopic(false), _modeUsed(0)
 {
 	this->addOperator(op);
-	this->addUser(op);
 	// Initialiser la map de modes.	
 }
 
@@ -151,7 +150,7 @@ void Channel::addUser(Client *target)
 	this->setNbMembers();
 }
 
-void Channel::ejectClient(Client *target, Client *op)
+void Channel::kickUser(Client *target, Client *op)
 {
 	if (target == op)
 		return ;
@@ -175,7 +174,12 @@ void Channel::addOperator(Client *target)
 	std::vector<Client*>::iterator it;
 	it = std::find(this->_operator.begin(), this->_operator.end(), target);
 	if (it == this->_operator.end())
+	{
 		this->_operator.push_back(target);
+		it = std::find(this->_users.begin(), this->_users.end(), target);
+		if (it != this->_users.end())
+			this->_users.erase(it);
+	}
 	this->setNbOp();
 }
 

@@ -6,7 +6,7 @@
 #    By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/04/15 14:12:34 by amerzone          #+#    #+#              #
-#    Updated: 2026/04/29 11:31:19 by gaducurt         ###   ########.fr        #
+#    Updated: 2026/04/29 15:43:03 by gaducurt         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,6 +24,7 @@ OBJDIR = obj/
 SRC =	main_test.cpp \
 		sources/Channel.cpp \
 		sources/Client.cpp \
+		sources/Server.cpp \
 # 		sources/error.cpp \
 # 		sources/command/NICK.cpp \
 # 		sources/command/PASS.cpp \

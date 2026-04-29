@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/21 17:00:04 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/04/29 13:15:58 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/04/29 17:04:19 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ class Channel
 		void	setPassword(std::string password); //set the password if mode's parameter is +k
 		void	rmPassword(); //remove the password if mode's parameter is -k
 		void	addUser(Client *target); //add a new user whene a client use join
-		void	ejectClient(Client *target, Client *op); //Remove the client specified in parameter and call the destructor if _n_members == 0
+		void	kickUser(Client *target, Client *op); //Remove the client specified in parameter and call the destructor if _n_members == 0
 		void	addOperator(Client *target);
 		void	rmOperator(Client *target);
 		void	setTopic(std::string topic);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   JOIN.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 11:13:50 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/04/28 14:52:09 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/04/29 14:19:39 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void	Server::JOIN(std::string const& line, Client* client)
 		{
 			// create channel
 			createChannel(nameChannel);
-			_channels[nameChannel].addUser(Client *);
+			_channels[nameChannel]->addUser(client);
 		}
 		else // si il existe
 		{
@@ -69,14 +69,14 @@ void	Server::JOIN(std::string const& line, Client* client)
 				// si il en a un verifier si c'est le bon.
 				if  (i < passwords.size()) // si l'index du vector de passwords est plus petit on compare
 				{
-					if (passwords[i].compare(_channels[nameChannel].getPassword) == 0) //si le password est correct | remplacer _password par getPassword
-						_channels[nameChannel].addUser(Client *);
+					if (passwords[i].compare(_channels[nameChannel]->getPassword()) == 0) //si le password est correct | remplacer _password par getPassword
+						_channels[nameChannel]->addUser(client);
 				}
 				else //sinon ca veut dire qu'il manque un parametre password pour le channel donc renvoyer badchannelkey
 					sendError(client, _name, ERR_BADCHANNELKEY, nameChannel + " :Cannot join channel (+k)");
 			}
 			else //si il y a pas de password faire addUser
-				_channels[nameChannel].addUser(Client *);
+				_channels[nameChannel]->addUser(client);
 		}
 	}
 

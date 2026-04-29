@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/15 12:42:23 by amerzone          #+#    #+#             */
-/*   Updated: 2026/04/23 13:14:21 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/04/29 15:36:53 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ void	Server::runServer( void )
 					int bytes = recv(_fds[i].fd, buff, sizeof(buff), 0);
 					if (bytes == 0)
 					{
-						std::cout << "Client disconnected" << std::cout;
+						std::cout << "Client disconnected" << std::endl;
 						close(_fds[i].fd);
 						_fds.erase(_fds.begin() + i);
 						i--;
@@ -115,27 +115,31 @@ void	Server::parseCommand( std::string const & line , Client* client )
 {
 	if (line.size() >= 4)
 	{
-		if (line.compare(0, 4, "PASS") && (line[4] == ' ' || line.size() == 4))
+		if (!line.compare(0, 5, "PASS") && (line[5] == ' ' || line.size() == 4))
 		{
 			PASS(line, client);
 			std::cout << "parseCommand => PASS " << std::endl;
 		}
-		if (line.compare(0, 4, "NICK") && (line[4] == ' ' || line.size() == 4))
+		if (!line.compare(0, 4, "NICK") && (line[5] == ' ' || line.size() == 4))
 		{
 			NICK(line, client);
 		}
-		if (line.compare(0, 4, "USER") && (line[4] == ' ' || line.size() == 4))
+		if (!line.compare(0, 4, "USER") && (line[5] == ' ' || line.size() == 4))
 		{
 			USER(line, client);
 		}
-		if (line.compare(0, 4, "JOIN") && (line[4] == ' ' || line.size() == 4))
+		if (line.compare(0, 4, "JOIN") && (line[5] == ' ' || line.size() == 4))
 		{
 			JOIN(line, client);
 		}
-		if (line.compare(0, 4, "PRIVMSG") && (line[4] == ' ' || line.size() == 4))
+		if (line.compare(0, 7, "PRIVMSG") && line[7] == ' ')
 		{
 			PRIVMSG(line, client);
 		}
+		// if (line.compare(0, 4, "KICK") && line[5] == ' ')
+		// {
+		// 	KICK(line, client);
+		// }
 	}
 }
 
@@ -178,7 +182,7 @@ void	Server::addClientSocket( void )
 	// }
 }
 
-void	Server::createChannel( std::string nameChannel )
+void	Server::createChannel( std::string nameChannel, Client* op )
 {
-	_channels[nameChannel] = new Channel(nameChannel);
+	_channels[nameChannel] = new Channel(nameChannel, op);
 }

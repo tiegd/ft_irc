@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/09 12:20:30 by amerzone          #+#    #+#             */
-/*   Updated: 2026/04/28 16:27:34 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/04/29 14:21:05 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ class Server
 		void			USER( std::string const & line, Client* client );
 
 		void			JOIN( std::string const & line, Client* client );
-			void			createChannel( std::string nameChannel );
+			void			createChannel( std::string nameChannel, Client *op );
 		
 		void			PRIVMSG( std::string const& line, Client* client );
 		void			NOTICE( std::string const& line, Client* client );
@@ -108,7 +108,7 @@ class Server
 		void			PING( std::string const& line, Client* client );
 		void			PONG( std::string params, Client* client );
 
-
+		void			KICK(std::string const& line, Client* op);
 
 
 
