@@ -3,17 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/15 12:42:23 by amerzone          #+#    #+#             */
-/*   Updated: 2026/04/29 11:01:13 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/04/23 13:14:21 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 #include "Client.hpp"
 #include "function.hpp"
-#include "Channel.hpp"
 
 Server::Server( void ) {};
 
@@ -179,7 +178,7 @@ void	Server::addClientSocket( void )
 	// }
 }
 
-void	Server::createChannel( std::string nameChannel, Client op)
+void	Server::createChannel( std::string nameChannel )
 {
-	_channels[nameChannel] = new Channel(nameChannel, op);
+	_channels[nameChannel] = new Channel(nameChannel);
 }
