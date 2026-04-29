@@ -3,22 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   parsingArguments.cpp                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amerzone <amerzone@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/15 12:34:11 by amerzone          #+#    #+#             */
-/*   Updated: 2026/04/15 14:53:17 by amerzone         ###   ########.fr       */
+/*   Updated: 2026/04/29 13:37:19 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "function.hpp"
 #include <algorithm>
-
-bool	isPrintable( char c )
-{
-	if (c < 33 || c > 126 )
-		return false;
-	return true;
-}
+#include "tools.hpp"
 
 void	parseArg( int ac, char **av, u_int16_t & port, std::string & password)
 {

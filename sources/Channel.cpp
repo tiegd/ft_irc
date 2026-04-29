@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 11:34:51 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/04/29 10:38:18 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/04/29 16:58:07 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Channel.hpp"
 #include <sys/types.h>
 #include <algorithm>
+#include "FunctionError.hpp"
 
 Channel::Channel()
 {
@@ -21,7 +22,7 @@ Channel::Channel()
 Channel::Channel(std::string channel_name, Client *op) : _name(channel_name), _nbMembers(1), _invitOnly(false), _restrictionTopic(false), _hasPassword(false), _hasTopic(false), _hasLimit(false) 
 {
 	this->addOperator(op);
-	this->addUser(op);
+	// this->addUser(op);
 	// Initialiser la map de modes.
 	
 }
@@ -244,4 +245,37 @@ void Channel::setNbMembers()
 void Channel::setNbOp()
 {
 	this->_nbOp = this->_operator.size();
+}
+
+void	Channel::sendChannelMsg( std::string const& message )
+{
+	for (std::vector<Client*>::iterator it = _users.begin(); it != _users.end(); it++)
+	{
+		if (send((*it)->getSocketClient(), message.c_str(), message.size(), 0))
+			throw FunctionError();
+	}
+}
+
+std::string	Channel::getStrAllUsersNames( void )
+{
+	std::string allUser;
+
+	for (int i = 0; i < _users.size(); i++)
+	{
+		allUser = _users[i]->getNickname() + " ";
+	}
+	allUser.erase(allUser.find_last_of(' '), 1);
+	return allUser;
+}
+
+std::string	Channel::getStrAllOperatorsNames( void )
+{
+	std::string allUser;
+
+	for (int i = 0; i < _operator.size(); i++)
+	{
+		allUser = _operator[i]->getNickname() + " ";
+	}
+	allUser.erase(allUser.find_last_of(' '), 1);
+	return allUser;
 }

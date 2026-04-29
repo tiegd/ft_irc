@@ -6,13 +6,13 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/20 18:34:09 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/04/23 09:15:48 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/04/29 17:35:10 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 #include "Client.hpp"
-// #include "error.hpp"
+#include "error_IRC.hpp"
 
 bool	validNickname( std::string line);
 bool	nicknameIsAvailable( std::string line, std::map<SOCKET, Client*> clients );
@@ -31,6 +31,7 @@ void	Server::NICK( std::string const & line, Client* client )
 	std::string temp(line);
 
 	temp.erase(0, 5);
+	std::cout << "Receive in NICK() :" << temp << std::endl;
 	if (noNicknameGiven(temp) == true)
 	{
 		sendError(client, _name, ERR_ERRONEUSNICKNAME, ":No nickname given");
@@ -48,12 +49,15 @@ void	Server::NICK( std::string const & line, Client* client )
 	}
 	if (client->getRegister() == true)
 	{
+		// std::cout << "IS REGISTERED" << std::endl;
 		for (std::vector<std::string>::iterator it = _nicknameAlreadyUsed.begin(); it != _nicknameAlreadyUsed.end(); it++)
 		{
 			if (temp == *it)
 			{
 				_nicknameAlreadyUsed.erase(it);
 			}
+			std::string	notification = ":" + client->getNickname() + "!" + client->getUsername() + "@" + client->getHostname() + " NICK " + temp;
+			client->sendNotif(notification);
 		}
 	}
 	client->setNickname(temp);

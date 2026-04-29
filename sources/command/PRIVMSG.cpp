@@ -6,13 +6,16 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 18:33:23 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/04/23 14:15:04 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/04/29 13:34:18 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 #include "Client.hpp"
 #include "tools.hpp"
+#include "error_IRC.hpp"
+#include "FunctionError.hpp"
+#include "Channel.hpp"
 #include <algorithm>
 
 /*
@@ -56,7 +59,7 @@ void	Server::sendMessage( Client *client, std::string recipient, std::string mes
 	if (recipient[0] == '#')
 	{
 		if (channelExist(recipient) == true) // si on trouve le channel
-			_channels[recipient].sendChannelMsg(message); // fonction qui envoit un message a tous le channel.
+			_channels[recipient]->sendChannelMsg(message); // fonction qui envoit un message a tous le channel.
 		else // sinon revoyer une erreur
 		{
 			sendError(client, _name, ERR_NOSUCHNICK, recipient + " :No such nick/channel");
@@ -72,12 +75,12 @@ void	Server::sendMessage( Client *client, std::string recipient, std::string mes
 			throw std::invalid_argument("Socket for nickname given can't be found");
 		}
 		if (send(client->getSocketClient(), message.c_str(), message.size(), 0) < 0) // si on le trouve on envoie le message au socket du nickname associé
-			throw FunctionError("send");
+			throw FunctionError();
 	}
 }
 
 /* Return the SOCKET associated to std::string nicknameRecipient or -1 if it's not found*/
-SOCKET	const& Server::searchClient( std::string nicknameRecipient )
+SOCKET	Server::searchClient( std::string nicknameRecipient )
 {
 	for (std::map<SOCKET, Client*>::iterator it = _clients.begin(); it != _clients.end(); it++)
 	{

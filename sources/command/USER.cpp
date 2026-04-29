@@ -6,18 +6,17 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/21 09:44:33 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/04/23 09:16:04 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/04/29 13:02:57 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 #include "Client.hpp"
-// #include "error_IRC.hpp"
-
-std::vector<std::string>	split( std::string & str );
+#include "tools.hpp"
+#include "error_IRC.hpp"
 
 /*
-Format : USER <username> <hostname> <servername> :<realname> 
+Format : USER <username> <hostname> <servername> :<realname>
 Il faut qu'il y ait les 4 parametres sinon : ERR_NEEDMOREPARAMS
 Pas que le client soit deja enregistré (que nick et user est dejà été recu): ERR_ALREADYREGISTRED
 */
@@ -54,25 +53,25 @@ void	Server::USER( std::string const & line, Client* client )
 	client->setHostname(splitParams[1]);
 }
 
-std::vector<std::string>	split( std::string & str, char c )
-{
-	std::vector<std::string>	strvec;
-	size_t index = 0;
-	size_t	pos = 0;
+// std::vector<std::string>	split( std::string & str, char c )
+// {
+// 	std::vector<std::string>	strvec;
+// 	size_t index = 0;
+// 	size_t	pos = 0;
 
-	while (index < str.size())
-	{
-		pos = str.find(c, index);
-		if (pos == std::string::npos)
-		{
-			strvec.push_back(str.substr(index, str.size()));
-			break;
-		}
-		strvec.push_back(str.substr(index, pos - index));
-		index = pos + 1;
-	}
-	return strvec;
-}
+// 	while (index < str.size())
+// 	{
+// 		pos = str.find(c, index);
+// 		if (pos == std::string::npos)
+// 		{
+// 			strvec.push_back(str.substr(index, str.size()));
+// 			break;
+// 		}
+// 		strvec.push_back(str.substr(index, pos - index));
+// 		index = pos + 1;
+// 	}
+// 	return strvec;
+// }
 
 // FUNCTION TESTER
 // #include <string>

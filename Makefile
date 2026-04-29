@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+         #
+#    By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/04/15 14:12:34 by amerzone          #+#    #+#              #
-#    Updated: 2026/04/29 10:48:46 by gaducurt         ###   ########.fr        #
+#    Updated: 2026/04/29 13:35:12 by jpiquet          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,9 +21,14 @@ INC = includes
 
 OBJDIR = obj/
 
-SRC =	main_test.cpp \
+SRC =	main.cpp \
 		sources/Client.cpp \
+		sources/Server.cpp \
+		sources/Channel.cpp \
 		sources/error.cpp \
+		sources/FunctionError.cpp \
+		sources/parsingArguments.cpp \
+		sources/tools.cpp \
 		sources/command/NICK.cpp \
 		sources/command/PASS.cpp \
 		sources/command/USER.cpp \

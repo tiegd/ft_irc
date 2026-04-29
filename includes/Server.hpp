@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/09 12:20:30 by amerzone          #+#    #+#             */
-/*   Updated: 2026/04/29 10:49:08 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/04/29 15:34:22 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@
 #define	INVALID_CHAR ": *?@!"
 
 class Client;
-// class Channel;
+class Channel;
 
 class Server
 {
@@ -58,7 +58,7 @@ class Server
 
 		// /*Une liste d'operator, a voir si on creer une class operator ou on utilise client*/
 		std::map<SOCKET, Client*>		_clients;
-		// std::map<std::string, Channel>	_channels;
+		std::map<std::string, Channel*>	_channels;
 		std::vector<std::string>		_nicknameAlreadyUsed;
 		
 		// u_int64_t						_numberClients;
@@ -72,18 +72,31 @@ class Server
 		~Server( void );
 
 		/* SETTER */
-		void	setSocketServ( void );
+		void			setSocketServ( void );
 		// void	setPort( unsigned int port );
 		// void	setPassword( std::string password );
 
-		void	runServer( void );
-		void	addClientSocket( void );
+		void			runServer( void );
+		void			addClientSocket( void );
+
+		// { PARSING }
+		void			parseCommand( std::string const & line, Client* client );
+
+		// { COMMAND }
+		void			PASS( std::string const & line, Client* client );
+
+		void			NICK( std::string const & line, Client* client );
+
+		void			USER( std::string const & line, Client* client );
+
+		void			JOIN( std::string const & line, Client* client );
+			void			sendJoinNotification(Client *client, std::string nameChannel);
 		
 		void			PRIVMSG( std::string const& line, Client* client );
 		void			NOTICE( std::string const& line, Client* client );
 			void			sendNotice( Client *client, std::string recipient, std::string message);
 			void			sendMessage( Client *client, std::string recipient, std::string message);
-			SOCKET	const&	searchClient( std::string nicknameRecipient );
+			SOCKET			searchClient( std::string nicknameRecipient );
 			bool			channelExist( std::string channelName );
 
 		// void			WHO( std::string const& line, Client* client );

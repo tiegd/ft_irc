@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/15 12:42:23 by amerzone          #+#    #+#             */
-/*   Updated: 2026/04/23 13:14:21 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/04/29 18:37:48 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ void	Server::runServer( void )
 					int bytes = recv(_fds[i].fd, buff, sizeof(buff), 0);
 					if (bytes == 0)
 					{
-						std::cout << "Client disconnected" << std::cout;
+						std::cout << "Client disconnected" << std::endl;
 						close(_fds[i].fd);
 						_fds.erase(_fds.begin() + i);
 						i--;
@@ -99,11 +99,15 @@ void	Server::runServer( void )
 						while ((pos = message.find("\r\n")) != std::string::npos) 
 						{
 							std::string line = message.substr(0, pos);
-							std::cout << "Client " << i << " dit : "  << line << std::endl;
-							message.erase(0, pos + 1);
+							message.erase(0, pos + 2);
+							// std::cout << "Client " << i << " dit : "  << line << std::endl;
+							std::cout << "Recu : "<< line << std::endl;
 							parseCommand(line, _clients[_fds[i].fd]);
-							if (_clients[_fds[i].fd]->getNickname() != "*" && _clients[_fds[i].fd]->getUsername() != "*")
-								_clients[_fds[i].fd]->setRegister(true);
+						}
+						if (_clients[_fds[i].fd]->getRegister() == true && _clients[_fds[i].fd]->getNickname() != "*" && _clients[_fds[i].fd]->getUsername() != "*")
+						{
+							
+							_clients[_fds[i].fd]->setRegister(true);
 						}
 					}
 				}
@@ -114,29 +118,35 @@ void	Server::runServer( void )
 
 void	Server::parseCommand( std::string const & line , Client* client )
 {
-	if (line.size() >= 4)
+	try
 	{
-		if (line.compare(0, 4, "PASS") && (line[4] == ' ' || line.size() == 4))
+		if (line.size() >= 4)
 		{
-			PASS(line, client);
-			std::cout << "parseCommand => PASS " << std::endl;
+			if (!line.compare(0, 5, "PASS ") && (line[4] == ' ' || line.size() == 4))
+			{
+				PASS(line, client);
+			}
+			if (!line.compare(0, 5, "NICK ") && (line[4] == ' ' || line.size() == 4))
+			{
+				NICK(line, client);
+			}
+			if (!line.compare(0, 5, "USER ") && (line[4] == ' ' || line.size() == 4))
+			{
+				USER(line, client);
+			}
+			if (!line.compare(0, 5, "JOIN ") && (line[4] == ' ' || line.size() == 4))
+			{
+				JOIN(line, client);
+			}
+			if (!line.compare(0, 8, "PRIVMSG") && (line[8] == ' ' || line.size() == 7))
+			{
+				PRIVMSG(line, client);
+			}
 		}
-		if (line.compare(0, 4, "NICK") && (line[4] == ' ' || line.size() == 4))
-		{
-			NICK(line, client);
-		}
-		if (line.compare(0, 4, "USER") && (line[4] == ' ' || line.size() == 4))
-		{
-			USER(line, client);
-		}
-		if (line.compare(0, 4, "JOIN") && (line[4] == ' ' || line.size() == 4))
-		{
-			JOIN(line, client);
-		}
-		if (line.compare(0, 4, "PRIVMSG") && (line[4] == ' ' || line.size() == 4))
-		{
-			PRIVMSG(line, client);
-		}
+	}
+	catch(const std::exception& e)
+	{
+		std::cerr << e.what() << '\n';
 	}
 }
 
@@ -179,7 +189,7 @@ void	Server::addClientSocket( void )
 	// }
 }
 
-void	Server::createChannel( std::string nameChannel, Client op)
-{
-	_channels[nameChannel] = new Channel(nameChannel, op);
-}
+// void	Server::createChannel( std::string nameChannel, Client op)
+// {
+// 	_channels[nameChannel] = new Channel(nameChannel, op);
+// }
