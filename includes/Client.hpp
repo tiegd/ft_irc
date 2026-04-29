@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/09 12:18:51 by amerzone          #+#    #+#             */
-/*   Updated: 2026/04/28 17:02:03 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/04/29 10:42:34 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,6 @@ class Client
 		void	setUsername( std::string const & newNickname );
 		void	setHostname( std::string const & newNickname );
 		void	setRegister( bool val );
-
-		// bool	operator==(const Client& obj) const;
 			
 };
 
