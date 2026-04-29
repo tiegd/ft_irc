@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/16 17:03:42 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/04/22 18:17:43 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/04/29 09:57:18 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,6 @@
 #include <iostream>
 
 Client::Client( void ) {}
-
-// Client::Client( Client const & src )
-// {
-// }
-
-// Client & Client::operator=( Client const & rightSide )
-// {
-// 	if (this != &rightSide)
-// 	return *this;
-// }
 
 Client::Client( SOCKET sockClient ) : _clientSocket(sockClient), _nickname("*"), _username("*"), _registered(false) {}
 

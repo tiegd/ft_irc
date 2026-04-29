@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 14:21:16 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/04/28 14:12:43 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/04/29 10:27:16 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,14 +51,14 @@ void	Server::sendNotice( Client *client, std::string recipient, std::string mess
 	{
 		if (channelExist(recipient) == true) // si on trouve le channel
 			_channels[recipient].sendChannelMsg(message); // fonction qui envoit un message a tous le channel.
-		else // sinon revoyer une erreur
-			throw std::invalid_argument("Socket for channel given can't be found");
+		// else // sinon revoyer une erreur
+		// 	throw std::invalid_argument("Socket for channel given can't be found");
 	}
 	else
 	{
 		SOCKET	sockRecipient = searchClient(recipient);
-		if (sockRecipient == -1) // si on trouve pas le client
-			throw std::invalid_argument("Socket for nickname given can't be found");
+		// if (sockRecipient == -1) // si on trouve pas le client
+		// 	throw std::invalid_argument("Socket for nickname given can't be found");
 		if (send(client->getSocketClient(), message.c_str(), message.size(), 0) < 0) // si on le trouve on envoie le message au socket du nickname associé
 			throw FunctionError("send");
 	}
