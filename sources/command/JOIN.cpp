@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 11:13:50 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/04/23 09:15:39 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/04/28 14:52:09 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,12 +64,12 @@ void	Server::JOIN(std::string const& line, Client* client)
 		else // si il existe
 		{
 			// checker si il a un password
-			if (_channels[nameChannel]->_hasPassword) //mettre getHasPassword()
+			if (_channels[nameChannel]->getHasPassword()) //mettre getHasPassword()
 			{
 				// si il en a un verifier si c'est le bon.
 				if  (i < passwords.size()) // si l'index du vector de passwords est plus petit on compare
 				{
-					if (passwords[i].compare(_channels[nameChannel]._password) == 0) //si le password est correct | remplacer _password par getPassword
+					if (passwords[i].compare(_channels[nameChannel].getPassword) == 0) //si le password est correct | remplacer _password par getPassword
 						_channels[nameChannel].addUser(Client *);
 				}
 				else //sinon ca veut dire qu'il manque un parametre password pour le channel donc renvoyer badchannelkey

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   FunctionError.hpp                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 11:14:29 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/04/23 11:28:45 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/04/29 10:48:57 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 #include <exception>
 #include <string>
+#include <iostream>
 
 class	FunctionError : public std::exception
 {
@@ -22,8 +23,7 @@ class	FunctionError : public std::exception
 		std::string	_functionName;
 	public:
 		FunctionError( std::string functionName );
-		const char* what( void ) const throw();
-		virtual ~FunctionError() throw();
+		const char* what() const throw();
 };
 
 #endif

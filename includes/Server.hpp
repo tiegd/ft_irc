@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/09 12:20:30 by amerzone          #+#    #+#             */
-/*   Updated: 2026/04/20 19:02:31 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/04/29 10:49:08 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,17 +79,27 @@ class Server
 		void	runServer( void );
 		void	addClientSocket( void );
 		
-		// { PARSING }
-		void	parseCommand( std::string const & line, Client* client );
-		
-		// { COMMAND }
-		
-		void	PASS( std::string const & line, Client* client );
-		void	NICK( std::string const & line, Client* client );
-		// bool	validNickname( std::string const & line);
-		// bool	nicknameIsAvailable( std::string const & line );
-		// bool	noNicknameGiven( std::string const & line);
+		void			PRIVMSG( std::string const& line, Client* client );
+		void			NOTICE( std::string const& line, Client* client );
+			void			sendNotice( Client *client, std::string recipient, std::string message);
+			void			sendMessage( Client *client, std::string recipient, std::string message);
+			SOCKET	const&	searchClient( std::string nicknameRecipient );
+			bool			channelExist( std::string channelName );
 
+		// void			WHO( std::string const& line, Client* client );
+		void			PING( std::string const& line, Client* client );
+		void			PONG( std::string params, Client* client );
+
+
+
+
+
+
+
+		
+			// bool	validNickname( std::string const & line);
+			// bool	nicknameIsAvailable( std::string const & line );
+			// bool	noNicknameGiven( std::string const & line);
 	/* Fonction necessaire
 
 	{ PARSING }
