@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/09 12:20:30 by amerzone          #+#    #+#             */
-/*   Updated: 2026/04/29 10:49:08 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/04/29 11:31:59 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,10 +81,11 @@ class Server
 		
 		void			PRIVMSG( std::string const& line, Client* client );
 		void			NOTICE( std::string const& line, Client* client );
-			void			sendNotice( Client *client, std::string recipient, std::string message);
-			void			sendMessage( Client *client, std::string recipient, std::string message);
-			SOCKET	const&	searchClient( std::string nicknameRecipient );
-			bool			channelExist( std::string channelName );
+		void			sendNotice( Client *client, std::string recipient, std::string message);
+		void			sendMessage( Client *client, std::string recipient, std::string message);
+		SOCKET	const&	searchClient( std::string nicknameRecipient );
+		bool			channelExist( std::string channelName );
+		void			createChannel(std::string nameChannel, Client op);
 
 		// void			WHO( std::string const& line, Client* client );
 		void			PING( std::string const& line, Client* client );

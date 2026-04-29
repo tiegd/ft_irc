@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/21 17:00:04 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/04/29 10:37:24 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/04/29 12:23:26 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,10 @@ class Channel
 		unsigned int						_nbMembers;
 		unsigned int						_nbOp;
 
+		char								_modes; 
+		// The modes are stocked on the 5th bits.
+		// Need to be checked with binary operator.
+		// 0000itkl
 		bool								_invitOnly; //i
 		bool								_restrictionTopic; //t
 		bool								_hasPassword; //k

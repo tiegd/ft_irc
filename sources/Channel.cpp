@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 11:34:51 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/04/29 10:38:18 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/04/29 12:29:25 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ std::string Channel::getPassword() const
 
 std::vector<Client*> Channel::getUsers() const
 {
-	this->displayUsers();
+	// this->displayUsers();
 	return (this->_users);
 }
 
@@ -58,7 +58,7 @@ void Channel::displayUsers() const
 
 std::vector<Client*> Channel::getOperators() const
 {
-	this->displayOps();
+	// this->displayOps();
 	return (this->_operator);
 }
 
@@ -92,6 +92,7 @@ unsigned int Channel::getNbOp() const
 bool Channel::getInvitOnly() const
 {
 	return (this->_invitOnly);
+	return (this->_modes >> 4 & 1);
 }
 
 bool Channel::getResTopic() const
@@ -101,17 +102,17 @@ bool Channel::getResTopic() const
 
 bool Channel::getHasPassword() const
 {
-	return (this->_hasPassword);
+	return (this->_modes >> 2 & 1);
 }
 
 bool Channel::getHasTopic() const
 {
-	return (this->_hasTopic);
+	return (this->_modes >> 3 & 1);
 }
 
 bool Channel::getHasLimit() const
 {
-	return (this->_hasLimit);
+	return (this->_modes & 1);
 }
 
 u_int64_t Channel::getUserLimit() const
@@ -160,7 +161,7 @@ void Channel::ejectClient(Client *target, Client *op)
 	it = std::find(this->_operator.begin(), this->_operator.end(), op);
 	if (it != this->_operator.end())
 	{
-		std::cout << "ok" << std::endl;
+		// std::cout << "ok" << std::endl;
 		it = std::find(this->_users.begin(), this->_users.end(), target);
 		if (it != this->_users.end())
 			this->_users.erase(it);
@@ -208,7 +209,10 @@ void Channel::rmTopic()
 
 void Channel::setInvitOnly(bool arg)
 {
-	this->_invitOnly = arg;
+	if (arg)
+		this->_modes += 1 << 4;
+	else
+		this->_modes -= 1 << 4;
 }
 
 void Channel::setRestrictionTopic(bool arg)
@@ -218,17 +222,26 @@ void Channel::setRestrictionTopic(bool arg)
 
 void Channel::setHasPassword(bool arg)
 {
-	this->_hasPassword = arg;
+	if (arg)
+		this->_modes += 1 << 2;
+	else
+		this->_modes -= 1 << 2;
 }
 
 void Channel::setHasTopic(bool arg)
 {
-	this->_hasTopic = arg;
+	if (arg)
+		this->_modes += 1 << 3;
+	else
+		this->_modes -= 1 << 3;
 }
 
 void Channel::setHasLimit(bool arg)
 {
-	this->_hasLimit = arg;
+	if (arg)
+		this->_modes += 1;
+	else
+		this->_modes -= 1;
 }
 
 void Channel::setUserLimit(u_int64_t nb)
