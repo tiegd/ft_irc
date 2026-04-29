@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 11:34:51 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/04/28 17:50:26 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/04/29 10:38:18 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ Channel::Channel(std::string channel_name, Client *op) : _name(channel_name), _n
 
 Channel::~Channel()
 {
-	// Delete les vectors et maps.
 }
 
 /*
@@ -71,6 +70,7 @@ void Channel::displayOps() const
 
 std::string Channel::getTopic() const
 {
+	std::cout << getHasTopic() << std::endl;
 	return (this->_topic);
 }
 
@@ -82,6 +82,11 @@ std::map<std::string, void (*)()> Channel::getMode() const
 unsigned int Channel::getNbMembers() const
 {
 	return (this->_nbMembers);
+}
+
+unsigned int Channel::getNbOp() const
+{
+	return (this->_nbOp);
 }
 
 bool Channel::getInvitOnly() const
@@ -144,6 +149,7 @@ void Channel::addUser(Client *target)
 	it = std::find(this->_users.begin(), this->_users.end(), target);
 	if (it == this->_users.end())
 		this->_users.push_back(target);
+	this->setNbMembers();
 }
 
 void Channel::ejectClient(Client *target, Client *op)
@@ -162,6 +168,8 @@ void Channel::ejectClient(Client *target, Client *op)
 		if (it != this->_operator.end())
 			this->_operator.erase(it);
 	}
+	this->setNbMembers();
+	this->setNbOp();
 }
 
 void Channel::addOperator(Client *target)
@@ -170,6 +178,7 @@ void Channel::addOperator(Client *target)
 	it = std::find(this->_operator.begin(), this->_operator.end(), target);
 	if (it == this->_operator.end())
 		this->_operator.push_back(target);
+	this->setNbOp();
 }
 
 void Channel::rmOperator(Client *target) // Called by another operator with mode
@@ -178,6 +187,7 @@ void Channel::rmOperator(Client *target) // Called by another operator with mode
 	it = std::find(this->_operator.begin(), this->_operator.end(), target);
 	if (it != this->_operator.end())
 		this->_operator.erase(it);
+	this->setNbOp();
 }
 
 void Channel::setTopic(std::string topic)
@@ -226,3 +236,12 @@ void Channel::setUserLimit(u_int64_t nb)
 	this->_userLimit = nb;
 }
 
+void Channel::setNbMembers()
+{
+	this->_nbMembers = this->_users.size();
+}
+
+void Channel::setNbOp()
+{
+	this->_nbOp = this->_operator.size();
+}

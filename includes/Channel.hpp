@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/21 17:00:04 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/04/28 17:16:53 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/04/29 10:37:24 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ class Channel
 		std::string							_topic;
 		std::map<std::string, void (*)()>	_mode;
 		unsigned int						_nbMembers;
+		unsigned int						_nbOp;
 
 		bool								_invitOnly; //i
 		bool								_restrictionTopic; //t
@@ -39,13 +40,6 @@ class Channel
 		Channel(std::string channel_name, Client *op);
 		~Channel();
 
-		// void invite(Client client);
-		// void displayTopic();
-		// void changeTopic();
-		
-		// void limitNbUsers(int nb_user);
-		// void listUsers();
-
 		//getters
 		std::string							getName() const;
 		std::string							getPassword() const;
@@ -56,6 +50,7 @@ class Channel
 		std::string							getTopic() const;
 		std::map<std::string, void (*)()>	getMode() const;
 		unsigned int						getNbMembers() const;
+		unsigned int						getNbOp() const;
 		bool								getInvitOnly() const;
 		bool								getResTopic() const;
 		bool								getHasPassword() const;
@@ -79,6 +74,8 @@ class Channel
 		void	setHasTopic(bool arg);
 		void	setHasLimit(bool arg);
 		void	setUserLimit(u_int64_t nb);
+		void	setNbMembers();
+		void	setNbOp();
 };
 
 #endif
