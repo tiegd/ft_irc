@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/21 17:00:04 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/04/29 12:23:26 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/04/29 13:15:58 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,15 +28,15 @@ class Channel
 		unsigned int						_nbMembers;
 		unsigned int						_nbOp;
 
-		char								_modes; 
+		char								_modeUsed; 
 		// The modes are stocked on the 5th bits.
 		// Need to be checked with binary operator.
 		// 0000itkl
-		bool								_invitOnly; //i
-		bool								_restrictionTopic; //t
-		bool								_hasPassword; //k
+		// bool								_invitOnly; //i
+		// bool								_restrictionTopic; //t
+		// bool								_hasPassword; //k
 		bool								_hasTopic;
-		bool								_hasLimit;
+		// bool								_hasLimit;
 		u_int64_t							_userLimit; //l
 
 		Channel();
@@ -73,7 +73,7 @@ class Channel
 		void	setTopic(std::string topic);
 		void	rmTopic();
 		void	setInvitOnly(bool arg);
-		void	setRestrictionTopic(bool arg);
+		void	setHasRestrictionTopic(bool arg);
 		void	setHasPassword(bool arg);
 		void	setHasTopic(bool arg);
 		void	setHasLimit(bool arg);

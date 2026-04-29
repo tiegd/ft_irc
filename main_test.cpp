@@ -34,6 +34,11 @@ int main()
 	std::cout << "Has password = " << channel_1.getHasPassword() << std::endl;
 	std::cout << std::endl;
 
+	std::cout << channel_1.getHasLimit() << "\n" << channel_1.getResTopic() << "\n" << channel_1.getInvitOnly() << std::endl;
+	channel_1.setHasLimit(true);
+	channel_1.setHasRestrictionTopic(true);
+	channel_1.setInvitOnly(true);
+	std::cout << channel_1.getHasLimit() << "\n" << channel_1.getResTopic() << "\n" << channel_1.getInvitOnly() << std::endl;
 	// std::cout << "nb clients = " << channel_1.getNbMembers() << "\nnb Operators = " << channel_1.getNbOp() << std::endl;
 	// channel_1.ejectClient(client_1, client_2);
 	// channel_1.getOperators();
