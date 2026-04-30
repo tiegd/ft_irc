@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 11:34:51 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/04/30 13:32:09 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/04/30 13:34:57 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,7 +160,7 @@ void Channel::rmUser(Client *target)
 	this->setNbMembers();
 }
 
-void Channel::kickUser(Client *target, Client *op)
+void Channel::kickUser(Client *target, Client *op, std::string msg)
 {
 	if (target == op)
 		return ;
@@ -170,6 +170,7 @@ void Channel::kickUser(Client *target, Client *op)
 	{
 		this->rmOperator(target);
 		this->rmUser(target);
+		this->sendChannelMsg(msg);
 	}
 }
 

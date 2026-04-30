@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/09 12:20:30 by amerzone          #+#    #+#             */
-/*   Updated: 2026/04/30 11:03:38 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/04/30 14:08:39 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,12 @@ class Server
 		void			PONG( std::string params, Client* client );
 
 		void			KICK(std::string const& line, Client* op);
-
+		void 			MODE(std::string const& line, Client* op);
+			void			modeInviteOnly();		
+			void			modeResTopic();		
+			void			modePassword();		
+			void			modeOpPrivilege();		
+			void			modeLimitUser();		
 
 
 

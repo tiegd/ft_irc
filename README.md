@@ -188,6 +188,60 @@ Server --- S12
 
 ## Instruction
 
+### Commandes
+
+#### KICK
+
+An operator can delete a client from a channel.
+```bash
+/kick <channel> <user> [<comment>]
+```
+
+#### INVITE
+
+A user can invite another user to join the channel.
+If the channel is Invite Only (mode +i), only the operator can send an invite.
+
+```bash
+/invite <nickname> <channel>
+```
+
+#### TOPIC
+
+If the channel can be settable by everyone (mode -t), a user can change or set the topic's channel.
+```bash
+#To change or set the topic :
+/topic <channel> [<topic>] 
+
+#To view the topic :
+/topic <channel>
+```
+
+#### MODE
+
+An operator can changer some parameters on a channel.
+
+```bash
+/mode <channel> {[+|-]|o|i|t|l|k} [<limit>] [<user>][<ban mask>]
+
+#take/give operator privileges :
+o : /mode <channel> {[+|-]o} <user>
+
+#invite-only channel flag :
+i : /mode <channel> {[+|-]i}
+
+#topic settable by channel operator only flag :
+t : /mode <channel> {[+|-]t}
+
+#set the user limit to channel :
+l : /mode <channel> {+l} <limit>
+    /mode <channel> {-l}
+
+#set a channel key (password) :
+k : /mode <channel> {+k} <password>
+    /mode <channel> {-k}
+```
+
 ## Ressources
 
 - https://ubuntu.com/tutorials/irc-server#1-overview
@@ -197,3 +251,4 @@ Server --- S12
 - https://en.wikipedia.org/wiki/IRC
 - https://celeo.github.io/2021/06/18/Implementing-an-IRC-server-from-scratch-part-1/
 - https://mathieu-lemoine.developpez.com/tutoriels/irc/protocole/?page=page-3
+- https://modern.ircdocs.horse/#channel-mode
