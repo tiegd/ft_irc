@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/30 14:00:09 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/04/30 14:21:29 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/04/30 16:10:40 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,14 @@
 
 void Server::MODE(std::string const& line, Client* op)
 {
-	// /mode seul => affiche les modes activés sur le channel	
+	// /mode seul => affiche les modes activés sur le channel
+
+	// Faire un parsing comme dans join car il peut y avoir plusieurs options
+	//en meme temps et les parametres doivent etres dans l'ordre	
 }
 
 void Server::modeInviteOnly()
 {
-	// :MODE
 }
 
 void Server::modeResTopic()
