@@ -188,6 +188,16 @@ Server --- S12
 
 ## Instruction
 
+### Run
+
+```bash
+make
+```
+
+```bash
+./ft_irc <port> <password>
+```
+
 ### Commandes
 
 #### KICK
