@@ -4,6 +4,11 @@
 
 ## Description
 
+This is an IRC server (Internet Relay Chat).\
+It is a communication protocol that refers to a network of multiple connected servers in which clients communicate through a server.\
+A client is any program that uses sockets and is capable of connecting to the server.\
+A server hosts a set of channels, and multiple clients can connect to it and communicate with each other on that server. No account or login is required.
+
 ```mermaid
 flowchart LR
 
