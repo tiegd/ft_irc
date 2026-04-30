@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/27 10:55:25 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/04/29 17:04:38 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/04/30 10:53:45 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,10 @@ void Server::KICK(std::string const& line, Client* op)
 	for (std::map<SOCKET, Client *>::iterator it = _clients.begin(); it != _clients.end(); it++)
 	{
 		if (it->second->getNickname() == clientToKick)
+		{
 			_channels[channelTarget]->kickUser(it->second, op);
+			// _channels[channelTarget]
+		}
 	}
 	
 }
