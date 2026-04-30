@@ -6,7 +6,7 @@
 #    By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/04/15 14:12:34 by amerzone          #+#    #+#              #
-#    Updated: 2026/04/29 15:43:03 by gaducurt         ###   ########.fr        #
+#    Updated: 2026/04/30 10:55:58 by gaducurt         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,17 +21,20 @@ INC = includes
 
 OBJDIR = obj/
 
-SRC =	main_test.cpp \
-		sources/Channel.cpp \
+SRC =	main.cpp \
 		sources/Client.cpp \
 		sources/Server.cpp \
-# 		sources/error.cpp \
-# 		sources/command/NICK.cpp \
-# 		sources/command/PASS.cpp \
-# 		sources/command/USER.cpp \
-# 		sources/command/JOIN.cpp \
-# 		sources/command/NOTICE.cpp \
-# 		sources/command/PRIVMSG.cpp
+		sources/Channel.cpp \
+		sources/error.cpp \
+		sources/FunctionError.cpp \
+		sources/parsingArguments.cpp \
+		sources/tools.cpp \
+		sources/command/NICK.cpp \
+		sources/command/PASS.cpp \
+		sources/command/USER.cpp \
+		sources/command/JOIN.cpp \
+		sources/command/NOTICE.cpp \
+		sources/command/PRIVMSG.cpp
 		
 
 OBJ := $(addprefix $(OBJDIR), $(SRC:.cpp=.o))

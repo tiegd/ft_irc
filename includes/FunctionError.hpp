@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 11:14:29 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/04/29 16:55:58 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/04/30 10:56:45 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,7 @@
 
 class	FunctionError : public std::exception
 {
-	private:
-		std::string	_functionName;
 	public:
-		FunctionError( std::string functionName );
 		const char* what() const throw();
 };
 

@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/21 17:00:04 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/04/29 17:04:19 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/04/30 10:56:40 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,10 +63,10 @@ class Channel
 		u_int64_t							getUserLimit() const;
 
 		//setters
+		void	addUser(Client *target); //add a new user whene a client use join
 		void	setName(std::string name);
 		void	setPassword(std::string password); //set the password if mode's parameter is +k
 		void	rmPassword(); //remove the password if mode's parameter is -k
-		void	addUser(Client *target); //add a new user whene a client use join
 		void	kickUser(Client *target, Client *op); //Remove the client specified in parameter and call the destructor if _n_members == 0
 		void	addOperator(Client *target);
 		void	rmOperator(Client *target);
@@ -80,6 +80,12 @@ class Channel
 		void	setUserLimit(u_int64_t nb);
 		void	setNbMembers();
 		void	setNbOp();
+
+
+		void		sendChannelMsg( std::string const& message );
+		std::string	getStrAllUsersNames( void );
+		std::string	getStrAllOperatorsNames( void );
+
 };
 
 #endif

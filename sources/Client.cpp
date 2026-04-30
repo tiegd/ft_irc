@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/16 17:03:42 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/04/29 10:49:20 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/04/29 17:33:36 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,5 +28,16 @@ SOCKET		Client::getSocketClient( void ) const					{ return _clientSocket; }
 std::string	Client::getNickname( void ) const						{ return _nickname; }
 bool		Client::getRegister( void ) const						{ return _registered; }
 std::string	Client::getUsername( void ) const						{ return _username; }
+std::string	Client::getHostname( void ) const						{ return _hostname; }
+
+
+void		Client::sendNotif( std::string notification )
+{
+	if (send(_clientSocket, notification.c_str(), notification.size(), 0) < 0)
+	{
+		throw FunctionError();
+	}
+	std::cout << "Notif :" << notification << " (was sent)";
+}
 
 Client::~Client( void ) {}

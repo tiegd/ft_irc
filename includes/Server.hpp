@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/09 12:20:30 by amerzone          #+#    #+#             */
-/*   Updated: 2026/04/29 14:21:05 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/04/30 11:03:38 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@
 #define	INVALID_CHAR ": *?@!"
 
 class Client;
-// class Channel;
+class Channel;
 
 class Server
 {
@@ -95,13 +95,13 @@ class Server
 		void			USER( std::string const & line, Client* client );
 
 		void			JOIN( std::string const & line, Client* client );
-			void			createChannel( std::string nameChannel, Client *op );
+			void			sendJoinNotification(Client *client, std::string nameChannel);
 		
 		void			PRIVMSG( std::string const& line, Client* client );
 		void			NOTICE( std::string const& line, Client* client );
 			void			sendNotice( Client *client, std::string recipient, std::string message);
 			void			sendMessage( Client *client, std::string recipient, std::string message);
-			SOCKET	const&	searchClient( std::string nicknameRecipient );
+			SOCKET			searchClient( std::string nicknameRecipient );
 			bool			channelExist( std::string channelName );
 
 		// void			WHO( std::string const& line, Client* client );

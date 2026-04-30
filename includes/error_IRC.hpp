@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/20 17:33:30 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/04/28 13:59:56 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/04/29 13:01:45 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@
 #define ERR_NOTEXTTOSEND		"412" // :No text to send
 #define ERR_NOSUCHNICK			"401" // :No such nick/channel
 #define ERR_NOSUCHCHAN			"403" // :No such channel
+
+#define ERR_INVITEONLYCHAN		"473" // :Cannot join channel (+i)
 
 class Client;
 

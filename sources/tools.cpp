@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 13:40:18 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/04/22 13:40:40 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/04/29 13:27:27 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,4 +30,11 @@ std::vector<std::string>	split( std::string & str, char c )
 		index = pos + 1;
 	}
 	return strvec;
+}
+
+bool	isPrintable( char c )
+{
+	if (c < 33 || c > 126 )
+		return false;
+	return true;
 }

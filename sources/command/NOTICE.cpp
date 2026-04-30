@@ -6,13 +6,16 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 14:21:16 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/04/29 10:27:16 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/04/29 13:33:23 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 #include "Client.hpp"
+#include "Channel.hpp"
 #include "tools.hpp"
+#include "error_IRC.hpp"
+#include "FunctionError.hpp"
 #include <algorithm>
 
 /* Same as PRIVMSG but we doesn't send error if the channel or tue user can't be found*/
@@ -50,7 +53,7 @@ void	Server::sendNotice( Client *client, std::string recipient, std::string mess
 	if (recipient[0] == '#')
 	{
 		if (channelExist(recipient) == true) // si on trouve le channel
-			_channels[recipient].sendChannelMsg(message); // fonction qui envoit un message a tous le channel.
+			_channels[recipient]->sendChannelMsg(message); // fonction qui envoit un message a tous le channel.
 		// else // sinon revoyer une erreur
 		// 	throw std::invalid_argument("Socket for channel given can't be found");
 	}
@@ -60,6 +63,6 @@ void	Server::sendNotice( Client *client, std::string recipient, std::string mess
 		// if (sockRecipient == -1) // si on trouve pas le client
 		// 	throw std::invalid_argument("Socket for nickname given can't be found");
 		if (send(client->getSocketClient(), message.c_str(), message.size(), 0) < 0) // si on le trouve on envoie le message au socket du nickname associé
-			throw FunctionError("send");
+			throw FunctionError();
 	}
 }
