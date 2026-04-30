@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/30 10:59:44 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/04/30 11:00:13 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/04/30 13:19:09 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,19 +24,16 @@ void Server::KICK(std::string const& line, Client* op)
 	std::string temp(line);
 	
 	std::vector<std::string>	splitArgs = split(temp, SPACE);
+	std::string					msg;
 	std::string 				channelTarget = splitArgs[1];
 	std::string					clientToKick = splitArgs[2];
 	if (splitArgs.size() == 3)
 		std::string				comment = splitArgs[3];
-
 	clientToKick.erase(0, 1);
 	for (std::map<SOCKET, Client *>::iterator it = _clients.begin(); it != _clients.end(); it++)
 	{
 		if (it->second->getNickname() == clientToKick)
-		{
 			_channels[channelTarget]->kickUser(it->second, op);
-			// _channels[channelTarget]
-		}
 	}
 	
 }

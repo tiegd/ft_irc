@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 11:34:51 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/04/30 11:04:00 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/04/30 13:32:09 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,6 +151,15 @@ void Channel::addUser(Client *target)
 	this->setNbMembers();
 }
 
+void Channel::rmUser(Client *target)
+{
+	std::vector<Client*>::iterator it;
+	it = std::find(this->_users.begin(), this->_users.end(), target);
+		if (it != this->_users.end())
+			this->_users.erase(it);
+	this->setNbMembers();
+}
+
 void Channel::kickUser(Client *target, Client *op)
 {
 	if (target == op)
@@ -159,15 +168,9 @@ void Channel::kickUser(Client *target, Client *op)
 	it = std::find(this->_operator.begin(), this->_operator.end(), op);
 	if (it != this->_operator.end())
 	{
-		it = std::find(this->_users.begin(), this->_users.end(), target);
-		if (it != this->_users.end())
-			this->_users.erase(it);
-		it = std::find(this->_operator.begin(), this->_operator.end(), target);
-		if (it != this->_operator.end())
-			this->_operator.erase(it);
+		this->rmOperator(target);
+		this->rmUser(target);
 	}
-	this->setNbMembers();
-	this->setNbOp();
 }
 
 void Channel::addOperator(Client *target)
@@ -189,7 +192,10 @@ void Channel::rmOperator(Client *target) // Called by another operator with mode
 	std::vector<Client*>::iterator it;
 	it = std::find(this->_operator.begin(), this->_operator.end(), target);
 	if (it != this->_operator.end())
+	{
 		this->_operator.erase(it);
+		this->_operator.push_back(target);
+	}
 	this->setNbOp();
 }
 
