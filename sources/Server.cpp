@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/15 12:42:23 by amerzone          #+#    #+#             */
-/*   Updated: 2026/04/29 15:36:53 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/04/30 10:36:58 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,10 +136,10 @@ void	Server::parseCommand( std::string const & line , Client* client )
 		{
 			PRIVMSG(line, client);
 		}
-		// if (line.compare(0, 4, "KICK") && line[5] == ' ')
-		// {
-		// 	KICK(line, client);
-		// }
+		if (line.compare(0, 4, "KICK") && line[5] == ' ')
+		{
+			KICK(line, client);
+		}
 	}
 }
 
