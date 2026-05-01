@@ -240,7 +240,8 @@ An operator can changer some parameters on a channel.
 /mode <channel> {[+|-]|o|i|t|l|k} [<limit>] [<user>][<ban mask>]
 
 #take/give operator privileges :
-o : /mode <channel> {[+|-]o} <user>
+o : /mode <channel> {+o} <user>
+o : /mode <channel> {-o} <user>
 
 #invite-only channel flag :
 i : /mode <channel> {[+|-]i}
