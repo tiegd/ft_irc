@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 11:34:51 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/04/30 13:34:57 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/01 13:19:13 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -203,8 +203,11 @@ void Channel::rmOperator(Client *target) // Called by another operator with mode
 void Channel::setTopic(std::string topic)
 {
 	// parseTopic(topic)
-	this->_topic = topic;
-	setHasTopic(true);
+	if (!this->getResTopic())
+	{
+		this->_topic = topic;
+		setHasTopic(true);
+	}
 }
 
 void Channel::rmTopic()
