@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 11:34:51 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/05/04 10:16:22 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/04 13:54:04 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,19 +128,33 @@ void Channel::setName(std::string name)
 	this->_name = name;
 }
 
-void Channel::setPassword(std::string password)
+void Channel::setPassword(Client *op, std::string password)
 {
-	this->_password = password;
-	setHasPassword(true);
+	std::vector<Client*>::iterator it;
+	it = std::find(this->_users.begin(), this->_users.end(), op);
+	if (it == this->_users.end())
+	{
+		this->_password = password;
+		if (!this->getHasPassword())
+			setHasPassword(true);
+	}
+	else
+		return; // renvoyer une erreur.
 }
 
-void Channel::rmPassword()
+void Channel::rmPassword(Client *op)
 {
-	if (this->getHasPassword())
+	std::vector<Client*>::iterator it;
+	it = std::find(this->_users.begin(), this->_users.end(), op);
+	if (it == this->_users.end())
 	{
-		this->_password.clear();
-		this->setHasPassword(false);
+		if (this->getHasPassword())
+				this->setHasPassword(false);
+		else
+			return; // renvoyer une erreur.
 	}
+	else
+		return; // renvoyer une erreur.
 }
 
 void Channel::addUser(Client *target)
@@ -165,9 +179,10 @@ void Channel::kickUser(Client *target, Client *op, std::string msg)
 {
 	if (target == op)
 		return ;
-	std::vector<Client*>::iterator it;
-	it = std::find(this->_operator.begin(), this->_operator.end(), op);
-	if (it != this->_operator.end())
+	// std::vector<Client*>::iterator it;
+	// it = std::find(this->_operator.begin(), this->_operator.end(), op);
+	// if (it != this->_operator.end())
+	if (this->isOperator(op))
 	{
 		this->rmOperator(target);
 		this->rmUser(target);
@@ -175,38 +190,56 @@ void Channel::kickUser(Client *target, Client *op, std::string msg)
 	}
 }
 
-void Channel::addOperator(Client *target)
+bool Channel::isOperator(Client *op)
 {
 	std::vector<Client*>::iterator it;
-	it = std::find(this->_operator.begin(), this->_operator.end(), target);
-	if (it == this->_operator.end())
+	it = std::find(this->_operator.begin(), this->_operator.end(), op);
+	if (it != this->_operator.end())
+		return (true);
+	else
+		return (false);
+}
+
+bool Channel::isUser(Client *target)
+{
+	std::vector<Client*>::iterator it;
+	it = std::find(this->_users.begin(), this->_users.end(), target);
+	if (it != this->_users.end())
+		return (true);
+	else
+		return (false);
+}
+
+void Channel::addOperator(Client *op, Client *target)
+{
+	if (this->isOperator(op))
 	{
 		this->_operator.push_back(target);
+		std::vector<Client*>::iterator it;
 		it = std::find(this->_users.begin(), this->_users.end(), target);
 		if (it != this->_users.end())
 			this->_users.erase(it);
 	}
 	this->setNbOp();
+	this->setNbMembers();
 }
 
-void Channel::rmOperator(Client *target) // Called by another operator with mode
+void Channel::rmOperator(Client *op, Client *target) // Called by another operator with mode
 {
 	std::vector<Client*>::iterator it;
 	it = std::find(this->_operator.begin(), this->_operator.end(), target);
 	if (it != this->_operator.end())
 	{
 		this->_operator.erase(it);
-		this->_operator.push_back(target);
+		this->_users.push_back(target);
 	}
 	this->setNbOp();
+	this->setNbMembers();
 }
 
 void Channel::setTopic(Client *op, std::string topic)
 {
-	// parseTopic(topic)
-	std::vector<Client*>::iterator it;
-	it = std::find(this->_operator.begin(), this->_operator.end(), op);
-	if (!this->getResTopic() || (this->getResTopic() && it != this->_operator.end()))
+	if (!this->getResTopic() || (this->getResTopic() && this->isOperator(op)))
 	{
 		this->_topic = topic;
 		setHasTopic(true);
@@ -215,9 +248,7 @@ void Channel::setTopic(Client *op, std::string topic)
 
 void Channel::rmTopic(Client *op)
 {
-	std::vector<Client*>::iterator it;
-	it = std::find(this->_operator.begin(), this->_operator.end(), op);
-	if (!this->getResTopic() || (this->getResTopic() && it != this->_operator.end()))
+	if (!this->getResTopic() || (this->getResTopic() && this->isOperator(op)))
 	{
 		this->_topic.clear();
 		this->setHasTopic(false);
@@ -226,9 +257,9 @@ void Channel::rmTopic(Client *op)
 
 void Channel::setInvitOnly(Client *op, bool arg)
 {
-	std::vector<Client*>::iterator it;
-	it = std::find(this->_operator.begin(), this->_operator.end(), op);
-	if (it != this->_operator.end())
+	// std::vector<Client*>::iterator it;
+	// it = std::find(this->_operator.begin(), this->_operator.end(), op);
+	if (t)
 	{
 		if (arg)
 			this->_modeUsed += 1 << 4;
