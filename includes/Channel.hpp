@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/21 17:00:04 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/04/30 13:35:19 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/04 10:14:11 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,14 +71,14 @@ class Channel
 		void	kickUser(Client *target, Client *op, std::string msg); //Remove the client specified in parameter and call the destructor if _n_members == 0
 		void	addOperator(Client *target);
 		void	rmOperator(Client *target);
-		void	setTopic(std::string topic);
-		void	rmTopic();
-		void	setInvitOnly(bool arg);
-		void	setHasRestrictionTopic(bool arg);
+		void	setTopic(Client *op, std::string topic);
+		void	rmTopic(Client *op);
+		void	setInvitOnly(Client *op, bool arg);
+		void	setHasRestrictionTopic(Client *op, bool arg);
 		void	setHasPassword(bool arg);
 		void	setHasTopic(bool arg);
 		void	setHasLimit(bool arg);
-		void	setUserLimit(u_int64_t nb);
+		void	setUserLimit(Client* op, u_int64_t nb, bool arg);
 		void	setNbMembers();
 		void	setNbOp();
 

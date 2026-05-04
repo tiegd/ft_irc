@@ -6,13 +6,14 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/30 14:00:09 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/05/01 13:16:56 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/04 09:14:43 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 #include "Client.hpp"
 #include "Channel.hpp"
+#include <algorithm>
 
 std::vector<std::string>	split( std::string & str, char c );
 
@@ -64,9 +65,9 @@ void Server::MODE(std::string const& line, Client* op)
 void Server::modeInviteOnly(Client* op, Channel* channel, bool toDo)
 {
 	if (toDo && !channel->getInvitOnly())
-		channel->setInvitOnly(toDo);
+		channel->setInvitOnly(op, toDo);
 	else if (!toDo && channel->getInvitOnly())
-		channel->setInvitOnly(toDo);
+		channel->setInvitOnly(op, toDo);
 	else
 		return;
 }
@@ -74,9 +75,9 @@ void Server::modeInviteOnly(Client* op, Channel* channel, bool toDo)
 void Server::modeRestrictionTopic(Client* op, Channel* channel, bool toDo)
 {
 	if (toDo && !channel->getResTopic())
-		channel->setHasRestrictionTopic(toDo);
+		channel->setHasRestrictionTopic(op, toDo);
 	else if (!toDo && channel->getResTopic())
-		channel->setHasRestrictionTopic(toDo);
+		channel->setHasRestrictionTopic(op, toDo);
 	else
 		return;
 }

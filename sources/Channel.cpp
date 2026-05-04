@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 11:34:51 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/05/01 13:19:13 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/04 10:16:22 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <sys/types.h>
 #include <algorithm>
 #include "FunctionError.hpp"
+#include <cstdint>
 
 Channel::Channel()
 {
@@ -200,39 +201,53 @@ void Channel::rmOperator(Client *target) // Called by another operator with mode
 	this->setNbOp();
 }
 
-void Channel::setTopic(std::string topic)
+void Channel::setTopic(Client *op, std::string topic)
 {
 	// parseTopic(topic)
-	if (!this->getResTopic())
+	std::vector<Client*>::iterator it;
+	it = std::find(this->_operator.begin(), this->_operator.end(), op);
+	if (!this->getResTopic() || (this->getResTopic() && it != this->_operator.end()))
 	{
 		this->_topic = topic;
 		setHasTopic(true);
 	}
 }
 
-void Channel::rmTopic()
+void Channel::rmTopic(Client *op)
 {
-	if (this->getHasTopic())
+	std::vector<Client*>::iterator it;
+	it = std::find(this->_operator.begin(), this->_operator.end(), op);
+	if (!this->getResTopic() || (this->getResTopic() && it != this->_operator.end()))
 	{
 		this->_topic.clear();
 		this->setHasTopic(false);
 	}
 }
 
-void Channel::setInvitOnly(bool arg)
+void Channel::setInvitOnly(Client *op, bool arg)
 {
-	if (arg)
-		this->_modeUsed += 1 << 4;
-	else
-		this->_modeUsed -= 1 << 4;
+	std::vector<Client*>::iterator it;
+	it = std::find(this->_operator.begin(), this->_operator.end(), op);
+	if (it != this->_operator.end())
+	{
+		if (arg)
+			this->_modeUsed += 1 << 4;
+		else
+			this->_modeUsed -= 1 << 4;
+	}
 }
 
-void Channel::setHasRestrictionTopic(bool arg)
+void Channel::setHasRestrictionTopic(Client *op, bool arg)
 {
-	if (arg)
-		this->_modeUsed += 1 << 3;
-	else
-		this->_modeUsed -= 1 << 3;
+	std::vector<Client*>::iterator it;
+	it = std::find(this->_operator.begin(), this->_operator.end(), op);
+	if (it != this->_operator.end())
+	{
+		if (arg)
+			this->_modeUsed += 1 << 3;
+		else
+			this->_modeUsed -= 1 << 3;
+	}
 }
 
 void Channel::setHasPassword(bool arg)
@@ -256,9 +271,24 @@ void Channel::setHasLimit(bool arg)
 		this->_modeUsed -= 1;
 }
 
-void Channel::setUserLimit(u_int64_t nb)
+void Channel::setUserLimit(Client* op, u_int64_t nb, bool arg)
 {
-	this->_userLimit = nb;
+	if (arg == true && nb == 0)
+		return;
+	if (nb <= __UINT64_MAX__) // limite du serveur à definir.
+		return;
+	std::vector<Client*>::iterator it;
+	it = std::find(this->_operator.begin(), this->_operator.end(), op);
+	if (it != this->_operator.end())
+	{
+		if (arg == true)
+		{
+			this->_userLimit = nb;
+			this->setHasLimit(true);
+		}
+		else if (arg == false)
+			this->setHasLimit(false);
+	}
 }
 
 void Channel::setNbMembers()
