@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/30 14:00:09 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/05/06 11:44:23 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/06 18:48:48 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,20 +27,28 @@ void Server::MODE(std::string const& line, Client* op)
 	// Envoyer dans l'ordes dans les differents methodes.
 	
 	std::string	temp(line);
+	if (temp.size() <= 5)
+	{
+		// display mode
+		return ;
+	}
 	temp.erase(0, 5);
 
 	std::vector<std::string>	splitArgs = split(temp, SPACE);
 	std::string					channelTarget = splitArgs[0];
 	std::string					options;
-	bool						toDo;
+	bool						toDo = true;
 
+	if (splitArgs.size() < 2)
+	{
+		ERR_NEEDMOREPARAMS("MODE");
+		return ;
+	}
 	options = splitArgs[1];
-	if (options[0] == '+')
-		toDo = true;
-	else if (options[0] == '-')
+	if (!parseOptions(options))
+		return ;
+	if (options[0] == '-')
 		toDo = false;
-	else
-		return; //rajouter l'erreur
 	options.erase(0, 1);
 	splitArgs.erase(splitArgs.begin(), splitArgs.begin() + 2);
 	for (int i = 0; i < options.size(); i++)
@@ -52,14 +60,29 @@ void Server::MODE(std::string const& line, Client* op)
 			case 't':
 				modeRestrictionTopic(op, _channels[channelTarget], toDo);
 			case 'k':
-				modePassword(op, _channels[channelTarget], toDo, splitArgs[0]);
-				splitArgs.erase(splitArgs.begin());
+				if (splitArgs.size() > 0)
+				{
+					modePassword(op, _channels[channelTarget], toDo, splitArgs[0]);
+					splitArgs.erase(splitArgs.begin());
+				}
+				else
+					ERR_NEEDMOREPARAMS("MODE");
 			case 'o':
-				modeOpPrivilege(op, _channels[channelTarget], toDo, splitArgs[0]);
-				splitArgs.erase(splitArgs.begin());
+				if (splitArgs.size() > 0)
+				{
+					modeOpPrivilege(op, _channels[channelTarget], toDo, splitArgs[0]);
+					splitArgs.erase(splitArgs.begin());
+				}
+				else
+					ERR_NEEDMOREPARAMS("MODE");
 			case 'l':
-				modeLimitUser(op, _channels[channelTarget], toDo, splitArgs[0]);
-				splitArgs.erase(splitArgs.begin());
+				if (splitArgs.size() > 0)
+				{
+					modeLimitUser(op, _channels[channelTarget], toDo, splitArgs[0]);
+					splitArgs.erase(splitArgs.begin());
+				}
+				else
+					ERR_NEEDMOREPARAMS("MODE");
 		}
 	}
 }
@@ -92,8 +115,8 @@ void Server::modeRestrictionTopic(Client* op, Channel* channel, bool toDo)
 
 void Server::modePassword(Client* op, Channel* channel, bool toDo, std::string password)
 {
-	// if (!paserMdp());
-	// 	return ;
+	if (!parseChannelPassword(password))
+		return ;
 	if (channel->isOperator(op))
 	{
 		if (toDo)
@@ -104,7 +127,6 @@ void Server::modePassword(Client* op, Channel* channel, bool toDo, std::string p
 				channel->rmPassword(op);
 			else
 				ERR_PASSWDMISMATCH();
-				// sendError(op, _name, ERR_PASSWDMISMATCH, );
 		}
 	}
 }
@@ -129,4 +151,32 @@ void Server::modeOpPrivilege(Client* op, Channel* channel, bool toDo, std::strin
 void Server::modeLimitUser(Client* op, Channel* channel, bool toDo, std::string limit)
 {
 	
+}
+
+bool Server::parseOptions(std::string options)
+{
+	if (options[0] != '+' || options[0] != '-')
+	{
+		ERR_NEEDMOREPARAMS("MODE");
+		return (false);
+	}
+	for (int i = 1; i < options.size(); i++)
+	{
+		if (options[i] != 'i' && options[i] != 't' && options[i] != 'k' && options[i] != 'o' && options[i] != 'l')
+		{
+			ERR_UMODEUNKNOWNFLAG(options[i]);
+			return (false);
+		}
+	}
+	return (true);
+}
+
+bool Server::parseChannelPassword(std::string password)
+{
+	for (int i = 0; i < password.size(); i++)
+	{
+		if (password[i] < 33 || password[i] > 126)
+			return (false);
+	}
+	return (true);
 }
