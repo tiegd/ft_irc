@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 11:34:51 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/05/04 13:54:04 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/06 11:32:47 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -210,21 +210,18 @@ bool Channel::isUser(Client *target)
 		return (false);
 }
 
-void Channel::addOperator(Client *op, Client *target)
+void Channel::addOperator(Client *target)
 {
-	if (this->isOperator(op))
-	{
-		this->_operator.push_back(target);
-		std::vector<Client*>::iterator it;
-		it = std::find(this->_users.begin(), this->_users.end(), target);
-		if (it != this->_users.end())
-			this->_users.erase(it);
-	}
+	this->_operator.push_back(target);
+	std::vector<Client*>::iterator it;
+	it = std::find(this->_users.begin(), this->_users.end(), target);
+	if (it != this->_users.end())
+		this->_users.erase(it);
 	this->setNbOp();
 	this->setNbMembers();
 }
 
-void Channel::rmOperator(Client *op, Client *target) // Called by another operator with mode
+void Channel::rmOperator(Client *target) // Called by another operator with mode
 {
 	std::vector<Client*>::iterator it;
 	it = std::find(this->_operator.begin(), this->_operator.end(), target);
@@ -239,6 +236,8 @@ void Channel::rmOperator(Client *op, Client *target) // Called by another operat
 
 void Channel::setTopic(Client *op, std::string topic)
 {
+	// if (!parserTopic(topic))
+	// 	return ;
 	if (!this->getResTopic() || (this->getResTopic() && this->isOperator(op)))
 	{
 		this->_topic = topic;
@@ -255,30 +254,20 @@ void Channel::rmTopic(Client *op)
 	}
 }
 
-void Channel::setInvitOnly(Client *op, bool arg)
+void Channel::setInvitOnly(bool arg)
 {
-	// std::vector<Client*>::iterator it;
-	// it = std::find(this->_operator.begin(), this->_operator.end(), op);
-	if (t)
-	{
-		if (arg)
-			this->_modeUsed += 1 << 4;
-		else
-			this->_modeUsed -= 1 << 4;
-	}
+	if (arg)
+		this->_modeUsed += 1 << 4;
+	else
+		this->_modeUsed -= 1 << 4;
 }
 
-void Channel::setHasRestrictionTopic(Client *op, bool arg)
+void Channel::setHasRestrictionTopic(bool arg)
 {
-	std::vector<Client*>::iterator it;
-	it = std::find(this->_operator.begin(), this->_operator.end(), op);
-	if (it != this->_operator.end())
-	{
-		if (arg)
-			this->_modeUsed += 1 << 3;
-		else
-			this->_modeUsed -= 1 << 3;
-	}
+	if (arg)
+		this->_modeUsed += 1 << 3;
+	else
+		this->_modeUsed -= 1 << 3;
 }
 
 void Channel::setHasPassword(bool arg)

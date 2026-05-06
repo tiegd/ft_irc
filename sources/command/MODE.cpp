@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/30 14:00:09 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/05/04 13:38:10 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/06 11:44:23 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,36 +66,64 @@ void Server::MODE(std::string const& line, Client* op)
 
 void Server::modeInviteOnly(Client* op, Channel* channel, bool toDo)
 {
-	if (toDo && !channel->getInvitOnly())
-		channel->setInvitOnly(op, toDo);
-	else if (!toDo && channel->getInvitOnly())
-		channel->setInvitOnly(op, toDo);
-	else
-		return;
+	if (channel->isOperator(op))
+	{
+		if (toDo && !channel->getInvitOnly())
+			channel->setInvitOnly(toDo);
+		else if (!toDo && channel->getInvitOnly())
+			channel->setInvitOnly(toDo);
+		else
+			return;
+	}
 }
 
 void Server::modeRestrictionTopic(Client* op, Channel* channel, bool toDo)
 {
-	if (toDo && !channel->getResTopic())
-		channel->setHasRestrictionTopic(op, toDo);
-	else if (!toDo && channel->getResTopic())
-		channel->setHasRestrictionTopic(op, toDo);
-	else
-		return;
+	if (channel->isOperator(op))
+	{
+		if (toDo && !channel->getResTopic())
+			channel->setHasRestrictionTopic(toDo);
+		else if (!toDo && channel->getResTopic())
+			channel->setHasRestrictionTopic(toDo);
+		else
+			return;
+	}
 }
 
 void Server::modePassword(Client* op, Channel* channel, bool toDo, std::string password)
 {
-	if (toDo)
-		channel->setPassword(op, password);
-	else if (!toDo && !channel->getHasPassword())
-		channel->rmPassword(op);
+	// if (!paserMdp());
+	// 	return ;
+	if (channel->isOperator(op))
+	{
+		if (toDo)
+			channel->setPassword(op, password);
+		else if (!toDo && channel->getHasPassword())
+		{
+			if (channel->getPassword() == password)
+				channel->rmPassword(op);
+			else
+				ERR_PASSWDMISMATCH();
+				// sendError(op, _name, ERR_PASSWDMISMATCH, );
+		}
+	}
 }
 
 void Server::modeOpPrivilege(Client* op, Channel* channel, bool toDo, std::string user)
 {
-	if (toDo)
-		channel->addOperator(op, target);
+	if (channel->isOperator(op))
+	{
+		for (std::map<SOCKET, Client *>::iterator it = _clients.begin(); it != _clients.end(); it++)
+		{
+			if (it->second->getNickname() == user)
+			{
+				if (toDo)
+					channel->addOperator(it->second);
+				else if (!toDo)
+					channel->rmOperator(it->second);
+			}
+		}
+	}
 }
 
 void Server::modeLimitUser(Client* op, Channel* channel, bool toDo, std::string limit)
