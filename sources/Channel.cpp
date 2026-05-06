@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 11:34:51 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/04/29 16:58:07 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/06 18:19:49 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -247,9 +247,14 @@ void Channel::setNbOp()
 	this->_nbOp = this->_operator.size();
 }
 
-void	Channel::sendChannelMsg( std::string const& message )
+void	Channel::broadcastToAll( std::string const& message )
 {
 	for (std::vector<Client*>::iterator it = _users.begin(); it != _users.end(); it++)
+	{
+		if (send((*it)->getSocketClient(), message.c_str(), message.size(), 0))
+			throw FunctionError();
+	}
+	for (std::vector<Client*>::iterator it = _operator.begin(); it != _operator.end(); it++)
 	{
 		if (send((*it)->getSocketClient(), message.c_str(), message.size(), 0))
 			throw FunctionError();
@@ -278,4 +283,35 @@ std::string	Channel::getStrAllOperatorsNames( void )
 	}
 	allUser.erase(allUser.find_last_of(' '), 1);
 	return allUser;
+}
+
+bool		Channel::clientIsOperator( Client* client )
+{
+	for (size_t i = 0; i < _operator.size(); i++)
+	{
+		if (_operator[i] == client)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+bool		Channel::clientIsUser( Client* client )
+{
+	for (size_t i = 0; i < _users.size(); i++)
+	{
+		if (_users[i] == client)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+bool		Channel::clientIsOnChannel( Client* client )
+{
+	if (clientIsUser(client) == true || clientIsOperator(client) == true)
+		return true;
+	return false;
 }

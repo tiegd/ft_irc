@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 18:33:23 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/04/29 13:34:18 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/06 18:59:58 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,13 @@ PRIVMSG <receiver>{,<receiver>} <:text to be sent>
 */
 void	Server::PRIVMSG( std::string const& line, Client* client)
 {
-	if (line.size() <= 5)
+	if (line.size() <= 7)
 	{
-		sendError(client, _name, ERR_NORECIPIENT, ":No recipient given (PRIVMSG)");
+		ERR_NORECIPIENT(_name, client);
 		throw std::invalid_argument("Channel or nickname missing to send msg");
 	}
 	std::string	temp(line);
-	temp.erase(0, 5);
+	temp.erase(0, 8);
 	
 	std::vector<std::string>	splitArgs = split(temp, SPACE);
 	std::string					strMessage = splitArgs[1];
@@ -45,7 +45,7 @@ void	Server::PRIVMSG( std::string const& line, Client* client)
 	}
 	else
 	{
-		sendError(client, _name, ERR_NOTEXTTOSEND, ":No text to send");
+		ERR_NOTEXTTOSEND(_name, client);
 		throw std::invalid_argument("Missing :<text to send>");
 	}
 }
@@ -59,10 +59,12 @@ void	Server::sendMessage( Client *client, std::string recipient, std::string mes
 	if (recipient[0] == '#')
 	{
 		if (channelExist(recipient) == true) // si on trouve le channel
-			_channels[recipient]->sendChannelMsg(message); // fonction qui envoit un message a tous le channel.
+		{
+			sendPrivmsgToChannel(_channels[recipient], client, message); // fonction qui envoit un message a tous le channel.
+		}
 		else // sinon revoyer une erreur
 		{
-			sendError(client, _name, ERR_NOSUCHNICK, recipient + " :No such nick/channel");
+			ERR_NOSUCHNICK(_name, client, recipient);
 			throw std::invalid_argument("Socket for channel given can't be found");
 		}
 	}
@@ -71,11 +73,11 @@ void	Server::sendMessage( Client *client, std::string recipient, std::string mes
 		SOCKET	sockRecipient = searchClient(recipient);
 		if (sockRecipient == -1) // si on trouve pas le client
 		{
-			sendError(client, _name, ERR_NOSUCHNICK, recipient + " :No such nick/channel");
+			ERR_NOSUCHNICK(_name, client, recipient);
 			throw std::invalid_argument("Socket for nickname given can't be found");
 		}
-		if (send(client->getSocketClient(), message.c_str(), message.size(), 0) < 0) // si on le trouve on envoie le message au socket du nickname associé
-			throw FunctionError();
+		else
+			sendPrivmsgToUser(client, recipient, sockRecipient, message);
 	}
 }
 
@@ -103,4 +105,20 @@ bool	Server::channelExist( std::string channelName )
 		}
 	}
 	return false;
+}
+
+/*
+	Message format: :Angel!wings@irc.org PRIVMSG Wiz :Are you receiving this message!
+*/
+void	sendPrivmsgToUser(Client* client, std::string const& target, SOCKET sockTarget, std::string const& message)
+{
+	std::string fullMsg = ":" + client->getFullName() + " PRIVMSG " + target + " :" + message + "\r\n";
+	if (send(sockTarget, fullMsg.c_str(), fullMsg.size(), 0) < 0)
+			throw FunctionError();
+}
+
+void	sendPrivmsgToChannel(Channel* channel, Client* client, std::string const& message)
+{
+	std::string fullMsg = ":" + client->getFullName() + " PRIVMSG " + channel->getName() + " :" + message + "\r\n";
+	channel->broadcastToAll(fullMsg);
 }

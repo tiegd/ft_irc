@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 11:13:50 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/04/29 17:06:27 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/06 19:40:12 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,9 @@ void	Server::JOIN(std::string const& line, Client* client)
 	
 	- Split pour chaque "," si il y en a une, ensuite parser chaque string et faire les verifs.
 	*/
-
 	if (line.size() <= 5)
 	{
-		sendError(client, _name, ERR_NEEDMOREPARAMS, "JOIN :Not enough parameters");
+		ERR_NEEDMOREPARAMS(_name, client, "JOIN");
 		throw std::invalid_argument("Not enough parameters");		
 	}
 
@@ -56,7 +55,7 @@ void	Server::JOIN(std::string const& line, Client* client)
 		std::string nameChannel(channels[i]);
 		if (nameChannel[0] != '#')
 		{
-			sendError(client, _name, ERR_BADCHANMASK, "JOIN :Bad channel mask");
+			ERR_BADCHANMASK(_name, client, nameChannel);
 			throw std::invalid_argument("# is missing for the channel name");
 		}
 		if (it_end == _channels.find(nameChannel)) // regarde si le channel n'existe pas
@@ -67,7 +66,7 @@ void	Server::JOIN(std::string const& line, Client* client)
 				// créer le channel
 				Channel*	newChannel = new Channel(nameChannel, client);
 				_channels[nameChannel] = newChannel;
-				sendJoinNotification(client, nameChannel);
+				sendJoinNotification(client, _channels[nameChannel]);
 			}
 		}
 		else // si il existe
@@ -84,48 +83,43 @@ void	Server::JOIN(std::string const& line, Client* client)
 						if (passwords[i].compare(_channels[nameChannel]->getPassword()) == 0) //si le password est correct
 						{
 							_channels[nameChannel]->addUser(client);
-							sendJoinNotification(client, nameChannel);
+							sendJoinNotification(client, _channels[nameChannel]);
 						}
 					}
 					else //sinon ca veut dire qu'il manque un parametre password pour le channel donc renvoyer badchannelkey
-						sendError(client, _name, ERR_BADCHANNELKEY, nameChannel + " :Cannot join channel (+k)");
+						ERR_BADCHANNELKEY(_name, client, nameChannel);
 				}
 				else //si il y a pas de password faire addUser
 				{
 					_channels[nameChannel]->addUser(client);
-					sendJoinNotification(client, nameChannel);
+					sendJoinNotification(client, _channels[nameChannel]);
 				}
 			}
 			else // renvoyer une erreur car le mode invite only est activé
 			{
-				sendError(client, _name, ERR_INVITEONLYCHAN, nameChannel + " :Cannot join channel (+i)");
+				ERR_INVITEONLYCHAN(_name, client, nameChannel);
 			}
 		}
 	}
 }
 
-void	Server::sendJoinNotification(Client *client, std::string nameChannel)
+void	Server::sendJoinNotification(Client *client, Channel* channel)
 {
-	/*
-	-envoyer notif a tous le channel
-	-envoyer le topic si il y en a un
-	-envoyer la list des gens qu'il y a sur le channel
-	-envoyer "fin de list" au client
-	*/
-	_channels[nameChannel]->sendChannelMsg(":" + client->getNickname() + "!" + client->getUsername() + "@" + client->getHostname() + " JOIN " + nameChannel + "\r\n");
+	// Envoyer la notif a tous le channel.
+	std::string	channelMsg = ":" + client->getNickname() + " JOIN " + channel->getName();
+	channel->broadcastToAll(channelMsg);
 
-	// Channel TOPIC:
-	if (_channels[nameChannel]->getHasTopic() == true)
-		client->sendNotif(":" + _name + RPL_TOPIC + client->getNickname() + " " + nameChannel + " :" + _channels[nameChannel]->getTopic() + "\r\n");
+	// // Channel TOPIC:
+	if (channel->getHasTopic() == true)
+	{
+		RPL_TOPIC(_name, client, channel->getName(), channel->getTopic());
+	}
 	else
-		client->sendNotif(":" + _name + RPL_TOPIC + client->getNickname() + " " + nameChannel + " :No topic exists" + "\r\n");
+		RPL_NOTOPIC(_name, client, channel->getName());
 
-	//NAMES REPLY
-	std::string names = ":" + _name + RPL_NAMREPLY + client->getHostname() + " = " + nameChannel + " :" + _channels[nameChannel]->getStrAllOperatorsNames() + _channels[nameChannel]->getStrAllUsersNames();
-	client->sendNotif(names + "\r\n");
-	
-	//END LIST
-	client->sendNotif(":" + _name + RPL_ENDOFNAMES + client->getNickname() + " :End of /NAMES list\r\n");
+	//NAMES REPLY :
+	RPL_NAMREPLY(_name, client, channel);
+	RPL_ENDOFNAMES(_name, client, channel->getName());
 }
 
 bool	nameChannelWellFormated( std::string nameChannel )

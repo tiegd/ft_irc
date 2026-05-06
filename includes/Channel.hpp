@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/21 17:00:04 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/04/29 16:57:37 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/06 18:53:39 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,9 +78,14 @@ class Channel
 		void	setNbOp();
 
 
-		void		sendChannelMsg( std::string const& message );
+		void		broadcastToAll( std::string const& message );
+
 		std::string	getStrAllUsersNames( void );
 		std::string	getStrAllOperatorsNames( void );
+
+		bool		clientIsOperator( Client* client );
+		bool		clientIsUser( Client* client );
+		bool		clientIsOnChannel( Client* client );
 
 };
 

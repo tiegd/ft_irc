@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 14:21:16 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/04/29 13:33:23 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/06 16:10:00 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,13 @@
 /* Same as PRIVMSG but we doesn't send error if the channel or tue user can't be found*/
 void	Server::NOTICE( std::string const& line, Client* client)
 {
-	if (line.size() <= 5)
+	if (line.size() <= 6)
 	{
 		sendError(client, _name, ERR_NORECIPIENT, ":No recipient given (NOTICE)");
 		throw std::invalid_argument("Channel or nickname missing to send msg");
 	}
 	std::string	temp(line);
-	temp.erase(0, 5);
+	temp.erase(0, 7);
 	
 	std::vector<std::string>	splitArgs = split(temp, SPACE);
 	std::string					strMessage = splitArgs[1];

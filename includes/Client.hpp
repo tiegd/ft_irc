@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/09 12:18:51 by amerzone          #+#    #+#             */
-/*   Updated: 2026/04/29 15:13:47 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/06 17:31:37 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ class Client
 		std::string	getUsername( void ) const;
 		std::string	getHostname( void ) const;
 		bool		getRegister( void ) const;
+		std::string	getFullName( void ) const;
 
 		/* SETTER */
 		void	setNickname( std::string const & newNickname );

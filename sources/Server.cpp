@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/15 12:42:23 by amerzone          #+#    #+#             */
-/*   Updated: 2026/04/29 18:37:48 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/06 14:46:08 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void	Server::setSocketServ( void )
 
 	if (listen(_socketServ, MAXCLIENTS) < 0)
 		std::cout << "Listen error" << std::endl;
-	
+
 	std::cout << "Waiting for a connection on port " << _port << std::endl;
 }
 
@@ -122,25 +122,29 @@ void	Server::parseCommand( std::string const & line , Client* client )
 	{
 		if (line.size() >= 4)
 		{
-			if (!line.compare(0, 5, "PASS ") && (line[4] == ' ' || line.size() == 4))
+			if (!line.compare(0, 4, "PASS") && (line[4] == ' ' || line.size() == 4))
 			{
 				PASS(line, client);
 			}
-			if (!line.compare(0, 5, "NICK ") && (line[4] == ' ' || line.size() == 4))
+			if (!line.compare(0, 4, "NICK") && (line[4] == ' ' || line.size() == 4))
 			{
 				NICK(line, client);
 			}
-			if (!line.compare(0, 5, "USER ") && (line[4] == ' ' || line.size() == 4))
+			if (!line.compare(0, 4, "USER") && (line[4] == ' ' || line.size() == 4))
 			{
 				USER(line, client);
 			}
-			if (!line.compare(0, 5, "JOIN ") && (line[4] == ' ' || line.size() == 4))
+			if (!line.compare(0, 4, "JOIN") && (line[4] == ' ' || line.size() == 4))
 			{
 				JOIN(line, client);
 			}
-			if (!line.compare(0, 8, "PRIVMSG") && (line[8] == ' ' || line.size() == 7))
+			if (!line.compare(0, 7, "PRIVMSG") && (line[7] == ' ' || line.size() == 7))
 			{
 				PRIVMSG(line, client);
+			}
+			if (!line.compare(0, 5, "TOPIC") && (line[5] == ' ' || line.size() == 5))
+			{
+				TOPIC(line, client);
 			}
 		}
 	}
@@ -172,24 +176,4 @@ void	Server::addClientSocket( void )
 	_clients[client] = newClient;
 
 	std::cout << "New client connected" << std::endl;
-
-	// /* test reception de message */
-	
-	// std::string	message;
-	// char	buff[1024];
-	// int bytes = recv(_fds[1].fd, buff, sizeof(buff), 0);
-	// buff[bytes] = '\0';
-	// message += buff;
-	// size_t pos;
-	// while ((pos = message.find("\n")) != std::string::npos) 
-	// {
-	// 	std::string line = message.substr(0, pos);
-	// 	message.erase(0, pos + 1);
-	// 	createClient(line);
-	// }
 }
-
-// void	Server::createChannel( std::string nameChannel, Client op)
-// {
-// 	_channels[nameChannel] = new Channel(nameChannel, op);
-// }

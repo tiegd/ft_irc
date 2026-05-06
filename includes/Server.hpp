@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/09 12:20:30 by amerzone          #+#    #+#             */
-/*   Updated: 2026/04/29 15:34:22 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/06 19:17:37 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ class Server
 		void			USER( std::string const & line, Client* client );
 
 		void			JOIN( std::string const & line, Client* client );
-			void			sendJoinNotification(Client *client, std::string nameChannel);
+			void			sendJoinNotification(Client *client, Channel* Channel);
 		
 		void			PRIVMSG( std::string const& line, Client* client );
 		void			NOTICE( std::string const& line, Client* client );
@@ -102,6 +102,8 @@ class Server
 		// void			WHO( std::string const& line, Client* client );
 		void			PING( std::string const& line, Client* client );
 		void			PONG( std::string params, Client* client );
+
+		void			TOPIC(std::string line, Client* client);
 
 
 
