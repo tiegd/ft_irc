@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 11:34:51 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/05/07 10:43:10 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/07 11:41:35 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -296,24 +296,15 @@ void Channel::setHasLimit(bool arg)
 		this->_modeUsed -= 1;
 }
 
-void Channel::setUserLimit(Client* op, u_int64_t nb, bool arg)
+void Channel::setUserLimit(u_int64_t nb, bool arg)
 {
-	if (arg == true && nb == 0)
-		return;
-	if (nb <= __UINT64_MAX__) // limite du serveur à definir.
-		return;
-	std::vector<Client*>::iterator it;
-	it = std::find(this->_operator.begin(), this->_operator.end(), op);
-	if (it != this->_operator.end())
+	if (arg == true && nb >= this->getNbMembers())
 	{
-		if (arg == true)
-		{
-			this->_userLimit = nb;
-			this->setHasLimit(true);
-		}
-		else if (arg == false)
-			this->setHasLimit(false);
+		this->_userLimit = nb;
+		this->setHasLimit(true);
 	}
+	else if (arg == false)
+		this->setHasLimit(false);
 }
 
 void Channel::setNbMembers()

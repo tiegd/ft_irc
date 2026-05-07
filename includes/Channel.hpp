@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/21 17:00:04 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/05/07 10:30:33 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/07 11:40:58 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ class Channel
 		void	setHasPassword(bool arg);
 		void	setHasTopic(bool arg);
 		void	setHasLimit(bool arg);
-		void	setUserLimit(Client* op, u_int64_t nb, bool arg);
+		void	setUserLimit(u_int64_t nb, bool arg);
 		void	setNbMembers();
 		void	setNbOp();
 		bool	isOperator(Client *op);

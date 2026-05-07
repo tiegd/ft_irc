@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/30 14:00:09 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/05/07 11:15:59 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/07 11:50:16 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,7 +158,15 @@ void Server::modeOpPrivilege(Client* op, Channel* channel, bool toDo, std::strin
 
 void Server::modeLimitUser(Client* op, Channel* channel, bool toDo, std::string limit)
 {
-	
+	if (channel->isOperator(op))
+	{
+		u_int64_t	nb = std::atoi(limit.c_str());
+		if (limit[0] != '0' && limit.size() == 1 && nb == 0)
+			
+		channel->setUserLimit(nb, toDo);
+	}
+	else
+		ERR_CHANOPRIVSNEEDED(_name, op, channel->getName());
 }
 
 bool Server::parseOptions(std::string options, Client *client)
