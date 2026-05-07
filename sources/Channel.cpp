@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 11:34:51 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/05/06 18:19:49 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/07 10:32:24 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,16 @@
 #include <sys/types.h>
 #include <algorithm>
 #include "FunctionError.hpp"
+#include <cstdint>
 
 Channel::Channel()
 {
 }
 
-Channel::Channel(std::string channel_name, Client *op) : _name(channel_name), _nbMembers(1), _invitOnly(false), _restrictionTopic(false), _hasPassword(false), _hasTopic(false), _hasLimit(false) 
+Channel::Channel(std::string channel_name, Client *op) : _name(channel_name), _nbMembers(1), _hasTopic(false), _modeUsed(0)
 {
 	this->addOperator(op);
-	// this->addUser(op);
-	// Initialiser la map de modes.
-	
+	// Initialiser la map de modes.	
 }
 
 Channel::~Channel()
@@ -47,7 +46,7 @@ std::string Channel::getPassword() const
 
 std::vector<Client*> Channel::getUsers() const
 {
-	this->displayUsers();
+	// this->displayUsers();
 	return (this->_users);
 }
 
@@ -59,7 +58,7 @@ void Channel::displayUsers() const
 
 std::vector<Client*> Channel::getOperators() const
 {
-	this->displayOps();
+	// this->displayOps();
 	return (this->_operator);
 }
 
@@ -92,17 +91,17 @@ unsigned int Channel::getNbOp() const
 
 bool Channel::getInvitOnly() const
 {
-	return (this->_invitOnly);
+	return (this->_modeUsed >> 4 & 1);
 }
 
 bool Channel::getResTopic() const
 {
-	return (this->_restrictionTopic);
+	return (this->_modeUsed >> 3 & 1);
 }
 
 bool Channel::getHasPassword() const
 {
-	return (this->_hasPassword);
+	return (this->_modeUsed >> 2 & 1);
 }
 
 bool Channel::getHasTopic() const
@@ -112,7 +111,7 @@ bool Channel::getHasTopic() const
 
 bool Channel::getHasLimit() const
 {
-	return (this->_hasLimit);
+	return (this->_modeUsed & 1);
 }
 
 u_int64_t Channel::getUserLimit() const
@@ -129,19 +128,33 @@ void Channel::setName(std::string name)
 	this->_name = name;
 }
 
-void Channel::setPassword(std::string password)
+void Channel::setPassword(Client *op, std::string password)
 {
-	this->_password = password;
-	setHasPassword(true);
+	std::vector<Client*>::iterator it;
+	it = std::find(this->_users.begin(), this->_users.end(), op);
+	if (it == this->_users.end())
+	{
+		this->_password = password;
+		if (!this->getHasPassword())
+			setHasPassword(true);
+	}
+	else
+		return; // renvoyer une erreur.
 }
 
-void Channel::rmPassword()
+void Channel::rmPassword(Client *op)
 {
-	if (this->getHasPassword())
+	std::vector<Client*>::iterator it;
+	it = std::find(this->_users.begin(), this->_users.end(), op);
+	if (it == this->_users.end())
 	{
-		this->_password.clear();
-		this->setHasPassword(false);
+		if (this->getHasPassword())
+				this->setHasPassword(false);
+		else
+			return; // renvoyer une erreur.
 	}
+	else
+		return; // renvoyer une erreur.
 }
 
 void Channel::addUser(Client *target)
@@ -153,33 +166,64 @@ void Channel::addUser(Client *target)
 	this->setNbMembers();
 }
 
-void Channel::ejectClient(Client *target, Client *op)
+void Channel::rmUser(Client *target)
+{
+	std::vector<Client*>::iterator it;
+	it = std::find(this->_users.begin(), this->_users.end(), target);
+		if (it != this->_users.end())
+			this->_users.erase(it);
+	this->setNbMembers();
+}
+
+void Channel::kickUser(Client *target, Client *op, std::string msg)
 {
 	if (target == op)
 		return ;
+	// std::vector<Client*>::iterator it;
+	// it = std::find(this->_operator.begin(), this->_operator.end(), op);
+	// if (it != this->_operator.end())
+	if (this->isOperator(op))
+	{
+		this->rmOperator(target);
+		this->rmUser(target);
+		this->sendChannelMsg(msg);
+	}
+}
+
+bool Channel::isOperator(Client *op)
+{
 	std::vector<Client*>::iterator it;
 	it = std::find(this->_operator.begin(), this->_operator.end(), op);
 	if (it != this->_operator.end())
-	{
-		std::cout << "ok" << std::endl;
-		it = std::find(this->_users.begin(), this->_users.end(), target);
-		if (it != this->_users.end())
-			this->_users.erase(it);
-		it = std::find(this->_operator.begin(), this->_operator.end(), target);
-		if (it != this->_operator.end())
-			this->_operator.erase(it);
-	}
-	this->setNbMembers();
-	this->setNbOp();
+		return (true);
+	else
+		return (false);
+}
+
+bool Channel::isUser(Client *target)
+{
+	std::vector<Client*>::iterator it;
+	it = std::find(this->_users.begin(), this->_users.end(), target);
+	if (it != this->_users.end())
+		return (true);
+	else
+		return (false);
 }
 
 void Channel::addOperator(Client *target)
 {
+	if (!this->isUser(target) && !this->isOperator(target))
+	{
+		ERR_NOTONCHANNEL(this->_name);
+		return ;
+	}
+	this->_operator.push_back(target);
 	std::vector<Client*>::iterator it;
-	it = std::find(this->_operator.begin(), this->_operator.end(), target);
-	if (it == this->_operator.end())
-		this->_operator.push_back(target);
+	it = std::find(this->_users.begin(), this->_users.end(), target);
+	if (it != this->_users.end())
+		this->_users.erase(it);
 	this->setNbOp();
+	this->setNbMembers();
 }
 
 void Channel::rmOperator(Client *target) // Called by another operator with mode
@@ -187,20 +231,28 @@ void Channel::rmOperator(Client *target) // Called by another operator with mode
 	std::vector<Client*>::iterator it;
 	it = std::find(this->_operator.begin(), this->_operator.end(), target);
 	if (it != this->_operator.end())
+	{
 		this->_operator.erase(it);
+		this->_users.push_back(target);
+	}
 	this->setNbOp();
+	this->setNbMembers();
 }
 
-void Channel::setTopic(std::string topic)
+void Channel::setTopic(Client *op, std::string topic)
 {
-	// parseTopic(topic)
-	this->_topic = topic;
-	setHasTopic(true);
+	// if (!parserTopic(topic))
+	// 	return ;
+	if (!this->getResTopic() || (this->getResTopic() && this->isOperator(op)))
+	{
+		this->_topic = topic;
+		setHasTopic(true);
+	}
 }
 
-void Channel::rmTopic()
+void Channel::rmTopic(Client *op)
 {
-	if (this->getHasTopic())
+	if (!this->getResTopic() || (this->getResTopic() && this->isOperator(op)))
 	{
 		this->_topic.clear();
 		this->setHasTopic(false);
@@ -209,17 +261,26 @@ void Channel::rmTopic()
 
 void Channel::setInvitOnly(bool arg)
 {
-	this->_invitOnly = arg;
+	if (arg)
+		this->_modeUsed += 1 << 4;
+	else
+		this->_modeUsed -= 1 << 4;
 }
 
-void Channel::setRestrictionTopic(bool arg)
+void Channel::setHasRestrictionTopic(bool arg)
 {
-	this->_restrictionTopic = arg;
+	if (arg)
+		this->_modeUsed += 1 << 3;
+	else
+		this->_modeUsed -= 1 << 3;
 }
 
 void Channel::setHasPassword(bool arg)
 {
-	this->_hasPassword = arg;
+	if (arg)
+		this->_modeUsed += 1 << 2;
+	else
+		this->_modeUsed -= 1 << 2;
 }
 
 void Channel::setHasTopic(bool arg)
@@ -229,12 +290,30 @@ void Channel::setHasTopic(bool arg)
 
 void Channel::setHasLimit(bool arg)
 {
-	this->_hasLimit = arg;
+	if (arg)
+		this->_modeUsed += 1;
+	else
+		this->_modeUsed -= 1;
 }
 
-void Channel::setUserLimit(u_int64_t nb)
+void Channel::setUserLimit(Client* op, u_int64_t nb, bool arg)
 {
-	this->_userLimit = nb;
+	if (arg == true && nb == 0)
+		return;
+	if (nb <= __UINT64_MAX__) // limite du serveur à definir.
+		return;
+	std::vector<Client*>::iterator it;
+	it = std::find(this->_operator.begin(), this->_operator.end(), op);
+	if (it != this->_operator.end())
+	{
+		if (arg == true)
+		{
+			this->_userLimit = nb;
+			this->setHasLimit(true);
+		}
+		else if (arg == false)
+			this->setHasLimit(false);
+	}
 }
 
 void Channel::setNbMembers()

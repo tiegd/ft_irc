@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/09 12:20:30 by amerzone          #+#    #+#             */
-/*   Updated: 2026/05/06 19:17:37 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/07 10:32:06 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 /* GLOBAL */
 
+#include <iostream>
 #include <string>
 #include <vector>
 #include <map>
@@ -23,12 +24,16 @@
 /* SOCKET */
 #include <sys/socket.h>
 #include <sys/types.h>
+#include <netinet/in.h>
+#include <poll.h>
 #include <string.h>
 #include <stdlib.h>
-#include <netinet/in.h>
-#include <iostream>
 #include <unistd.h>
-#include <poll.h>
+
+/* {MY HEADERS} */
+#include "error_IRC.hpp"
+#include "Channel.hpp"
+#include "FunctionError.hpp"
 
 // #define SERVER_PORT 1800
 #define	SOCKET int
@@ -108,6 +113,15 @@ class Server
 
 
 
+		void			KICK(std::string const& line, Client* op);
+		void 			MODE(std::string const& line, Client* op);
+			void			modeInviteOnly(Client* op, Channel* channel, bool toDo);
+			void			modeRestrictionTopic(Client* op, Channel* channel, bool toDo);
+			void			modePassword(Client* op, Channel* channel, bool toDo, std::string password);
+			void			modeOpPrivilege(Client* op, Channel* channel, bool toDo, std::string user);
+			void			modeLimitUser(Client* op, Channel* channel, bool toDo, std::string limit);
+			bool			parseOptions(std::string options);
+			bool			parseChannelPassword(std::string password);
 
 
 

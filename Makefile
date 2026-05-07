@@ -3,14 +3,14 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+         #
+#    By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/04/15 14:12:34 by amerzone          #+#    #+#              #
-#    Updated: 2026/04/29 13:35:12 by jpiquet          ###   ########.fr        #
+#    Updated: 2026/05/06 14:27:01 by gaducurt         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = ft_irc
+NAME = 1
 
 CXX = c++
 

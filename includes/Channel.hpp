@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/21 17:00:04 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/05/06 18:53:39 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/07 10:30:33 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,15 @@ class Channel
 		unsigned int						_nbMembers;
 		unsigned int						_nbOp;
 
-		bool								_invitOnly; //i
-		bool								_restrictionTopic; //t
-		bool								_hasPassword; //k
+		char								_modeUsed; 
+		// The modes are stocked on the 5th bits.
+		// Need to be checked with binary operator.
+		// 0000itkl
+		// bool								_invitOnly; //i
+		// bool								_restrictionTopic; //t
+		// bool								_hasPassword; //k
 		bool								_hasTopic;
-		bool								_hasLimit;
+		// bool								_hasLimit;
 		u_int64_t							_userLimit; //l
 
 		Channel();
@@ -60,31 +64,33 @@ class Channel
 
 		//setters
 		void	addUser(Client *target); //add a new user whene a client use join
+		void	rmUser(Client *target);
 		void	setName(std::string name);
-		void	setPassword(std::string password); //set the password if mode's parameter is +k
-		void	rmPassword(); //remove the password if mode's parameter is -k
-		void	ejectClient(Client *target, Client *op); //Remove the client specified in parameter and call the destructor if _n_members == 0
+		void	setPassword(Client *op, std::string password); //set the password if mode's parameter is +k
+		void	rmPassword(Client *op); //remove the password if mode's parameter is -k
+		void	kickUser(Client *target, Client *op, std::string msg); //Remove the client specified in parameter and call the destructor if _n_members == 0
 		void	addOperator(Client *target);
 		void	rmOperator(Client *target);
-		void	setTopic(std::string topic);
-		void	rmTopic();
+		void	setTopic(Client *op, std::string topic);
+		void	rmTopic(Client *op);
 		void	setInvitOnly(bool arg);
-		void	setRestrictionTopic(bool arg);
+		void	setHasRestrictionTopic(bool arg);
 		void	setHasPassword(bool arg);
 		void	setHasTopic(bool arg);
 		void	setHasLimit(bool arg);
-		void	setUserLimit(u_int64_t nb);
+		void	setUserLimit(Client* op, u_int64_t nb, bool arg);
 		void	setNbMembers();
 		void	setNbOp();
-
+		bool	isOperator(Client *op);
+		bool	isUser(Client *target);
 
 		void		broadcastToAll( std::string const& message );
 
 		std::string	getStrAllUsersNames( void );
 		std::string	getStrAllOperatorsNames( void );
 
-		bool		clientIsOperator( Client* client );
-		bool		clientIsUser( Client* client );
+		// bool		clientIsOperator( Client* client );
+		// bool		clientIsUser( Client* client );
 		bool		clientIsOnChannel( Client* client );
 
 };

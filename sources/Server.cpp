@@ -3,17 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/15 12:42:23 by amerzone          #+#    #+#             */
-/*   Updated: 2026/05/06 14:46:08 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/07 10:32:48 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 #include "Client.hpp"
 #include "function.hpp"
-#include "Channel.hpp"
 
 Server::Server( void ) {};
 
@@ -145,6 +144,13 @@ void	Server::parseCommand( std::string const & line , Client* client )
 			if (!line.compare(0, 5, "TOPIC") && (line[5] == ' ' || line.size() == 5))
 			{
 				TOPIC(line, client);
+			if (line.compare(0, 5, "KICK") && line[4] == ' ')
+			{
+				KICK(line, client);
+			}
+			if (line.compare(0, 5, "MODE") && line[4] == ' ')
+			{
+				MODE(line, client);
 			}
 		}
 	}
