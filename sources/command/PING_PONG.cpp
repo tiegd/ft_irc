@@ -6,13 +6,13 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/28 16:15:59 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/04/29 13:25:20 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/07 16:10:45 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
-#include "Client.hpp"
-#include "FunctionError.hpp"
+// #include "Client.hpp"
+// #include "FunctionError.hpp"
 
 void	Server::PING( std::string const& line, Client* client )
 {

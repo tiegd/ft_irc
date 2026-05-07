@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/16 17:03:42 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/06 18:05:40 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/07 18:56:09 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ std::string	Client::getHostname( void ) const						{ return _hostname; }
 
 std::string	Client::getFullName( void ) const // ":nick!user@host"
 {
-	std::string	fullName = ":" + _nickname + "!" + _username + "@" + _hostname;
+	std::string	fullName = _nickname + "!" + _username + "@" + _hostname;
 	return fullName;
 }
 
@@ -42,7 +42,6 @@ void		Client::sendNotif( std::string notification )
 	{
 		throw FunctionError();
 	}
-	std::cout << "Notif :" << notification << " (was sent)";
 }
 
 Client::~Client( void ) {}

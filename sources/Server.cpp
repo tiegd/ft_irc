@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/15 12:42:23 by amerzone          #+#    #+#             */
-/*   Updated: 2026/05/07 10:32:48 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/07 18:03:38 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
-#include "Client.hpp"
-#include "function.hpp"
+// #include "Client.hpp"
+// #include "function.hpp"
 
 Server::Server( void ) {};
 
@@ -99,14 +99,8 @@ void	Server::runServer( void )
 						{
 							std::string line = message.substr(0, pos);
 							message.erase(0, pos + 2);
-							// std::cout << "Client " << i << " dit : "  << line << std::endl;
 							std::cout << "Recu : "<< line << std::endl;
 							parseCommand(line, _clients[_fds[i].fd]);
-						}
-						if (_clients[_fds[i].fd]->getRegister() == true && _clients[_fds[i].fd]->getNickname() != "*" && _clients[_fds[i].fd]->getUsername() != "*")
-						{
-							
-							_clients[_fds[i].fd]->setRegister(true);
 						}
 					}
 				}
@@ -132,6 +126,8 @@ void	Server::parseCommand( std::string const & line , Client* client )
 			if (!line.compare(0, 4, "USER") && (line[4] == ' ' || line.size() == 4))
 			{
 				USER(line, client);
+				client->setRegister(true);
+				RPL_WELCOME(_name, client);
 			}
 			if (!line.compare(0, 4, "JOIN") && (line[4] == ' ' || line.size() == 4))
 			{
@@ -144,14 +140,15 @@ void	Server::parseCommand( std::string const & line , Client* client )
 			if (!line.compare(0, 5, "TOPIC") && (line[5] == ' ' || line.size() == 5))
 			{
 				TOPIC(line, client);
-			if (line.compare(0, 5, "KICK") && line[4] == ' ')
-			{
-				KICK(line, client);
 			}
-			if (line.compare(0, 5, "MODE") && line[4] == ' ')
-			{
-				MODE(line, client);
-			}
+			// if (line.compare(0, 5, "KICK") && line[4] == ' ')
+			// {
+			// 	KICK(line, client);
+			// }
+			// if (line.compare(0, 5, "MODE") && line[4] == ' ')
+			// {
+			// 	MODE(line, client);
+			// }
 		}
 	}
 	catch(const std::exception& e)

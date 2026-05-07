@@ -6,12 +6,11 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/20 16:27:20 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/06 17:18:10 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/07 16:44:29 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "error_IRC.hpp"
-#include "Client.hpp"
 // #include <string>
 
 /* FORMAT ERREUR : { :PREFIX CODE TARGET :message de l'erreur\r\n }
@@ -116,5 +115,11 @@ void	ERR_NOTONCHANNEL(std::string const& serverName, Client* client, std::string
 void	 ERR_CHANOPRIVSNEEDED(std::string const& serverName, Client* client, std::string const& channel)
 {
 	std::string msgToClient = ":" + serverName + " 482 " + client->getNickname() + " " + channel + " :You're not channel operator\r\n";
+	sendError(client, msgToClient);
+}
+
+void	ERR_UMODEUNKNOWNFLAG(std::string const& serverName, Client* client)
+{
+	std::string msgToClient = ":" + serverName + " 501 " + client->getNickname() + " :Unknown MODE flag";
 	sendError(client, msgToClient);
 }

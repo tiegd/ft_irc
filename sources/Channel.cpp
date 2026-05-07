@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 11:34:51 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/05/07 10:32:24 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/07 19:02:54 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <sys/types.h>
 #include <algorithm>
 #include "FunctionError.hpp"
-#include <cstdint>
+// #include <cstdint>
 
 Channel::Channel()
 {
@@ -186,7 +186,7 @@ void Channel::kickUser(Client *target, Client *op, std::string msg)
 	{
 		this->rmOperator(target);
 		this->rmUser(target);
-		this->sendChannelMsg(msg);
+		this->broadcastToAll(msg, op);
 	}
 }
 
@@ -212,11 +212,11 @@ bool Channel::isUser(Client *target)
 
 void Channel::addOperator(Client *target)
 {
-	if (!this->isUser(target) && !this->isOperator(target))
-	{
-		ERR_NOTONCHANNEL(this->_name);
-		return ;
-	}
+	// if (!this->isUser(target) && !this->isOperator(target))
+	// {
+	// 	ERR_NOTONCHANNEL(serverName, target, this->_name);
+	// 	return ;
+	// }
 	this->_operator.push_back(target);
 	std::vector<Client*>::iterator it;
 	it = std::find(this->_users.begin(), this->_users.end(), target);
@@ -326,16 +326,21 @@ void Channel::setNbOp()
 	this->_nbOp = this->_operator.size();
 }
 
-void	Channel::broadcastToAll( std::string const& message )
+void	Channel::broadcastToAll( std::string const& message, Client* sender )
 {
+	// (void)sender;
 	for (std::vector<Client*>::iterator it = _users.begin(); it != _users.end(); it++)
 	{
-		if (send((*it)->getSocketClient(), message.c_str(), message.size(), 0))
+		if ((*it)->getSocketClient() == sender->getSocketClient())
+			continue;
+		if (send((*it)->getSocketClient(), message.c_str(), message.size(), 0) < 0)
 			throw FunctionError();
 	}
 	for (std::vector<Client*>::iterator it = _operator.begin(); it != _operator.end(); it++)
 	{
-		if (send((*it)->getSocketClient(), message.c_str(), message.size(), 0))
+		if ((*it)->getSocketClient() == sender->getSocketClient())
+			continue;
+		if (send((*it)->getSocketClient(), message.c_str(), message.size(), 0) < 0)
 			throw FunctionError();
 	}
 }
@@ -358,39 +363,39 @@ std::string	Channel::getStrAllOperatorsNames( void )
 
 	for (int i = 0; i < _operator.size(); i++)
 	{
-		allUser = _operator[i]->getNickname() + " ";
+		allUser = '@' + _operator[i]->getNickname() + " ";
 	}
 	allUser.erase(allUser.find_last_of(' '), 1);
 	return allUser;
 }
 
-bool		Channel::clientIsOperator( Client* client )
-{
-	for (size_t i = 0; i < _operator.size(); i++)
-	{
-		if (_operator[i] == client)
-		{
-			return true;
-		}
-	}
-	return false;
-}
+// bool		Channel::clientIsOperator( Client* client )
+// {
+// 	for (size_t i = 0; i < _operator.size(); i++)
+// 	{
+// 		if (_operator[i] == client)
+// 		{
+// 			return true;
+// 		}
+// 	}
+// 	return false;
+// }
 
-bool		Channel::clientIsUser( Client* client )
-{
-	for (size_t i = 0; i < _users.size(); i++)
-	{
-		if (_users[i] == client)
-		{
-			return true;
-		}
-	}
-	return false;
-}
+// bool		Channel::clientIsUser( Client* client )
+// {
+// 	for (size_t i = 0; i < _users.size(); i++)
+// 	{
+// 		if (_users[i] == client)
+// 		{
+// 			return true;
+// 		}
+// 	}
+// 	return false;
+// }
 
 bool		Channel::clientIsOnChannel( Client* client )
 {
-	if (clientIsUser(client) == true || clientIsOperator(client) == true)
+	if (isUser(client) == true || isOperator(client) == true)
 		return true;
 	return false;
 }

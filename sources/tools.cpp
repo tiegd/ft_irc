@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 13:40:18 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/04/29 13:27:27 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/07 19:26:08 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,26 @@ std::vector<std::string>	split( std::string & str, char c )
 	while (index < str.size())
 	{
 		pos = str.find(c, index);
+		if (pos == std::string::npos)
+		{
+			strvec.push_back(str.substr(index, str.size()));
+			break;
+		}
+		strvec.push_back(str.substr(index, pos - index));
+		index = pos + 1;
+	}
+	return strvec;
+}
+
+std::vector<std::string>	splitStr( std::string & str, std::string c_set )
+{
+	std::vector<std::string>	strvec;
+	size_t index = 0;
+	size_t	pos = 0;
+
+	while (index < str.size())
+	{
+		pos = str.find(c_set, index);
 		if (pos == std::string::npos)
 		{
 			strvec.push_back(str.substr(index, str.size()));

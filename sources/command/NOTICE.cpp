@@ -6,28 +6,30 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 14:21:16 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/06 16:10:00 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/07 18:48:22 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
-#include "Client.hpp"
-#include "Channel.hpp"
-#include "tools.hpp"
-#include "error_IRC.hpp"
-#include "FunctionError.hpp"
+// #include "Client.hpp"
+// #include "tools.hpp"
+// #include "error_IRC.hpp"
+// #include "FunctionError.hpp"
+// #include "Channel.hpp"
 #include <algorithm>
 
-/* Same as PRIVMSG but we doesn't send error if the channel or tue user can't be found*/
+void	sendNoticeToUser(Client* client, std::string const& target, SOCKET sockTarget, std::string const& message);
+void	sendNoticeToChannel(Channel* channel, Client* client, std::string const& message);
+
 void	Server::NOTICE( std::string const& line, Client* client)
 {
-	if (line.size() <= 6)
+	if (line.size() <= 7)
 	{
-		sendError(client, _name, ERR_NORECIPIENT, ":No recipient given (NOTICE)");
+		ERR_NORECIPIENT(_name, client);
 		throw std::invalid_argument("Channel or nickname missing to send msg");
 	}
 	std::string	temp(line);
-	temp.erase(0, 7);
+	temp.erase(0, 8);
 	
 	std::vector<std::string>	splitArgs = split(temp, SPACE);
 	std::string					strMessage = splitArgs[1];
@@ -38,31 +40,46 @@ void	Server::NOTICE( std::string const& line, Client* client)
 	{
 		for(std::vector<std::string>::iterator it = recipient.begin(); it != recipient.end(); it++)
 		{
-			sendNotice(client, *it, strMessage);
+			sendMessage(client, *it, strMessage);
 		}
 	}
 	else
 	{
-		sendError(client, _name, ERR_NOTEXTTOSEND, ":No text to send");
+		ERR_NOTEXTTOSEND(_name, client);
 		throw std::invalid_argument("Missing :<text to send>");
 	}
 }
 
+/*
+- Send std::string message to std::string recipient.
+- Throw invalid_argument exception if not found or FunctionError exception if send fails.
+*/
 void	Server::sendNotice( Client *client, std::string recipient, std::string message)
 {
 	if (recipient[0] == '#')
 	{
-		if (channelExist(recipient) == true) // si on trouve le channel
-			_channels[recipient]->sendChannelMsg(message); // fonction qui envoit un message a tous le channel.
-		// else // sinon revoyer une erreur
-		// 	throw std::invalid_argument("Socket for channel given can't be found");
+		sendNoticeToChannel(_channels[recipient], client, message); // fonction qui envoit un message a tous le channel.
 	}
 	else
 	{
 		SOCKET	sockRecipient = searchClient(recipient);
-		// if (sockRecipient == -1) // si on trouve pas le client
-		// 	throw std::invalid_argument("Socket for nickname given can't be found");
-		if (send(client->getSocketClient(), message.c_str(), message.size(), 0) < 0) // si on le trouve on envoie le message au socket du nickname associé
-			throw FunctionError();
+		sendNoticeToUser(client, recipient, sockRecipient, message);
 	}
 }
+
+/*
+	Message format: :Angel!wings@irc.org PRIVMSG Wiz :Are you receiving this message!
+*/
+void	sendNoticeToUser(Client* client, std::string const& target, SOCKET sockTarget, std::string const& message)
+{
+	std::string fullMsg = ":" + client->getFullName() + " PRIVMSG " + target + " :" + message + "\r\n";
+	if (send(sockTarget, fullMsg.c_str(), fullMsg.size(), 0) < 0)
+			throw FunctionError();
+}
+
+void	sendNoticeToChannel(Channel* channel, Client* client, std::string const& message)
+{
+	std::string fullMsg = ":" + client->getFullName() + " PRIVMSG " + channel->getName() + " :" + message + "\r\n";
+	channel->broadcastToAll(fullMsg, client);
+}
+

@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/09 12:18:51 by amerzone          #+#    #+#             */
-/*   Updated: 2026/05/06 17:31:37 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/07 16:40:42 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 #include "Server.hpp"
 #include "FunctionError.hpp"
+
 #define	SOCKET int
 // #include "Channel.hpp"
 

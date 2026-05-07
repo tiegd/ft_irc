@@ -3,19 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   JOIN.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 11:13:50 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/07 10:33:04 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/07 19:29:13 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
-#include "Client.hpp"
-#include "tools.hpp"
-#include "error_IRC.hpp"
-#include "Channel.hpp"
-#include "rpl.hpp"
+// #include "Client.hpp"
+// #include "tools.hpp"
+// #include "error_IRC.hpp"
+// #include "Channel.hpp"
+// #include "rpl.hpp"
 
 bool	nameChannelWellFormated( std::string nameChannel );
 
@@ -42,15 +42,22 @@ void	Server::JOIN(std::string const& line, Client* client)
 	std::string	temp(line);
 	temp.erase(0, 5);
 
+	//Diviser la string en <channel> / <password>
 	std::vector<std::string>	splitArgs = split(temp, SPACE);
+
 	std::string					strChannel = splitArgs[0];
-	std::string					strPassword = splitArgs[1];
-
 	std::vector<std::string>	channels = split(strChannel, ',');
-	std::vector<std::string>	passwords = split(strPassword, ',');
+	std::string					strPassword;
+	std::vector<std::string>	passwords;
 
-	std::map<std::string, Channel*>::iterator	it_end = _channels.end();
-	for(size_t i = 0; i < channels.size(); i++)
+	if (splitArgs.size() > 1)
+	{
+		strPassword = splitArgs[1];
+		passwords = split(strPassword, ',');
+	}
+
+	// std::map<std::string, Channel*>::iterator	it_end = _channels.end();
+	for(size_t i = 0; i < channels.size(); i++) // boucle pour iteré sur tous les channels.
 	{
 		std::string nameChannel(channels[i]);
 		if (nameChannel[0] != '#')
@@ -58,7 +65,7 @@ void	Server::JOIN(std::string const& line, Client* client)
 			ERR_BADCHANMASK(_name, client, nameChannel);
 			throw std::invalid_argument("# is missing for the channel name");
 		}
-		if (it_end == _channels.find(nameChannel)) // regarde si le channel n'existe pas
+		if (_channels.size() == 0 || !_channels[nameChannel]) // regarde si le channel n'existe pas
 		{
 			//si il existe pas checker que le nom u channel a le bon format
 			if (nameChannelWellFormated(nameChannel) == true) // faire la fonction
@@ -72,13 +79,13 @@ void	Server::JOIN(std::string const& line, Client* client)
 		else // si il existe
 		{
 			//checker si c'est en mode invite-only
-			if (_channels[nameChannel]->getInvitOnly() == true)
+			if (_channels[nameChannel]->getInvitOnly() == false)
 			{
 				// checker si il a un password
-				if (_channels[nameChannel]->getHasPassword()) //mettre getHasPassword()
+				if (_channels[nameChannel]->getHasPassword())
 				{
 					// si il en a un verifier si c'est le bon.
-					if  (i < passwords.size()) // si l'index du vector de passwords est plus petit on compare
+					if  (!passwords.empty()  && i < passwords.size()) // si l'index du vector de passwords est plus petit on compare
 					{
 						if (passwords[i].compare(_channels[nameChannel]->getPassword()) == 0) //si le password est correct
 						{
@@ -106,8 +113,9 @@ void	Server::JOIN(std::string const& line, Client* client)
 void	Server::sendJoinNotification(Client *client, Channel* channel)
 {
 	// Envoyer la notif a tous le channel.
-	std::string	channelMsg = ":" + client->getNickname() + " JOIN " + channel->getName();
-	channel->broadcastToAll(channelMsg);
+	std::string	channelMsg = ":" + client->getNickname() + " JOIN " + channel->getName() + "\r\n";
+	client->sendNotif(channelMsg);
+	channel->broadcastToAll(channelMsg, client);
 
 	// // Channel TOPIC:
 	if (channel->getHasTopic() == true)

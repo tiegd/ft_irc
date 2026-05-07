@@ -6,11 +6,12 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/06 16:22:12 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/06 19:38:20 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/07 18:59:11 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rpl.hpp"
+// #include "Server.hpp"
 
 void	sendRpl( Client *client, std::string const& msgToClient )
 {
@@ -37,6 +38,12 @@ void	RPL_ENDOFNAMES(std::string const& serverName, Client* client, std::string c
 
 void	RPL_NAMREPLY(std::string const& serverName, Client* client, Channel* channel)
 {
-	std::string msgToClient = ":" + serverName + " 353 " + client->getNickname() + " =" + channel->getName() + " :" + channel->getStrAllOperatorsNames() + channel->getStrAllUsersNames();
+	std::string msgToClient = ":" + serverName + " 353 " + client->getNickname() + " = " + channel->getName() + " :" + channel->getStrAllOperatorsNames() + SPACE + channel->getStrAllUsersNames() + "\r\n";
+	sendRpl(client, msgToClient);
+}
+
+void	RPL_WELCOME(std::string const& serverName, Client* client)
+{
+	std::string msgToClient = ":" + serverName + " 001 " + client->getNickname() + " :" + "HEY SALUT T'ES SUR LE SERVER DE 2 GROSSES MERDES !\r\n";
 	sendRpl(client, msgToClient);
 }

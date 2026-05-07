@@ -3,14 +3,14 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+         #
+#    By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/04/15 14:12:34 by amerzone          #+#    #+#              #
-#    Updated: 2026/05/06 14:27:01 by gaducurt         ###   ########.fr        #
+#    Updated: 2026/05/07 16:50:03 by jpiquet          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = 1
+NAME = IntelligentRapidCacaboudin
 
 CXX = c++
 
@@ -25,16 +25,21 @@ SRC =	main.cpp \
 		sources/Client.cpp \
 		sources/Server.cpp \
 		sources/Channel.cpp \
-		sources/error.cpp \
 		sources/FunctionError.cpp \
 		sources/parsingArguments.cpp \
 		sources/tools.cpp \
+		sources/rpl.cpp \
+		sources/error.cpp \
 		sources/command/NICK.cpp \
 		sources/command/PASS.cpp \
 		sources/command/USER.cpp \
 		sources/command/JOIN.cpp \
 		sources/command/NOTICE.cpp \
-		sources/command/PRIVMSG.cpp
+		sources/command/PRIVMSG.cpp \
+		sources/command/PING_PONG.cpp \
+		sources/command/TOPIC.cpp \
+		sources/command/MODE.cpp \
+		sources/command/KICK.cpp
 		
 
 OBJ := $(addprefix $(OBJDIR), $(SRC:.cpp=.o))

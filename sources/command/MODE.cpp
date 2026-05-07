@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   MODE.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/30 14:00:09 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/05/07 10:16:22 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/07 16:10:07 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
-#include "Client.hpp"
-#include "Channel.hpp"
+// #include "Client.hpp"
+// #include "Channel.hpp"
+// #include "error_IRC.hpp"
 #include <algorithm>
 
 std::vector<std::string>	split( std::string & str, char c );
@@ -41,7 +42,7 @@ void Server::MODE(std::string const& line, Client* op)
 
 	if (splitArgs.size() < 2)
 	{
-		ERR_NEEDMOREPARAMS("MODE");
+		ERR_NEEDMOREPARAMS(_name, op, "MODE");
 		return ;
 	}
 	options = splitArgs[1];
@@ -66,7 +67,7 @@ void Server::MODE(std::string const& line, Client* op)
 					splitArgs.erase(splitArgs.begin());
 				}
 				else
-					ERR_NEEDMOREPARAMS("MODE");
+					ERR_NEEDMOREPARAMS(_name, op, "MODE");
 			case 'o':
 				if (splitArgs.size() > 0)
 				{
@@ -74,7 +75,7 @@ void Server::MODE(std::string const& line, Client* op)
 					splitArgs.erase(splitArgs.begin());
 				}
 				else
-					ERR_NEEDMOREPARAMS("MODE");
+					ERR_NEEDMOREPARAMS(_name, op, "MODE");
 			case 'l':
 				if (splitArgs.size() > 0)
 				{
@@ -82,7 +83,7 @@ void Server::MODE(std::string const& line, Client* op)
 					splitArgs.erase(splitArgs.begin());
 				}
 				else
-					ERR_NEEDMOREPARAMS("MODE");
+					ERR_NEEDMOREPARAMS(_name, op, "MODE");
 		}
 	}
 }
@@ -126,7 +127,7 @@ void Server::modePassword(Client* op, Channel* channel, bool toDo, std::string p
 			if (channel->getPassword() == password)
 				channel->rmPassword(op);
 			else
-				ERR_PASSWDMISMATCH();
+				ERR_PASSWDMISMATCH(_name, op);
 		}
 	}
 }
@@ -157,14 +158,14 @@ bool Server::parseOptions(std::string options)
 {
 	if (options[0] != '+' || options[0] != '-')
 	{
-		ERR_NEEDMOREPARAMS("MODE");
+		// ERR_NEEDMOREPARAMS(_name, "MODE");
 		return (false);
 	}
 	for (int i = 1; i < options.size(); i++)
 	{
 		if (options[i] != 'i' && options[i] != 't' && options[i] != 'k' && options[i] != 'o' && options[i] != 'l')
 		{
-			ERR_UMODEUNKNOWNFLAG(options[i]);
+			// ERR_UMODEUNKNOWNFLAG(options[i]);
 			return (false);
 		}
 	}
