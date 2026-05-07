@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 11:34:51 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/05/07 10:32:24 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/07 10:43:10 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -364,33 +364,33 @@ std::string	Channel::getStrAllOperatorsNames( void )
 	return allUser;
 }
 
-bool		Channel::clientIsOperator( Client* client )
-{
-	for (size_t i = 0; i < _operator.size(); i++)
-	{
-		if (_operator[i] == client)
-		{
-			return true;
-		}
-	}
-	return false;
-}
+// bool		Channel::clientIsOperator( Client* client )
+// {
+// 	for (size_t i = 0; i < _operator.size(); i++)
+// 	{
+// 		if (_operator[i] == client)
+// 		{
+// 			return true;
+// 		}
+// 	}
+// 	return false;
+// }
 
-bool		Channel::clientIsUser( Client* client )
-{
-	for (size_t i = 0; i < _users.size(); i++)
-	{
-		if (_users[i] == client)
-		{
-			return true;
-		}
-	}
-	return false;
-}
+// bool		Channel::clientIsUser( Client* client )
+// {
+// 	for (size_t i = 0; i < _users.size(); i++)
+// 	{
+// 		if (_users[i] == client)
+// 		{
+// 			return true;
+// 		}
+// 	}
+// 	return false;
+// }
 
 bool		Channel::clientIsOnChannel( Client* client )
 {
-	if (clientIsUser(client) == true || clientIsOperator(client) == true)
+	if (isUser(client) == true || isOperator(client) == true)
 		return true;
 	return false;
 }

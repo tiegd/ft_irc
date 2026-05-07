@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   TOPIC.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/06 14:46:20 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/06 18:27:36 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/07 10:44:05 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	Server::TOPIC(std::string line, Client* client)
 	{
 		if (_channels[channelName]->getResTopic()) // checker si le mode +t est activé 
 		{
-			if (_channels[channelName]->clientIsOperator(client) == false) // checker si le client est pas un operator & renvoyer erreur en fonction
+			if (_channels[channelName]->isOperator(client) == false) // checker si le client est pas un operator & renvoyer erreur en fonction
 			{
 				ERR_CHANOPRIVSNEEDED(_name, client, channelName);
 				throw std::invalid_argument("Channel mode is +t && user is not operator");

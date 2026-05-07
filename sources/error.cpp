@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/20 16:27:20 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/06 17:18:10 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/07 11:14:37 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,3 +118,16 @@ void	 ERR_CHANOPRIVSNEEDED(std::string const& serverName, Client* client, std::s
 	std::string msgToClient = ":" + serverName + " 482 " + client->getNickname() + " " + channel + " :You're not channel operator\r\n";
 	sendError(client, msgToClient);
 }
+
+// { ------------------- MODE -------------- }
+void	ERR_UMODEUNKNOWNFLAG(std::string const& serverName, Client* client)
+{
+	std::string msgToClient = ":" + serverName + " 501 " + client->getNickname() + " :Unknown MODE flag\r\n";
+	sendError(client, msgToClient);
+}
+
+// void	ERR_NOPRIVILEGES(std::string const& serverName, Client* client)
+// {
+// 	std::string msgToClient = ":" + serverName + " 481 " + client->getNickname() + " ::Permission Denied- You're not an IRC operator\r\n";
+// 	sendError(client, msgToClient);
+// }

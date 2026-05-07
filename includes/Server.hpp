@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/09 12:20:30 by amerzone          #+#    #+#             */
-/*   Updated: 2026/05/07 10:32:06 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/07 10:47:14 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,7 @@ class Server
 			void			modePassword(Client* op, Channel* channel, bool toDo, std::string password);
 			void			modeOpPrivilege(Client* op, Channel* channel, bool toDo, std::string user);
 			void			modeLimitUser(Client* op, Channel* channel, bool toDo, std::string limit);
-			bool			parseOptions(std::string options);
+			bool			parseOptions(std::string options, Client *client);
 			bool			parseChannelPassword(std::string password);
 
 

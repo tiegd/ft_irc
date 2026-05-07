@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error_IRC.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/20 17:33:30 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/06 17:18:08 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/07 11:12:57 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,5 +44,9 @@ void    ERR_INVITEONLYCHAN(std::string const& serverName, Client* client, std::s
 // {TOPIC}
 void	ERR_NOTONCHANNEL(std::string const& serverName, Client* client, std::string const& channel);
 void	 ERR_CHANOPRIVSNEEDED(std::string const& serverName, Client* client, std::string const& channel);
+
+// {MODE}
+void	ERR_UMODEUNKNOWNFLAG(std::string const& serverName, Client* client);
+void	ERR_NOPRIVILEGES(std::string const& serverName, Client* client);
 
 #endif

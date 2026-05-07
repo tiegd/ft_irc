@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/30 14:00:09 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/05/07 10:16:22 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/07 11:15:59 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,11 @@ void Server::MODE(std::string const& line, Client* op)
 
 	if (splitArgs.size() < 2)
 	{
-		ERR_NEEDMOREPARAMS("MODE");
+		ERR_NEEDMOREPARAMS(_name, op, "MODE");
 		return ;
 	}
 	options = splitArgs[1];
-	if (!parseOptions(options))
+	if (!parseOptions(options, op))
 		return ;
 	if (options[0] == '-')
 		toDo = false;
@@ -66,7 +66,7 @@ void Server::MODE(std::string const& line, Client* op)
 					splitArgs.erase(splitArgs.begin());
 				}
 				else
-					ERR_NEEDMOREPARAMS("MODE");
+					ERR_NEEDMOREPARAMS(_name, op, "MODE");
 			case 'o':
 				if (splitArgs.size() > 0)
 				{
@@ -74,7 +74,7 @@ void Server::MODE(std::string const& line, Client* op)
 					splitArgs.erase(splitArgs.begin());
 				}
 				else
-					ERR_NEEDMOREPARAMS("MODE");
+					ERR_NEEDMOREPARAMS(_name, op, "MODE");
 			case 'l':
 				if (splitArgs.size() > 0)
 				{
@@ -82,7 +82,7 @@ void Server::MODE(std::string const& line, Client* op)
 					splitArgs.erase(splitArgs.begin());
 				}
 				else
-					ERR_NEEDMOREPARAMS("MODE");
+					ERR_NEEDMOREPARAMS(_name, op, "MODE");
 		}
 	}
 }
@@ -98,6 +98,8 @@ void Server::modeInviteOnly(Client* op, Channel* channel, bool toDo)
 		else
 			return;
 	}
+	else
+		ERR_CHANOPRIVSNEEDED(_name, op, channel->getName());
 }
 
 void Server::modeRestrictionTopic(Client* op, Channel* channel, bool toDo)
@@ -111,6 +113,8 @@ void Server::modeRestrictionTopic(Client* op, Channel* channel, bool toDo)
 		else
 			return;
 	}
+	else
+		ERR_CHANOPRIVSNEEDED(_name, op, channel->getName());
 }
 
 void Server::modePassword(Client* op, Channel* channel, bool toDo, std::string password)
@@ -126,9 +130,11 @@ void Server::modePassword(Client* op, Channel* channel, bool toDo, std::string p
 			if (channel->getPassword() == password)
 				channel->rmPassword(op);
 			else
-				ERR_PASSWDMISMATCH();
+				ERR_PASSWDMISMATCH(_name, op);
 		}
 	}
+	else
+		ERR_CHANOPRIVSNEEDED(_name, op, channel->getName());
 }
 
 void Server::modeOpPrivilege(Client* op, Channel* channel, bool toDo, std::string user)
@@ -146,6 +152,8 @@ void Server::modeOpPrivilege(Client* op, Channel* channel, bool toDo, std::strin
 			}
 		}
 	}
+	else
+		ERR_CHANOPRIVSNEEDED(_name, op, channel->getName());
 }
 
 void Server::modeLimitUser(Client* op, Channel* channel, bool toDo, std::string limit)
@@ -153,18 +161,18 @@ void Server::modeLimitUser(Client* op, Channel* channel, bool toDo, std::string 
 	
 }
 
-bool Server::parseOptions(std::string options)
+bool Server::parseOptions(std::string options, Client *client)
 {
 	if (options[0] != '+' || options[0] != '-')
 	{
-		ERR_NEEDMOREPARAMS("MODE");
+		ERR_NEEDMOREPARAMS(_name, client, "MODE");
 		return (false);
 	}
 	for (int i = 1; i < options.size(); i++)
 	{
 		if (options[i] != 'i' && options[i] != 't' && options[i] != 'k' && options[i] != 'o' && options[i] != 'l')
 		{
-			ERR_UMODEUNKNOWNFLAG(options[i]);
+			ERR_UMODEUNKNOWNFLAG(_name, client);
 			return (false);
 		}
 	}
