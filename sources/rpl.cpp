@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rpl.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/06 16:22:12 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/06 19:38:20 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/07 13:36:37 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,4 +39,9 @@ void	RPL_NAMREPLY(std::string const& serverName, Client* client, Channel* channe
 {
 	std::string msgToClient = ":" + serverName + " 353 " + client->getNickname() + " =" + channel->getName() + " :" + channel->getStrAllOperatorsNames() + channel->getStrAllUsersNames();
 	sendRpl(client, msgToClient);
+}
+
+void    RPL_CHANNELMODEIS(std::string const& serverName, Client* client, Channel* channel)
+{
+	
 }

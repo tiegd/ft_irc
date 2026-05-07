@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 11:34:51 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/05/07 11:41:35 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/07 16:54:19 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,11 +177,6 @@ void Channel::rmUser(Client *target)
 
 void Channel::kickUser(Client *target, Client *op, std::string msg)
 {
-	if (target == op)
-		return ;
-	// std::vector<Client*>::iterator it;
-	// it = std::find(this->_operator.begin(), this->_operator.end(), op);
-	// if (it != this->_operator.end())
 	if (this->isOperator(op))
 	{
 		this->rmOperator(target);
@@ -212,11 +207,6 @@ bool Channel::isUser(Client *target)
 
 void Channel::addOperator(Client *target)
 {
-	if (!this->isUser(target) && !this->isOperator(target))
-	{
-		ERR_NOTONCHANNEL(this->_name);
-		return ;
-	}
 	this->_operator.push_back(target);
 	std::vector<Client*>::iterator it;
 	it = std::find(this->_users.begin(), this->_users.end(), target);
@@ -354,30 +344,6 @@ std::string	Channel::getStrAllOperatorsNames( void )
 	allUser.erase(allUser.find_last_of(' '), 1);
 	return allUser;
 }
-
-// bool		Channel::clientIsOperator( Client* client )
-// {
-// 	for (size_t i = 0; i < _operator.size(); i++)
-// 	{
-// 		if (_operator[i] == client)
-// 		{
-// 			return true;
-// 		}
-// 	}
-// 	return false;
-// }
-
-// bool		Channel::clientIsUser( Client* client )
-// {
-// 	for (size_t i = 0; i < _users.size(); i++)
-// 	{
-// 		if (_users[i] == client)
-// 		{
-// 			return true;
-// 		}
-// 	}
-// 	return false;
-// }
 
 bool		Channel::clientIsOnChannel( Client* client )
 {

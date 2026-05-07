@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/09 12:20:30 by amerzone          #+#    #+#             */
-/*   Updated: 2026/05/07 10:47:14 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/07 15:43:54 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@
 
 /* {MY HEADERS} */
 #include "error_IRC.hpp"
+#include "rpl.hpp"
 #include "Channel.hpp"
 #include "FunctionError.hpp"
 
@@ -121,7 +122,7 @@ class Server
 			void			modeOpPrivilege(Client* op, Channel* channel, bool toDo, std::string user);
 			void			modeLimitUser(Client* op, Channel* channel, bool toDo, std::string limit);
 			bool			parseOptions(std::string options, Client *client);
-			bool			parseChannelPassword(std::string password);
+			bool			parseChannelPassword(Client* op, Channel* channel, std::string password);
 
 
 

@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/30 10:59:44 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/05/01 12:05:53 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/07 16:54:04 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,31 @@ void Server::KICK(std::string const& line, Client* op)
 	msg = ":" + op->getNickname() + " KICK " + channelTarget + " " + clientToKick;
 	if (splitArgs.size() == 3)
 		msg += " :" + splitArgs[2];
+	for (std::map<std::string, Channel*>::iterator it = _channels.begin(); it != _channels.end(); it++)
+	{
+		if (it->second->getName() == channelTarget)
+			break;
+		if (it == _channels.end())
+		{
+			ERR_NOSUCHCHANNEL(_name, op, channelTarget);
+			return;
+		}
+	}
 	for (std::map<SOCKET, Client *>::iterator it = _clients.begin(); it != _clients.end(); it++)
 	{
 		if (it->second->getNickname() == clientToKick)
-			_channels[channelTarget]->kickUser(it->second, op, msg);
-			// Checker si la channel existe
+		{
+			if (it->second == op)
+				return;
+			if (_channels[channelTarget]->isOperator(op))
+			{
+				if (!_channels[channelTarget]->isOperator(it->second) || !_channels[channelTarget]->isUser(it->second))
+				{
+					ERR_NOTONCHANNEL(_name, it->second, _channels[channelTarget]->getName());
+					return;
+				}
+				_channels[channelTarget]->kickUser(it->second, op, msg);
+			}
+		}
 	}
 }

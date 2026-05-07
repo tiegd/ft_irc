@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/30 14:00:09 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/05/07 11:50:16 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/07 16:56:03 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,27 +29,34 @@ void Server::MODE(std::string const& line, Client* op)
 	std::string	temp(line);
 	if (temp.size() <= 5)
 	{
-		// display mode
+		ERR_NEEDMOREPARAMS(_name, op, "MODE");
 		return ;
 	}
 	temp.erase(0, 5);
 
 	std::vector<std::string>	splitArgs = split(temp, SPACE);
 	std::string					channelTarget = splitArgs[0];
-	std::string					options;
-	bool						toDo = true;
-
-	if (splitArgs.size() < 2)
+	if (splitArgs.size() == 1)
 	{
-		ERR_NEEDMOREPARAMS(_name, op, "MODE");
+		RPL_CHANNELMODEIS(_name, op, _channels[channelTarget]);
 		return ;
 	}
+	std::string					options;
+	bool						toDo = true;
 	options = splitArgs[1];
+	if (options[0] == '-' || options[0] == '+')
+	{
+		if (options[0] == '-')
+			toDo = false;
+		if (options.size() == 1)
+		{
+			ERR_NEEDMOREPARAMS(_name, op, "MODE");
+			return ;	
+		}
+		options.erase(0, 1);
+	}
 	if (!parseOptions(options, op))
 		return ;
-	if (options[0] == '-')
-		toDo = false;
-	options.erase(0, 1);
 	splitArgs.erase(splitArgs.begin(), splitArgs.begin() + 2);
 	for (int i = 0; i < options.size(); i++)
 	{
@@ -85,6 +92,7 @@ void Server::MODE(std::string const& line, Client* op)
 					ERR_NEEDMOREPARAMS(_name, op, "MODE");
 		}
 	}
+	RPL_CHANNELMODEIS(_name, op, _channels[channelTarget]);
 }
 
 void Server::modeInviteOnly(Client* op, Channel* channel, bool toDo)
@@ -119,7 +127,7 @@ void Server::modeRestrictionTopic(Client* op, Channel* channel, bool toDo)
 
 void Server::modePassword(Client* op, Channel* channel, bool toDo, std::string password)
 {
-	if (!parseChannelPassword(password))
+	if (!parseChannelPassword(op, channel, password))
 		return ;
 	if (channel->isOperator(op))
 	{
@@ -160,9 +168,20 @@ void Server::modeLimitUser(Client* op, Channel* channel, bool toDo, std::string 
 {
 	if (channel->isOperator(op))
 	{
-		u_int64_t	nb = std::atoi(limit.c_str());
-		if (limit[0] != '0' && limit.size() == 1 && nb == 0)
-			
+		u_int64_t	nb;
+		
+		if (toDo)
+		{
+			for (int i = 0; i < limit.size(); i++)
+			{
+				if (!std::isdigit(limit[i]))
+					ERR_INVALIDMODEPARAM(_name, op, channel->getName(), 'o', limit, "limit can be only numeric characters");
+					return ;
+			}
+			nb = std::atoi(limit.c_str());
+			if (limit[0] != '0' && limit.size() == 1 && nb == 0)
+				return ;
+		}
 		channel->setUserLimit(nb, toDo);
 	}
 	else
@@ -171,12 +190,7 @@ void Server::modeLimitUser(Client* op, Channel* channel, bool toDo, std::string 
 
 bool Server::parseOptions(std::string options, Client *client)
 {
-	if (options[0] != '+' || options[0] != '-')
-	{
-		ERR_NEEDMOREPARAMS(_name, client, "MODE");
-		return (false);
-	}
-	for (int i = 1; i < options.size(); i++)
+	for (int i = 0; i < options.size(); i++)
 	{
 		if (options[i] != 'i' && options[i] != 't' && options[i] != 'k' && options[i] != 'o' && options[i] != 'l')
 		{
@@ -187,12 +201,15 @@ bool Server::parseOptions(std::string options, Client *client)
 	return (true);
 }
 
-bool Server::parseChannelPassword(std::string password)
+bool Server::parseChannelPassword(Client* op, Channel* channel, std::string password)
 {
 	for (int i = 0; i < password.size(); i++)
 	{
 		if (password[i] < 33 || password[i] > 126)
+		{
+			ERR_INVALIDMODEPARAM(_name, op, channel->getName(), 'k', password, "the characters in the keyword must be printable");
 			return (false);
+		}
 	}
 	return (true);
 }

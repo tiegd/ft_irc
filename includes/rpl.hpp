@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/29 18:48:05 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/07 10:31:33 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/07 13:35:57 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,5 +22,6 @@ void	RPL_NOTOPIC(std::string serverName, Client* client, std::string const& chan
 void	RPL_TOPIC(std::string const& serverName, Client* client, std::string const& channel, std::string const& topic);
 void	RPL_ENDOFNAMES(std::string const& serverName, Client* client, std::string const& channel);
 void	RPL_NAMREPLY(std::string const& serverName, Client* client, Channel* channel);
+void    RPL_CHANNELMODEIS(std::string const& serverName, Client* client, Channel* channel);
 
 #endif
