@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/30 14:00:09 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/05/07 16:56:03 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/07 17:04:13 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,6 +153,11 @@ void Server::modeOpPrivilege(Client* op, Channel* channel, bool toDo, std::strin
 		{
 			if (it->second->getNickname() == user)
 			{
+				if (!channel->isOperator(it->second) || !channel->isUser(it->second))
+				{
+					ERR_NOTONCHANNEL(_name, it->second, channel->getName());
+					return;
+				}
 				if (toDo)
 					channel->addOperator(it->second);
 				else if (!toDo)
