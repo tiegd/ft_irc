@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 11:34:51 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/05/06 11:32:47 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/07 10:25:20 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -212,6 +212,11 @@ bool Channel::isUser(Client *target)
 
 void Channel::addOperator(Client *target)
 {
+	if (!this->isUser(target) && !this->isOperator(target))
+	{
+		ERR_NOTONCHANNEL(this->_name);
+		return ;
+	}
 	this->_operator.push_back(target);
 	std::vector<Client*>::iterator it;
 	it = std::find(this->_users.begin(), this->_users.end(), target);
