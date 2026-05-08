@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/20 18:34:09 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/07 18:21:06 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/08 15:28:08 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,11 +53,14 @@ void	Server::NICK( std::string const & line, Client* client )
 			if (temp == *it)
 			{
 				_nicknameAlreadyUsed.erase(it);
+				break;
 			}
-			std::string	notification = ":" + client->getNickname() + "!" + client->getUsername() + "@" + client->getHostname() + " NICK " + temp + "\r\n";
-			client->sendNotif(notification);
 		}
 	}
+	std::string	notification = ":" + client->getNickname() + "!" + client->getUsername() + "@" + client->getHostname() + " NICK " + temp + "\r\n";
+	std::cout << "NOTIF CHANGEMENT DE NICK : " << notification << std::endl;
+	client->sendNotif(notification);
+	client->broadcastToMyChannels(notification);
 	client->setNickname(temp);
 	_nicknameAlreadyUsed.push_back(temp);
 }

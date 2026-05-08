@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/09 12:18:51 by amerzone          #+#    #+#             */
-/*   Updated: 2026/05/07 16:40:42 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/08 15:33:22 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,10 @@
 #define CLIENT_HPP
 
 #include "Server.hpp"
+#include "Channel.hpp"
 #include "FunctionError.hpp"
+
+class Channel;
 
 #define	SOCKET int
 // #include "Channel.hpp"
@@ -31,7 +34,7 @@ class Client
 
 		bool							_registered;
 		/*Map de tous les channels rejoint par le client.*/
-		// std::map<std::string, Channel>	_joined;
+		std::vector<Channel*>			_chanJoined;
 		// peut rejoindre 10 channel maximum
 
 		Client( Client const& src );
@@ -58,7 +61,9 @@ class Client
 		void	setUsername( std::string const & newNickname );
 		void	setHostname( std::string const & newNickname );
 		void	setRegister( bool val );
-			
+		
+		void	addChanJoined( Channel* newChannel );
+		void	broadcastToMyChannels( std::string notification );
 };
 
 #endif

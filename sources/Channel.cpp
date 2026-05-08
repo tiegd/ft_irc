@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 11:34:51 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/05/07 19:02:54 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/08 17:55:26 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -334,39 +334,42 @@ void	Channel::broadcastToAll( std::string const& message, Client* sender )
 		if ((*it)->getSocketClient() == sender->getSocketClient())
 			continue;
 		if (send((*it)->getSocketClient(), message.c_str(), message.size(), 0) < 0)
-			throw FunctionError();
+			std::cout << "send() error" << std::endl;
+
 	}
 	for (std::vector<Client*>::iterator it = _operator.begin(); it != _operator.end(); it++)
 	{
 		if ((*it)->getSocketClient() == sender->getSocketClient())
 			continue;
 		if (send((*it)->getSocketClient(), message.c_str(), message.size(), 0) < 0)
-			throw FunctionError();
+			std::cout << "send() error" << std::endl;
 	}
 }
 
 std::string	Channel::getStrAllUsersNames( void )
 {
-	std::string allUser;
+	std::string allUsers;
 
-	for (int i = 0; i < _users.size(); i++)
+	for (size_t i = 0; i < _users.size(); ++i)
 	{
-		allUser = _users[i]->getNickname() + " ";
+		if (!allUsers.empty())
+			allUsers += " ";
+		allUsers += _users[i]->getNickname();
 	}
-	allUser.erase(allUser.find_last_of(' '), 1);
-	return allUser;
+	return allUsers;
 }
 
 std::string	Channel::getStrAllOperatorsNames( void )
 {
-	std::string allUser;
+	std::string allOps;
 
-	for (int i = 0; i < _operator.size(); i++)
+	for (size_t i = 0; i < _operator.size(); ++i)
 	{
-		allUser = '@' + _operator[i]->getNickname() + " ";
+		if (!allOps.empty())
+			allOps += " ";
+		allOps += '@' + _operator[i]->getNickname() + " ";
 	}
-	allUser.erase(allUser.find_last_of(' '), 1);
-	return allUser;
+	return allOps;
 }
 
 // bool		Channel::clientIsOperator( Client* client )

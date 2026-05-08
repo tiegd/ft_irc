@@ -6,7 +6,7 @@
 #    By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/04/15 14:12:34 by amerzone          #+#    #+#              #
-#    Updated: 2026/05/07 16:50:03 by jpiquet          ###   ########.fr        #
+#    Updated: 2026/05/08 17:03:40 by jpiquet          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,6 +39,7 @@ SRC =	main.cpp \
 		sources/command/PING_PONG.cpp \
 		sources/command/TOPIC.cpp \
 		sources/command/MODE.cpp \
+		sources/command/PART.cpp \
 		sources/command/KICK.cpp
 		
 

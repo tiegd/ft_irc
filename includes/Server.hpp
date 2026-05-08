@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/09 12:20:30 by amerzone          #+#    #+#             */
-/*   Updated: 2026/05/07 16:42:45 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/08 17:34:04 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ class Server
 
 		void			TOPIC(std::string line, Client* client);
 
-
+		void			PART(std::string const& line, Client* client);
 
 
 		void			KICK(std::string const& line, Client* op);

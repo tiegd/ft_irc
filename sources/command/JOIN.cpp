@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 11:13:50 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/07 19:29:13 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/08 17:59:40 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ void	Server::JOIN(std::string const& line, Client* client)
 				// créer le channel
 				Channel*	newChannel = new Channel(nameChannel, client);
 				_channels[nameChannel] = newChannel;
+				client->addChanJoined(_channels[nameChannel]);
 				sendJoinNotification(client, _channels[nameChannel]);
 			}
 		}
@@ -90,6 +91,7 @@ void	Server::JOIN(std::string const& line, Client* client)
 						if (passwords[i].compare(_channels[nameChannel]->getPassword()) == 0) //si le password est correct
 						{
 							_channels[nameChannel]->addUser(client);
+							client->addChanJoined(_channels[nameChannel]);
 							sendJoinNotification(client, _channels[nameChannel]);
 						}
 					}
@@ -99,6 +101,7 @@ void	Server::JOIN(std::string const& line, Client* client)
 				else //si il y a pas de password faire addUser
 				{
 					_channels[nameChannel]->addUser(client);
+					client->addChanJoined(_channels[nameChannel]);
 					sendJoinNotification(client, _channels[nameChannel]);
 				}
 			}
@@ -112,22 +115,18 @@ void	Server::JOIN(std::string const& line, Client* client)
 
 void	Server::sendJoinNotification(Client *client, Channel* channel)
 {
-	// Envoyer la notif a tous le channel.
-	std::string	channelMsg = ":" + client->getNickname() + " JOIN " + channel->getName() + "\r\n";
-	client->sendNotif(channelMsg);
-	channel->broadcastToAll(channelMsg, client);
+	std::string	channelMsg = ":" + client->getFullName() + " JOIN " + channel->getName() + "\r\n";
 
-	// // Channel TOPIC:
+	RPL_NAMREPLY(_name, client, channel);
+	RPL_ENDOFNAMES(_name, client, channel->getName());
+
 	if (channel->getHasTopic() == true)
-	{
 		RPL_TOPIC(_name, client, channel->getName(), channel->getTopic());
-	}
 	else
 		RPL_NOTOPIC(_name, client, channel->getName());
 
-	//NAMES REPLY :
-	RPL_NAMREPLY(_name, client, channel);
-	RPL_ENDOFNAMES(_name, client, channel->getName());
+	sendRpl(client, channelMsg);
+	channel->broadcastToAll(channelMsg, client);
 }
 
 bool	nameChannelWellFormated( std::string nameChannel )

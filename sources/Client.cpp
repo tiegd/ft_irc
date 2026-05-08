@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/16 17:03:42 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/07 18:56:09 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/08 15:21:47 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,22 @@ void		Client::sendNotif( std::string notification )
 {
 	if (send(_clientSocket, notification.c_str(), notification.size(), 0) < 0)
 	{
-		throw FunctionError();
+		std::cout << "sendNotif() error" << std::endl;
 	}
+}
+
+void		Client::broadcastToMyChannels( std::string notification )
+{
+	std::vector<Channel*>::iterator it;
+	for (it = _chanJoined.begin(); it != _chanJoined.end(); ++it)
+	{
+		(*it)->broadcastToAll(notification, this);
+	}
+}
+
+void		Client::addChanJoined( Channel *newChannel )
+{
+	_chanJoined.push_back(newChannel);
 }
 
 Client::~Client( void ) {}
