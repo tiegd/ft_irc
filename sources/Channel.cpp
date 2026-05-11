@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 11:34:51 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/05/11 15:31:10 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/11 17:21:06 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,9 +74,18 @@ std::string Channel::getTopic() const
 	return (this->_topic);
 }
 
-std::map<std::string, void (*)()> Channel::getMode() const
+std::string Channel::getModeString() const
 {
-	return (this->_mode);
+	std::string	str;
+	if (this->getHasLimit())
+		str += 'l';
+	if (this->getHasPassword())
+		str += 'k';
+	if (this->getInvitOnly())
+		str += 'i';
+	if (this->getResTopic())
+		str += 't';
+	return (str);
 }
 
 unsigned int Channel::getNbMembers() const

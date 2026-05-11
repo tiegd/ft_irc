@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/21 17:00:04 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/05/11 15:28:22 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/11 17:13:14 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,8 @@ class Channel
 		std::vector<Client*>				getOperators() const;
 		void								displayOps() const;
 		std::string							getTopic() const;
-		std::map<std::string, void (*)()>	getMode() const;
+		std::string							getModeString() const;
+		std::string							getModeArgs() const;
 		unsigned int						getNbMembers() const;
 		unsigned int						getNbOp() const;
 		bool								getInvitOnly() const;

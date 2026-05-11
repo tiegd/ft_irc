@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/30 14:00:09 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/05/11 15:33:56 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/11 15:55:11 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ void Server::MODE(std::string const& line, Client* op)
 	// Envoyer dans l'ordes dans les differents methodes.
 	
 	std::string	temp(line);
+	std::cout << temp << " : " << temp.size() << std::endl;
 	if (temp.size() <= 5)
 	{
 		ERR_NEEDMOREPARAMS(_name, op, "MODE");
