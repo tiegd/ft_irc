@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/15 12:42:23 by amerzone          #+#    #+#             */
-/*   Updated: 2026/05/08 17:13:34 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/11 16:45:13 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,33 +117,42 @@ void	Server::parseCommand( std::string const & line , Client* client )
 		{
 			if (!line.compare(0, 4, "PASS") && (line[4] == ' ' || line.size() == 4))
 			{
-				PASS(line, client);
+				client->setPassValid(PASS(line, client));
 			}
 			if (!line.compare(0, 4, "NICK") && (line[4] == ' ' || line.size() == 4))
 			{
-				NICK(line, client);
+				client->setNickValid(NICK(line, client));
 			}
 			if (!line.compare(0, 4, "USER") && (line[4] == ' ' || line.size() == 4))
 			{
-				USER(line, client);
-				client->setRegister(true);
-				RPL_WELCOME(_name, client);
+				client->setUserValid(USER(line, client));
+				// std::cout << "pass valid = " << passValid << std::endl;
+				// std::cout << "nick valid = " << nickValid << std::endl;
+				// std::cout << "user valid = " << userValid << std::endl;
+				// if (passValid == 1 && nickValid == 1 && userValid == 1)
+				// {
+				// 	client->setRegister(true);
+				// 	RPL_WELCOME(_name, client);
+				// }
 			}
-			if (!line.compare(0, 4, "JOIN") && (line[4] == ' ' || line.size() == 4))
+			if (client->getRegister() == true)
 			{
-				JOIN(line, client);
-			}
-			if (!line.compare(0, 4, "PART") && (line[4] == ' ' || line.size() == 4))
-			{
-				PART(line, client);
-			}
-			if (!line.compare(0, 7, "PRIVMSG") && (line[7] == ' ' || line.size() == 7))
-			{
-				PRIVMSG(line, client);
-			}
-			if (!line.compare(0, 5, "TOPIC") && (line[5] == ' ' || line.size() == 5))
-			{
-				TOPIC(line, client);
+				if (!line.compare(0, 4, "JOIN") && (line[4] == ' ' || line.size() == 4))
+				{
+					JOIN(line, client);
+				}
+				if (!line.compare(0, 4, "PART") && (line[4] == ' ' || line.size() == 4))
+				{
+					PART(line, client);
+				}
+				if (!line.compare(0, 7, "PRIVMSG") && (line[7] == ' ' || line.size() == 7))
+				{
+					PRIVMSG(line, client);
+				}
+				if (!line.compare(0, 5, "TOPIC") && (line[5] == ' ' || line.size() == 5))
+				{
+					TOPIC(line, client);
+				}
 			}
 			// if (line.compare(0, 5, "KICK") && line[4] == ' ')
 			// {
@@ -158,6 +167,14 @@ void	Server::parseCommand( std::string const & line , Client* client )
 	catch(const std::exception& e)
 	{
 		std::cerr << e.what() << '\n';
+	}
+	// std::cout << "pass valid = " << passValid << std::endl;
+	// std::cout << "nick valid = " << nickValid << std::endl;
+	// std::cout << "user valid = " << userValid << std::endl;
+	if ( client->getRegister() != true && client->canBeRegistered() == true)
+	{
+		client->setRegister(true);
+		RPL_WELCOME(_name, client);
 	}
 }
 

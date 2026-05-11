@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/06 16:22:12 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/08 17:54:18 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/11 18:39:53 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,12 +44,23 @@ void	RPL_ENDOFNAMES(std::string const& serverName, Client* client, std::string c
 void	RPL_NAMREPLY(std::string const& serverName, Client* client, Channel* channel)
 {
 	// std::cout << "RPL_NAMREPLY socket = " << client->getSocketClient() << std::endl;
-	std::string msgToClient = ":" + serverName + " 353 " + client->getNickname() + " = " + channel->getName() + " :" + channel->getStrAllOperatorsNames() + SPACE + channel->getStrAllUsersNames() + "\r\n";
+	std::string msgToClient = ":" + serverName + " 353 " + client->getNickname() + " = " + channel->getName()
+								+ " :" + channel->getStrAllOperatorsNames() + SPACE + channel->getStrAllUsersNames() + "\r\n";
 	sendRpl(client, msgToClient);
 }
 
 void	RPL_WELCOME(std::string const& serverName, Client* client)
 {
-	std::string msgToClient = ":" + serverName + " 001 " + client->getNickname() + " :" + "HEY SALUT T'ES SUR LE SERVER DE 2 GROSSES MERDES !\r\n";
+	std::string msgToClient = ":" + serverName + " 001 " + client->getNickname() + " :" + "Bienvenue sur le serveur IRC de gaducurt & jpiquet !\r\n";
 	sendRpl(client, msgToClient);
+}
+
+/* :serveur 352 <nick_qui_a_fait_WHO> <canal> <user> <host> <serveur> <nick_cible> :<hopcount> <realname> */
+void	RPL_WHOREPLY(std::string const& serverName, Client *client, Client* target, std::string const& channelName)
+{
+	std::string	msgToClient = ":" + serverName + " 352 " + client->getNickname()
+							+ SPACE + channelName
+							+ SPACE + target->getUsername()
+							+ SPACE + target->getHostname() + serverName
+							+ SPACE + target->getNickname() + " :" + "0 " + target->getRealname() + "\r\n";
 }
