@@ -6,15 +6,18 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/21 17:00:04 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/05/07 11:40:58 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/11 15:28:22 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CHANNEL_HPP
 #define CHANNEL_HPP
 
-#include "Client.hpp"
+#include "Server.hpp"
 #include <sys/types.h>
+// #include <vector>
+
+class Client;
 
 class Channel
 {
@@ -84,7 +87,7 @@ class Channel
 		bool	isOperator(Client *op);
 		bool	isUser(Client *target);
 
-		void		broadcastToAll( std::string const& message );
+		void		broadcastToAll( std::string const& message, Client* sender );
 
 		std::string	getStrAllUsersNames( void );
 		std::string	getStrAllOperatorsNames( void );

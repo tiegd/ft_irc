@@ -6,13 +6,13 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/15 12:42:23 by amerzone          #+#    #+#             */
-/*   Updated: 2026/05/11 11:00:25 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/11 15:32:52 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
-#include "Client.hpp"
-#include "function.hpp"
+// #include "Client.hpp"
+// #include "function.hpp"
 
 Server::Server( void ) {};
 
@@ -99,14 +99,8 @@ void	Server::runServer( void )
 						{
 							std::string line = message.substr(0, pos);
 							message.erase(0, pos + 2);
-							// std::cout << "Client " << i << " dit : "  << line << std::endl;
 							std::cout << "Recu : "<< line << std::endl;
 							parseCommand(line, _clients[_fds[i].fd]);
-						}
-						if (_clients[_fds[i].fd]->getRegister() == true && _clients[_fds[i].fd]->getNickname() != "*" && _clients[_fds[i].fd]->getUsername() != "*")
-						{
-							
-							_clients[_fds[i].fd]->setRegister(true);
 						}
 					}
 				}
@@ -132,10 +126,16 @@ void	Server::parseCommand( std::string const & line , Client* client )
 			if (!line.compare(0, 4, "USER") && (line[4] == ' ' || line.size() == 4))
 			{
 				USER(line, client);
+				client->setRegister(true);
+				RPL_WELCOME(_name, client);
 			}
 			if (!line.compare(0, 4, "JOIN") && (line[4] == ' ' || line.size() == 4))
 			{
 				JOIN(line, client);
+			}
+			if (!line.compare(0, 4, "PART") && (line[4] == ' ' || line.size() == 4))
+			{
+				PART(line, client);
 			}
 			if (!line.compare(0, 7, "PRIVMSG") && (line[7] == ' ' || line.size() == 7))
 			{

@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/20 17:33:30 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/07 16:33:50 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/11 15:29:09 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #define ERROR_IRC_HPP
 
 class Client;
+#include "Client.hpp"
 
 #include <string>
 

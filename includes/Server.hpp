@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/09 12:20:30 by amerzone          #+#    #+#             */
-/*   Updated: 2026/05/07 15:43:54 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/11 15:29:52 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,6 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-/* {MY HEADERS} */
-#include "error_IRC.hpp"
-#include "rpl.hpp"
-#include "Channel.hpp"
-#include "FunctionError.hpp"
-
-// #define SERVER_PORT 1800
 #define	SOCKET int
 #define MAXLINE	4096
 #define MAXCLIENTS 10
@@ -47,8 +40,19 @@
 #define ALL_VALID_CHAR "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789{}|\\[]^_"
 #define	INVALID_CHAR ": *?@!"
 
-class Client;
-class Channel;
+/* {MY HEADERS} */
+#include "FunctionError.hpp"
+
+// #define SERVER_PORT 1800
+
+#include "Channel.hpp"
+#include "Client.hpp"
+#include "error_IRC.hpp"
+#include "tools.hpp"
+#include "rpl.hpp"
+
+// class Client;
+// class Channel;
 
 class Server
 {
@@ -111,7 +115,7 @@ class Server
 
 		void			TOPIC(std::string line, Client* client);
 
-
+		void			PART(std::string const& line, Client* client);
 
 
 		void			KICK(std::string const& line, Client* op);

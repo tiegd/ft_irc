@@ -1,0 +1,2 @@
+- Probleme de RPL_NAME ne s'affiche pas dans le client.
+- Faire JOIN 0 (qui revient à faire PART sur tous les channels sur lequel le client est)

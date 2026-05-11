@@ -6,13 +6,13 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/30 10:59:44 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/05/07 16:54:04 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/11 15:32:58 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
-#include "Client.hpp"
-#include "Channel.hpp"
+// #include "Client.hpp"
+// #include "Channel.hpp"
 
 std::vector<std::string>	split( std::string & str, char c );
 

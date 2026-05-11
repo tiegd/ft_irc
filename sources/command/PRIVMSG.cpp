@@ -6,17 +6,20 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 18:33:23 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/06 18:59:58 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/07 19:29:27 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
-#include "Client.hpp"
-#include "tools.hpp"
-#include "error_IRC.hpp"
-#include "FunctionError.hpp"
-#include "Channel.hpp"
+// #include "Client.hpp"
+// #include "tools.hpp"
+// #include "error_IRC.hpp"
+// #include "FunctionError.hpp"
+// #include "Channel.hpp"
 #include <algorithm>
+
+void	sendPrivmsgToUser(Client* client, std::string const& target, SOCKET sockTarget, std::string const& message);
+void	sendPrivmsgToChannel(Channel* channel, Client* client, std::string const& message);
 
 /*
 PRIVMSG <receiver>{,<receiver>} <:text to be sent>
@@ -31,13 +34,14 @@ void	Server::PRIVMSG( std::string const& line, Client* client)
 	std::string	temp(line);
 	temp.erase(0, 8);
 	
-	std::vector<std::string>	splitArgs = split(temp, SPACE);
+	std::vector<std::string>	splitArgs = splitStr(temp, " :");
 	std::string					strMessage = splitArgs[1];
 
 	std::vector<std::string>	recipient = split(splitArgs[0], ',');
 
 	if (strMessage.size() > 1 && strMessage[0] == ':')
 	{
+		strMessage.erase(0, 1);
 		for(std::vector<std::string>::iterator it = recipient.begin(); it != recipient.end(); it++)
 		{
 			sendMessage(client, *it, strMessage);
@@ -120,5 +124,5 @@ void	sendPrivmsgToUser(Client* client, std::string const& target, SOCKET sockTar
 void	sendPrivmsgToChannel(Channel* channel, Client* client, std::string const& message)
 {
 	std::string fullMsg = ":" + client->getFullName() + " PRIVMSG " + channel->getName() + " :" + message + "\r\n";
-	channel->broadcastToAll(fullMsg);
+	channel->broadcastToAll(fullMsg, client);
 }

@@ -6,14 +6,14 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/21 09:44:33 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/04/29 13:02:57 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/07 16:33:09 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
-#include "Client.hpp"
-#include "tools.hpp"
-#include "error_IRC.hpp"
+// #include "Client.hpp"
+// #include "tools.hpp"
+// #include "error_IRC.hpp"
 
 /*
 Format : USER <username> <hostname> <servername> :<realname>
@@ -24,7 +24,7 @@ void	Server::USER( std::string const & line, Client* client )
 {
 	if (client->getRegister() == true)
 	{
-		sendError(client, _name, ERR_ALREADYREGISTRED, ":You may not reregister");
+		ERR_ALREADYREGISTRED(_name, client);
 		throw std::invalid_argument("already registered");
 	}
 
@@ -33,7 +33,7 @@ void	Server::USER( std::string const & line, Client* client )
 	size_t pos = temp.find_first_of(':', 0);
 	if (pos == std::string::npos)
 	{
-		sendError(client, _name, ERR_NEEDMOREPARAMS, "USER :Not enough parameters");
+		ERR_NEEDMOREPARAMS(_name, client, "USER");
 		throw std::invalid_argument("Need more params");
 	}
 
@@ -46,7 +46,7 @@ void	Server::USER( std::string const & line, Client* client )
 	std::vector<std::string>	splitParams = split(first_part, SPACE);
 	if (splitParams.size() != 3)
 	{
-		sendError(client, _name, ERR_NEEDMOREPARAMS, "USER :Not enough parameters");
+		ERR_NEEDMOREPARAMS(_name, client, "USER");
 		throw std::invalid_argument("Need more params");
 	}
 	client->setUsername(splitParams[0]);

@@ -6,13 +6,14 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/30 14:00:09 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/05/11 15:22:53 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/11 15:33:56 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
-#include "Client.hpp"
-#include "Channel.hpp"
+// #include "Client.hpp"
+// #include "Channel.hpp"
+// #include "error_IRC.hpp"
 #include <algorithm>
 
 std::vector<std::string>	split( std::string & str, char c );

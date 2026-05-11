@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 11:34:51 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/05/11 10:57:13 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/11 15:31:10 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <sys/types.h>
 #include <algorithm>
 #include "FunctionError.hpp"
-#include <cstdint>
+// #include <cstdint>
 
 Channel::Channel()
 {
@@ -181,7 +181,7 @@ void Channel::kickUser(Client *target, Client *op, std::string msg)
 	{
 		this->rmOperator(target);
 		this->rmUser(target);
-		// this->sendChannelMsg(msg);
+		this->broadcastToAll(msg, op);
 	}
 }
 
@@ -307,42 +307,50 @@ void Channel::setNbOp()
 	this->_nbOp = this->_operator.size();
 }
 
-void	Channel::broadcastToAll( std::string const& message )
+void	Channel::broadcastToAll( std::string const& message, Client* sender )
 {
+	// (void)sender;
 	for (std::vector<Client*>::iterator it = _users.begin(); it != _users.end(); it++)
 	{
-		if (send((*it)->getSocketClient(), message.c_str(), message.size(), 0))
-			throw FunctionError();
+		if ((*it)->getSocketClient() == sender->getSocketClient())
+			continue;
+		if (send((*it)->getSocketClient(), message.c_str(), message.size(), 0) < 0)
+			std::cout << "send() error" << std::endl;
+
 	}
 	for (std::vector<Client*>::iterator it = _operator.begin(); it != _operator.end(); it++)
 	{
-		if (send((*it)->getSocketClient(), message.c_str(), message.size(), 0))
-			throw FunctionError();
+		if ((*it)->getSocketClient() == sender->getSocketClient())
+			continue;
+		if (send((*it)->getSocketClient(), message.c_str(), message.size(), 0) < 0)
+			std::cout << "send() error" << std::endl;
 	}
 }
 
 std::string	Channel::getStrAllUsersNames( void )
 {
-	std::string allUser;
+	std::string allUsers;
 
-	for (int i = 0; i < _users.size(); i++)
+	for (size_t i = 0; i < _users.size(); ++i)
 	{
-		allUser = _users[i]->getNickname() + " ";
+		if (!allUsers.empty())
+			allUsers += " ";
+		allUsers += _users[i]->getNickname();
 	}
-	allUser.erase(allUser.find_last_of(' '), 1);
-	return allUser;
+	return allUsers;
 }
 
 std::string	Channel::getStrAllOperatorsNames( void )
 {
-	std::string allUser;
+	std::string allOps;
 
-	for (int i = 0; i < _operator.size(); i++)
+	for (size_t i = 0; i < _operator.size(); ++i)
 	{
-		allUser = _operator[i]->getNickname() + " ";
+		if (!allOps.empty())
+			allOps += " ";
+		allOps += '@' + _operator[i]->getNickname() + " ";
 	}
-	allUser.erase(allUser.find_last_of(' '), 1);
-	return allUser;
+	return allOps;
 }
 
 bool		Channel::clientIsOnChannel( Client* client )

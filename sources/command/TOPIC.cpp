@@ -6,14 +6,16 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/06 14:46:20 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/07 10:44:05 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/11 15:34:07 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
-#include "Channel.hpp"
-#include "rpl.hpp"
-#include "error_IRC.hpp"
+// #include "Channel.hpp"
+// #include "rpl.hpp"
+// #include "error_IRC.hpp"
+
+void	sendTopicNotif(Channel* channel, Client* client, std::string const& newTopic);
 
 /*
 	- +t : que les operateur peuvent modifier le topic du channel;
@@ -22,7 +24,6 @@
 	- TOPIC + <channel> + [:le nom du topic] = changer le topic du channel.
 	- Si le [:nom du topic] est une string vide, supprimer le topic.
 */
-
 void	Server::TOPIC(std::string line, Client* client)
 {
 
@@ -60,13 +61,13 @@ void	Server::TOPIC(std::string line, Client* client)
 		}
 		if (topic.size() == 1)
 		{
-			_channels[channelName]->rmTopic();
+			_channels[channelName]->rmTopic(client);
 			sendTopicNotif(_channels[channelName], client, topic);
 		}
 		else
 		{
 			topic.erase(0, 1);
-			_channels[channelName]->setTopic(topic);
+			_channels[channelName]->setTopic(client, topic);
 			_channels[channelName]->setHasTopic(true);
 			sendTopicNotif(_channels[channelName], client, topic);
 		}
@@ -77,5 +78,5 @@ void	Server::TOPIC(std::string line, Client* client)
 void	sendTopicNotif(Channel* channel, Client* client, std::string const& newTopic)
 {
 	std::string fullMsg = ":" + client->getFullName() + " TOPIC " + channel->getName() + " :" + newTopic + "\r\n";
-	channel->broadcastToAll(fullMsg);
+	channel->broadcastToAll(fullMsg, client);
 }
