@@ -6,7 +6,7 @@
 #    By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/04/15 14:12:34 by amerzone          #+#    #+#              #
-#    Updated: 2026/05/06 14:27:01 by gaducurt         ###   ########.fr        #
+#    Updated: 2026/05/11 10:30:28 by gaducurt         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,12 +29,17 @@ SRC =	main.cpp \
 		sources/FunctionError.cpp \
 		sources/parsingArguments.cpp \
 		sources/tools.cpp \
-		sources/command/NICK.cpp \
-		sources/command/PASS.cpp \
-		sources/command/USER.cpp \
 		sources/command/JOIN.cpp \
+		sources/command/KICK.cpp \
+		sources/command/MODE.cpp \
+		sources/command/NICK.cpp \
 		sources/command/NOTICE.cpp \
-		sources/command/PRIVMSG.cpp
+		sources/command/PASS.cpp \
+		sources/command/PING_PONG.cpp \
+		sources/command/PRIVMSG.cpp \
+		sources/command/TOPIC.cpp \
+		sources/command/USER.cpp \
+		sources/command/WHO.cpp
 		
 
 OBJ := $(addprefix $(OBJDIR), $(SRC:.cpp=.o))
