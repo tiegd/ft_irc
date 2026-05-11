@@ -6,11 +6,11 @@
 #    By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/04/15 14:12:34 by amerzone          #+#    #+#              #
-#    Updated: 2026/05/11 10:30:28 by gaducurt         ###   ########.fr        #
+#    Updated: 2026/05/11 15:18:55 by gaducurt         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = 1
+NAME = InternationalRaclureDeCroute
 
 CXX = c++
 
