@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/30 14:00:09 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/05/11 13:50:13 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/11 15:22:53 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,12 +36,14 @@ void Server::MODE(std::string const& line, Client* op)
 
 	std::vector<std::string>	splitArgs = split(temp, SPACE);
 	std::string					channelTarget = splitArgs[0];
+	if (!_channels[channelTarget])
+	{
+		ERR_NOSUCHCHANNEL(_name, op, channelTarget);
+		return ;	
+	}
 	if (splitArgs.size() == 1)
 	{
-		if (!_channels[channelTarget])
-			ERR_NOSUCHCHANNEL(_name, op, channelTarget);
-		else
-			RPL_CHANNELMODEIS(_name, op, _channels[channelTarget]);
+		RPL_CHANNELMODEIS(_name, op, _channels[channelTarget]);
 		return ;
 	}
 	std::string					options;
