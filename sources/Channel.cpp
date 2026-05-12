@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 11:34:51 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/05/11 17:21:06 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/12 16:17:36 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ std::string Channel::getModeString() const
 		str += 'i';
 	if (this->getResTopic())
 		str += 't';
+	std::cout << str << std::endl;
 	return (str);
 }
 
@@ -299,10 +300,11 @@ void Channel::setUserLimit(u_int64_t nb, bool arg)
 {
 	if (arg == true && nb >= this->getNbMembers())
 	{
+		std::cout << "set limit" << std::endl;
 		this->_userLimit = nb;
 		this->setHasLimit(true);
 	}
-	else if (arg == false)
+	else if (arg == false || nb == 0)
 		this->setHasLimit(false);
 }
 

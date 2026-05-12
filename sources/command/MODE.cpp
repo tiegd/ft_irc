@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/30 14:00:09 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/05/11 15:55:11 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/12 16:16:43 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void Server::MODE(std::string const& line, Client* op)
 	
 	std::string	temp(line);
 	std::cout << temp << " : " << temp.size() << std::endl;
-	if (temp.size() <= 5)
+	if (temp.size() <= 6) // check qu'il y ait bien une #channel après MODE
 	{
 		ERR_NEEDMOREPARAMS(_name, op, "MODE");
 		return ;
@@ -38,12 +38,12 @@ void Server::MODE(std::string const& line, Client* op)
 
 	std::vector<std::string>	splitArgs = split(temp, SPACE);
 	std::string					channelTarget = splitArgs[0];
-	if (!_channels[channelTarget])
+	if (!_channels[channelTarget]) // check l'existance du #channel
 	{
 		ERR_NOSUCHCHANNEL(_name, op, channelTarget);
 		return ;	
 	}
-	if (splitArgs.size() == 1)
+	if (splitArgs.size() == 1) // s'il n'y a aucun parametre après #channel
 	{
 		RPL_CHANNELMODEIS(_name, op, _channels[channelTarget]);
 		return ;
@@ -71,8 +71,10 @@ void Server::MODE(std::string const& line, Client* op)
 		{
 			case 'i':
 				modeInviteOnly(op, _channels[channelTarget], toDo);
+				break;
 			case 't':
 				modeRestrictionTopic(op, _channels[channelTarget], toDo);
+				break;
 			case 'k':
 				if (splitArgs.size() > 0)
 				{
@@ -81,6 +83,7 @@ void Server::MODE(std::string const& line, Client* op)
 				}
 				else
 					ERR_NEEDMOREPARAMS(_name, op, "MODE");
+				break;
 			case 'o':
 				if (splitArgs.size() > 0)
 				{
@@ -89,14 +92,18 @@ void Server::MODE(std::string const& line, Client* op)
 				}
 				else
 					ERR_NEEDMOREPARAMS(_name, op, "MODE");
+				break;
 			case 'l':
 				if (splitArgs.size() > 0)
 				{
-					modeLimitUser(op, _channels[channelTarget], toDo, splitArgs[0]);
+					modeAddLimitUser(op, _channels[channelTarget], toDo, splitArgs[0]);
 					splitArgs.erase(splitArgs.begin());
 				}
+				else if (!toDo)
+					modeRmLimitUser(op, _channels[channelTarget], toDo);
 				else
 					ERR_NEEDMOREPARAMS(_name, op, "MODE");
+				break;
 		}
 	}
 	RPL_CHANNELMODEIS(_name, op, _channels[channelTarget]);
@@ -160,7 +167,7 @@ void Server::modeOpPrivilege(Client* op, Channel* channel, bool toDo, std::strin
 		{
 			if (it->second->getNickname() == user)
 			{
-				if (!channel->isOperator(it->second) || !channel->isUser(it->second))
+				if (!channel->isOperator(it->second) && !channel->isUser(it->second))
 				{
 					ERR_NOTONCHANNEL(_name, it->second, channel->getName());
 					return;
@@ -176,19 +183,20 @@ void Server::modeOpPrivilege(Client* op, Channel* channel, bool toDo, std::strin
 		ERR_CHANOPRIVSNEEDED(_name, op, channel->getName());
 }
 
-void Server::modeLimitUser(Client* op, Channel* channel, bool toDo, std::string limit)
+void Server::modeAddLimitUser(Client* op, Channel* channel, bool toDo, std::string limit)
 {
 	if (channel->isOperator(op))
 	{
 		u_int64_t	nb;
-		
 		if (toDo)
 		{
 			for (int i = 0; i < limit.size(); i++)
 			{
 				if (!std::isdigit(limit[i]))
-					ERR_INVALIDMODEPARAM(_name, op, channel->getName(), 'o', limit, "limit can be only numeric characters");
+				{
+					ERR_INVALIDMODEPARAM(_name, op, channel->getName(), 'l', limit, "limit can be only numeric characters");
 					return ;
+				}
 			}
 			nb = std::atoi(limit.c_str());
 			if (limit[0] != '0' && limit.size() == 1 && nb == 0)
@@ -196,6 +204,14 @@ void Server::modeLimitUser(Client* op, Channel* channel, bool toDo, std::string 
 		}
 		channel->setUserLimit(nb, toDo);
 	}
+	else
+		ERR_CHANOPRIVSNEEDED(_name, op, channel->getName());
+}
+
+void Server::modeRmLimitUser(Client* op, Channel* channel, bool toDo)
+{
+	if (channel->isOperator(op))
+		channel->setUserLimit(0, toDo);
 	else
 		ERR_CHANOPRIVSNEEDED(_name, op, channel->getName());
 }
