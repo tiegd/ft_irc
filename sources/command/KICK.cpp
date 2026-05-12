@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/30 10:59:44 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/05/11 15:32:58 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/12 16:31:02 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,10 @@ void Server::KICK(std::string const& line, Client* op)
 	std::string					clientToKick = splitArgs[1];
 
 	clientToKick.erase(0, 1);
-	msg = ":" + op->getNickname() + " KICK " + channelTarget + " " + clientToKick;
-	if (splitArgs.size() == 3)
-		msg += " :" + splitArgs[2];
+	std::cout << clientR
+	// msg = ":" + op->getNickname() + " KICK " + channelTarget + " " + clientToKick;
+	// if (splitArgs.size() == 3)
+	// 	msg += " :" + splitArgs[2];
 	for (std::map<std::string, Channel*>::iterator it = _channels.begin(); it != _channels.end(); it++)
 	{
 		if (it->second->getName() == channelTarget)
