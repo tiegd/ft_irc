@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/06 16:22:12 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/11 18:39:53 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/12 13:56:43 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,9 +58,18 @@ void	RPL_WELCOME(std::string const& serverName, Client* client)
 /* :serveur 352 <nick_qui_a_fait_WHO> <canal> <user> <host> <serveur> <nick_cible> :<hopcount> <realname> */
 void	RPL_WHOREPLY(std::string const& serverName, Client *client, Client* target, std::string const& channelName)
 {
+	std::cout << "rpl_whoreply\n";
 	std::string	msgToClient = ":" + serverName + " 352 " + client->getNickname()
 							+ SPACE + channelName
 							+ SPACE + target->getUsername()
-							+ SPACE + target->getHostname() + serverName
+							+ SPACE + target->getHostname() 
+							+ SPACE + serverName
 							+ SPACE + target->getNickname() + " :" + "0 " + target->getRealname() + "\r\n";
+	sendRpl(client, msgToClient);
+}
+
+void	RPL_ENDOFWHO(std::string const& serverName, Client* client, std::string const& mask)
+{
+	std::string msgToClient = ":" + serverName + " 315 " + client->getNickname() + SPACE + mask + " :End of /WHO list\r\n";
+	sendRpl(client, msgToClient);
 }

@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 11:13:50 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/08 17:59:40 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/12 13:21:59 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,9 @@ void	Server::sendJoinNotification(Client *client, Channel* channel)
 {
 	std::string	channelMsg = ":" + client->getFullName() + " JOIN " + channel->getName() + "\r\n";
 
+	sendRpl(client, channelMsg);
+	channel->broadcastToAll(channelMsg, client);
+
 	RPL_NAMREPLY(_name, client, channel);
 	RPL_ENDOFNAMES(_name, client, channel->getName());
 
@@ -125,8 +128,6 @@ void	Server::sendJoinNotification(Client *client, Channel* channel)
 	else
 		RPL_NOTOPIC(_name, client, channel->getName());
 
-	sendRpl(client, channelMsg);
-	channel->broadcastToAll(channelMsg, client);
 }
 
 bool	nameChannelWellFormated( std::string nameChannel )

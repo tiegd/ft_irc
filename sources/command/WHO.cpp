@@ -6,19 +6,29 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/28 14:56:10 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/11 19:01:22 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/12 14:06:32 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 
-/*
-	- Si channel
-*/
+void	sendWhoFromChannel( Channel* channel, Client* client, std::string const& servName, bool onlyOps );
+
 void	Server::WHO( std::string const& line, Client* client )
 {
+	std::cout << "HALLO !\n";
+	if (line.size() == 3 || line[3] == ' ')
+	{
+		std::cout << "HALLO !\n";
+		for (std::map<SOCKET, Client*>::iterator it = _clients.begin(); it != _clients.end(); ++it)
+		{
+			RPL_WHOREPLY(_name, client, it->second, "*");
+		}
+		RPL_ENDOFWHO(_name, client, "*");
+		return ;
+	}
 	std::string temp(line);
-	temp.erase(0, 5);
+	temp.erase(0, 4);
 
 	std::vector<std::string>	params = split(temp, ' ');
 	std::string					mask = params[0];
@@ -28,20 +38,62 @@ void	Server::WHO( std::string const& line, Client* client )
 		if (params[1].compare("o") == 0)
 			onlyOps = true;
 	}
-	if (mask[0] = '#')
+	if (mask[0] == '#')
 	{
 		if (_channels[mask])
 		{
-			std::vector<Client*> opList = _channels[mask]->getOperators();
-			for (int i = 0; i < opList.size(); ++i)
-				RPL_WHOREPLY(_name, client, opList[i], mask);
-			if (onlyOps == false)
-			{
-				std::vector<Client*> userList = _channels[mask]->getUsers();
-				for (int i = 0; i < userList.size(); ++i)
-					RPL_WHOREPLY(_name, client, userList[i], mask);
-			}
+			sendWhoFromChannel(_channels[mask], client, _name, onlyOps);
+			RPL_ENDOFWHO(_name, client, mask);
+			return ;
 		}
 	}
+	if (mask.compare("*") == 0 || mask.compare("0") == 0)
+	{
+		for (std::map<SOCKET, Client*>::iterator it = _clients.begin(); it != _clients.end(); ++it)
+		{
+			RPL_WHOREPLY(_name, client, it->second, mask);
+		}
+		RPL_ENDOFWHO(_name, client, mask);
+		return ;
+	}
+	for (std::map<SOCKET, Client*>::iterator it = _clients.begin(); it != _clients.end(); ++it)
+	{
+		if (mask.compare(it->second->getNickname()) == 0)
+		{
+			RPL_WHOREPLY(_name, client, it->second, mask);
+		}
+		else if (mask.compare(it->second->getHostname()) == 0)
+		{
+			RPL_WHOREPLY(_name, client, it->second, mask);
+		}
+		else if (mask.compare(it->second->getRealname()) == 0)
+		{
+			RPL_WHOREPLY(_name, client, it->second, mask);
+		}
+	}
+	RPL_ENDOFWHO(_name, client, mask);
+}
+
+void	sendWhoFromChannel( Channel* channel, Client* client, std::string const& servName, bool onlyOps )
+{
 	
+	std::vector<Client*> opList = channel->getOperators();
+	for (int i = 0; i < opList.size(); ++i)
+	{
+		if (opList[i] != client)
+		{
+			std::cout << "ENTER IN RPL\n";
+			RPL_WHOREPLY(servName, client, opList[i], channel->getName());
+		}
+	}
+	if (onlyOps == false)
+	{
+		std::vector<Client*> userList = channel->getUsers();
+		for (int i = 0; i < userList.size(); ++i)
+		{
+			std::cout << "userlist\n";
+			if (userList[i] != client)
+				RPL_WHOREPLY(servName, client, userList[i], channel->getName());
+		}
+	}
 }

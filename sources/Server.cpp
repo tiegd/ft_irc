@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/15 12:42:23 by amerzone          #+#    #+#             */
-/*   Updated: 2026/05/11 16:45:13 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/12 14:16:42 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,47 +113,42 @@ void	Server::parseCommand( std::string const & line , Client* client )
 {
 	try
 	{
-		if (line.size() >= 4)
+		if (!line.compare(0, 4, "PASS") && (line[4] == ' ' || line.size() == 4))
 		{
-			if (!line.compare(0, 4, "PASS") && (line[4] == ' ' || line.size() == 4))
+			client->setPassValid(PASS(line, client));
+		}
+		if (!line.compare(0, 4, "NICK") && (line[4] == ' ' || line.size() == 4))
+		{
+			client->setNickValid(NICK(line, client));
+		}
+		if (!line.compare(0, 4, "USER") && (line[4] == ' ' || line.size() == 4))
+		{
+			client->setUserValid(USER(line, client));
+		}
+		if (client->getRegister() == true)
+		{
+			if (!line.compare(0, 4, "JOIN") && (line[4] == ' ' || line.size() == 4))
 			{
-				client->setPassValid(PASS(line, client));
+				JOIN(line, client);
 			}
-			if (!line.compare(0, 4, "NICK") && (line[4] == ' ' || line.size() == 4))
+			if (!line.compare(0, 4, "PART") && (line[4] == ' ' || line.size() == 4))
 			{
-				client->setNickValid(NICK(line, client));
+				PART(line, client);
 			}
-			if (!line.compare(0, 4, "USER") && (line[4] == ' ' || line.size() == 4))
+			if (!line.compare(0, 7, "PRIVMSG") && (line[7] == ' ' || line.size() == 7))
 			{
-				client->setUserValid(USER(line, client));
-				// std::cout << "pass valid = " << passValid << std::endl;
-				// std::cout << "nick valid = " << nickValid << std::endl;
-				// std::cout << "user valid = " << userValid << std::endl;
-				// if (passValid == 1 && nickValid == 1 && userValid == 1)
-				// {
-				// 	client->setRegister(true);
-				// 	RPL_WELCOME(_name, client);
-				// }
+				PRIVMSG(line, client);
 			}
-			if (client->getRegister() == true)
+			if (!line.compare(0, 5, "TOPIC") && (line[5] == ' ' || line.size() == 5))
 			{
-				if (!line.compare(0, 4, "JOIN") && (line[4] == ' ' || line.size() == 4))
-				{
-					JOIN(line, client);
-				}
-				if (!line.compare(0, 4, "PART") && (line[4] == ' ' || line.size() == 4))
-				{
-					PART(line, client);
-				}
-				if (!line.compare(0, 7, "PRIVMSG") && (line[7] == ' ' || line.size() == 7))
-				{
-					PRIVMSG(line, client);
-				}
-				if (!line.compare(0, 5, "TOPIC") && (line[5] == ' ' || line.size() == 5))
-				{
-					TOPIC(line, client);
-				}
+				TOPIC(line, client);
 			}
+			if (!line.compare(0, 3, "WHO") && (line[3] == ' ' || line.size() == 3))
+			{
+				std::cout << "HELLO !" << std::endl;
+				WHO(line, client);
+			}
+			
 			// if (line.compare(0, 5, "KICK") && line[4] == ' ')
 			// {
 			// 	KICK(line, client);
@@ -168,9 +163,6 @@ void	Server::parseCommand( std::string const & line , Client* client )
 	{
 		std::cerr << e.what() << '\n';
 	}
-	// std::cout << "pass valid = " << passValid << std::endl;
-	// std::cout << "nick valid = " << nickValid << std::endl;
-	// std::cout << "user valid = " << userValid << std::endl;
 	if ( client->getRegister() != true && client->canBeRegistered() == true)
 	{
 		client->setRegister(true);
