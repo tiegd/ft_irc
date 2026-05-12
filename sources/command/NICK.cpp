@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/20 18:34:09 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/11 15:35:36 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/12 15:23:59 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int	Server::NICK( std::string const & line, Client* client )
 		return -1;
 		// throw std::invalid_argument("Wrong nickname format");
 	}
-	if (nicknameIsAvailable(temp, _clients) == false)
+	if (nicknameExist(temp) == true)
 	{
 		ERR_NICKNAMEINUSE(_name, client);
 		return -1;

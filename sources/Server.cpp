@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/15 12:42:23 by amerzone          #+#    #+#             */
-/*   Updated: 2026/05/12 14:16:42 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/12 16:07:08 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,7 +148,10 @@ void	Server::parseCommand( std::string const & line , Client* client )
 				std::cout << "HELLO !" << std::endl;
 				WHO(line, client);
 			}
-			
+			if (!line.compare(0, 6, "INVITE") && (line[6] == ' ' || line.size() == 6))
+			{
+				INVITE(line, client);
+			}
 			// if (line.compare(0, 5, "KICK") && line[4] == ' ')
 			// {
 			// 	KICK(line, client);
@@ -192,4 +195,28 @@ void	Server::addClientSocket( void )
 	_clients[client] = newClient;
 
 	std::cout << "New client connected" << std::endl;
+}
+
+bool	Server::nicknameExist( std::string target)
+{
+	for (std::map<SOCKET, Client*>::iterator it = _clients.begin(); it != _clients.end(); it++)
+	{
+		if (it->second->getNickname() == target)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+Client*	Server::searchClient( std::string target )
+{
+	for (std::map<SOCKET, Client*>::iterator it = _clients.begin(); it != _clients.end(); it++)
+	{
+		if (target.compare(it->second->getNickname()) == 0)
+		{
+			return it->second;
+		}
+	}
+	return NULL;
 }

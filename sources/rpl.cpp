@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/06 16:22:12 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/12 13:56:43 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/12 16:18:24 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,5 +71,11 @@ void	RPL_WHOREPLY(std::string const& serverName, Client *client, Client* target,
 void	RPL_ENDOFWHO(std::string const& serverName, Client* client, std::string const& mask)
 {
 	std::string msgToClient = ":" + serverName + " 315 " + client->getNickname() + SPACE + mask + " :End of /WHO list\r\n";
+	sendRpl(client, msgToClient);
+}
+
+void	RPL_INVITING(std::string const& serverName, Client* client, std::string const& target, std::string const& channel)
+{
+	std::string msgToClient = ":" + serverName + " 341 " + client->getNickname() + SPACE + channel + SPACE + target + "\r\n";
 	sendRpl(client, msgToClient);
 }

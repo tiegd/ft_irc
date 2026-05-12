@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/09 12:20:30 by amerzone          #+#    #+#             */
-/*   Updated: 2026/05/12 10:27:40 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/12 15:37:22 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,12 +83,12 @@ class Server
 
 		/* SETTER */
 		void			setSocketServ( void );
-		// void	setPort( unsigned int port );
-		// void	setPassword( std::string password );
-
 		void			runServer( void );
 		void			addClientSocket( void );
+		bool			nicknameExist( std::string target );
+		Client*			searchClient( std::string target );
 
+		
 		// { PARSING }
 		void			parseCommand( std::string const & line, Client* client );
 
@@ -106,7 +106,7 @@ class Server
 		void			NOTICE( std::string const& line, Client* client );
 			void			sendNotice( Client *client, std::string recipient, std::string message );
 			void			sendMessage( Client *client, std::string recipient, std::string message );
-			SOCKET			searchClient( std::string nicknameRecipient );
+			SOCKET			searchClientSocket( std::string nicknameRecipient );
 			bool			channelExist( std::string channelName );
 
 		// void			WHO( std::string const& line, Client* client );
@@ -118,6 +118,8 @@ class Server
 		void			PART( std::string const& line, Client* client);
 
 		void			WHO( std::string const& line, Client* client );
+
+		void			INVITE(std::string const& line, Client* client);
 
 		void			KICK( std::string const& line, Client* op );
 		void 			MODE( std::string const& line, Client* op );

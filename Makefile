@@ -6,7 +6,7 @@
 #    By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/04/15 14:12:34 by amerzone          #+#    #+#              #
-#    Updated: 2026/05/12 11:42:17 by jpiquet          ###   ########.fr        #
+#    Updated: 2026/05/12 16:07:26 by jpiquet          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,7 +41,8 @@ SRC =	main.cpp \
 		sources/command/MODE.cpp \
 		sources/command/PART.cpp \
 		sources/command/KICK.cpp \
-		sources/command/WHO.cpp
+		sources/command/WHO.cpp \
+		sources/command/INVITE.cpp \
 		
 
 OBJ := $(addprefix $(OBJDIR), $(SRC:.cpp=.o))

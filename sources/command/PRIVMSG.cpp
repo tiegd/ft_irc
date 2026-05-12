@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 18:33:23 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/07 19:29:27 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/12 15:36:30 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ void	Server::sendMessage( Client *client, std::string recipient, std::string mes
 	}
 	else
 	{
-		SOCKET	sockRecipient = searchClient(recipient);
+		SOCKET	sockRecipient = searchClientSocket(recipient);
 		if (sockRecipient == -1) // si on trouve pas le client
 		{
 			ERR_NOSUCHNICK(_name, client, recipient);
@@ -86,7 +86,7 @@ void	Server::sendMessage( Client *client, std::string recipient, std::string mes
 }
 
 /* Return the SOCKET associated to std::string nicknameRecipient or -1 if it's not found*/
-SOCKET	Server::searchClient( std::string nicknameRecipient )
+SOCKET	Server::searchClientSocket( std::string nicknameRecipient )
 {
 	for (std::map<SOCKET, Client*>::iterator it = _clients.begin(); it != _clients.end(); it++)
 	{

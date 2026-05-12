@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 14:21:16 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/07 18:48:22 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/12 16:04:31 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ void	Server::sendNotice( Client *client, std::string recipient, std::string mess
 	}
 	else
 	{
-		SOCKET	sockRecipient = searchClient(recipient);
+		SOCKET	sockRecipient = searchClientSocket(recipient);
 		sendNoticeToUser(client, recipient, sockRecipient, message);
 	}
 }

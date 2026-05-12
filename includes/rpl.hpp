@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/29 18:48:05 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/12 11:17:45 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/12 16:00:57 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,5 +29,6 @@ void	RPL_NAMREPLY(std::string const& serverName, Client* client, Channel* channe
 void	RPL_WELCOME(std::string const& serverName, Client* client);
 void	RPL_WHOREPLY(std::string const& serverName, Client *client, Client* target, std::string const& channelName);
 void	RPL_ENDOFWHO(std::string const& serverName, Client* client, std::string const& mask);
+void	RPL_INVITING(std::string const& serverName, Client* client, std::string const& target, std::string const& channel);
 
 #endif
