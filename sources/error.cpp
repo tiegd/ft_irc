@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/20 16:27:20 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/11 15:31:45 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/13 10:43:27 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,6 +134,12 @@ void	ERR_INVALIDMODEPARAM(std::string const& serverName, Client* client, std::st
 void	ERR_NOSUCHCHANNEL(std::string const& serverName, Client* client, std::string channel)
 {
 	std::string msgToClient = ":" + serverName + " 403 " + client->getNickname() + " " + channel +  " :No such channel\r\n";
+	sendError(client, msgToClient);
+}
+
+void	ERR_USERNOTINCHANNEL(std::string const& serverName, Client* client, std::string channel)
+{
+	std::string msgToClient = ":" + serverName + " 441 " + client->getNickname() + " " + channel +  " :They aren't on that channel\r\n";
 	sendError(client, msgToClient);
 }
 

@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 11:34:51 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/05/13 10:22:42 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/13 11:35:10 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -191,7 +191,7 @@ void Channel::kickUser(Client *target, Client *op, std::string msg)
 	{
 		this->rmOperator(target);
 		this->rmUser(target);
-		this->broadcastToAll(msg, op);
+		// this->broadcastToAll(msg, op);
 	}
 }
 
