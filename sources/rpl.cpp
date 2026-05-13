@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/06 16:22:12 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/12 16:18:24 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/13 14:30:06 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,11 +49,7 @@ void	RPL_NAMREPLY(std::string const& serverName, Client* client, Channel* channe
 	sendRpl(client, msgToClient);
 }
 
-void	RPL_WELCOME(std::string const& serverName, Client* client)
-{
-	std::string msgToClient = ":" + serverName + " 001 " + client->getNickname() + " :" + "Bienvenue sur le serveur IRC de gaducurt & jpiquet !\r\n";
-	sendRpl(client, msgToClient);
-}
+
 
 /* :serveur 352 <nick_qui_a_fait_WHO> <canal> <user> <host> <serveur> <nick_cible> :<hopcount> <realname> */
 void	RPL_WHOREPLY(std::string const& serverName, Client *client, Client* target, std::string const& channelName)
@@ -79,3 +75,42 @@ void	RPL_INVITING(std::string const& serverName, Client* client, std::string con
 	std::string msgToClient = ":" + serverName + " 341 " + client->getNickname() + SPACE + channel + SPACE + target + "\r\n";
 	sendRpl(client, msgToClient);
 }
+
+void	RPL_WELCOME(std::string const& serverName, Client* client)
+{
+	std::string msgToClient = ":" + serverName + " 001 " + client->getNickname() + " :" + "Welcome to the Internet Relay Network " + client->getFullName() + "\r\n";
+	sendRpl(client, msgToClient);
+}
+
+void	RPL_YOURHOST(std::string const& serverName, Client* client)
+{
+	std::string msgToClient = ":" + serverName + " 002 " + client->getNickname() + " :" + "Your host is " + serverName + ", running version PROUT.2\r\n";
+	sendRpl(client, msgToClient);
+}
+
+void	RPL_CREATED(std::string const& serverName, Client* client)
+{
+	std::string msgToClient = ":" + serverName + " 003 " + client->getNickname() + " :" + "This server was created 2026/04/15\r\n";
+	sendRpl(client, msgToClient);
+}
+
+void	RPL_MYINFO(std::string const& serverName, Client* client)
+{
+	std::string msgToClient = ":" + serverName + " 004 " + client->getNickname() + SPACE + serverName + " PROUT.2 " + "" + " oitlk\r\n"; 
+	sendRpl(client, msgToClient);
+}
+
+/*       001    RPL_WELCOME
+              "Welcome to the Internet Relay Network
+               <nick>!<user>@<host>"
+       002    RPL_YOURHOST
+              "Your host is <servername>, running version <ver>"
+       003    RPL_CREATED
+              "This server was created <date>"
+       004    RPL_MYINFO
+              "<servername> <version> <available user modes>
+               <available channel modes>"
+
+         - The server sends Replies 001 to 004 to a user upon
+           successful registration.
+*/

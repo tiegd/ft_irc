@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/11 17:33:07 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/12 16:16:16 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/13 10:38:22 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	sendInviteToUser(Client* client, Client* target, std::string const& channel
 
 /*
 INVITE <nickname> <channel>
-- Le channel n'est pas obligé d'exister ni d'etre un channel valide pour que le nickname puisse etre invité
+- Le channel n'est pas obligé d'exister ni d'etre un channel valide pour que le nickname puisse etre invité.
 - Checker qu'il y a bien 2 paramettre sinon renvoyer ERR_NEEDMOREPARAMS [x]
 - Checker si le <nickname> existe sinon renvoyer ERR_NOSUCHNICK [x]
 - Checker si le user qui invite est bien sur le channel sinon renvoyer ERR_NOTONCHANNEL [x]

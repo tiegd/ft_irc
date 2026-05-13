@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/09 12:20:30 by amerzone          #+#    #+#             */
-/*   Updated: 2026/05/12 15:37:22 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/13 10:28:26 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 #include <vector>
 #include <map>
 #include <stdbool.h>
+#include <csignal>
 
 /* SOCKET */
 #include <sys/socket.h>

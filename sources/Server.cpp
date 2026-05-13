@@ -6,13 +6,15 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/15 12:42:23 by amerzone          #+#    #+#             */
-/*   Updated: 2026/05/12 16:07:08 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/13 14:34:10 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 // #include "Client.hpp"
 // #include "function.hpp"
+
+volatile std::sig_atomic_t gSignalStatus = 0;
 
 Server::Server( void ) {};
 
@@ -27,7 +29,10 @@ Server::Server( std::string name, u_int16_t port, std::string password )
 	_fds.push_back(t_fd);
 }
 
-Server::~Server( void ) {};
+void	signalHandler(int signal)
+{
+	gSignalStatus = 1;
+}
 
 void	Server::setSocketServ( void )
 {
@@ -56,13 +61,18 @@ void	Server::setSocketServ( void )
 
 void	Server::runServer( void )
 {
-	char	buff[1024];
-	
+	char	buff[512];
+
+	std::signal(SIGINT, signalHandler);
 	while (true)
 	{
+		if (gSignalStatus == 1)
+		{
+			throw std::exception();
+		}
 		if (poll(_fds.data(), _fds.size(), -1) < 0)
 		{
-			std::cout << "Error occured during poll().";
+			std::cout << "Error occured during poll()." << std::endl;
 			continue;
 		}
 		
@@ -145,7 +155,6 @@ void	Server::parseCommand( std::string const & line , Client* client )
 			}
 			if (!line.compare(0, 3, "WHO") && (line[3] == ' ' || line.size() == 3))
 			{
-				std::cout << "HELLO !" << std::endl;
 				WHO(line, client);
 			}
 			if (!line.compare(0, 6, "INVITE") && (line[6] == ' ' || line.size() == 6))
@@ -170,6 +179,9 @@ void	Server::parseCommand( std::string const & line , Client* client )
 	{
 		client->setRegister(true);
 		RPL_WELCOME(_name, client);
+		RPL_YOURHOST(_name, client);
+		RPL_CREATED(_name, client);
+		RPL_MYINFO(_name, client);
 	}
 }
 
@@ -219,4 +231,18 @@ Client*	Server::searchClient( std::string target )
 		}
 	}
 	return NULL;
+}
+
+Server::~Server( void )
+{
+	std::cout << "Server destructor called !" << std::endl;
+
+	for (std::map<SOCKET, Client*>::iterator it = _clients.begin(); it != _clients.end(); ++it)
+	{
+		delete it->second;
+	}
+	for (std::map<std::string, Channel*>::iterator it = _channels.begin(); it != _channels.end(); ++it)
+	{
+		delete it->second;
+	}
 }

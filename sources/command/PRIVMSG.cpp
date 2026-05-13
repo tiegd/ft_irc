@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 18:33:23 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/12 15:36:30 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/13 13:51:59 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 
 void	sendPrivmsgToUser(Client* client, std::string const& target, SOCKET sockTarget, std::string const& message);
 void	sendPrivmsgToChannel(Channel* channel, Client* client, std::string const& message);
+size_t	sameRecipientMultipleTimes(std::vector<std::string> nicknames);
 
 /*
 PRIVMSG <receiver>{,<receiver>} <:text to be sent>
@@ -38,7 +39,12 @@ void	Server::PRIVMSG( std::string const& line, Client* client)
 	std::string					strMessage = splitArgs[1];
 
 	std::vector<std::string>	recipient = split(splitArgs[0], ',');
-
+	size_t i = sameRecipientMultipleTimes(recipient);
+	if (i != -1)
+	{
+		ERR_TOOMANYTARGETS(_name, client, recipient[i]);
+		throw std::invalid_argument("Multiple repetiton of recipient");
+	}
 	if (strMessage.size() > 1 && strMessage[0] == ':')
 	{
 		strMessage.erase(0, 1);
@@ -125,4 +131,20 @@ void	sendPrivmsgToChannel(Channel* channel, Client* client, std::string const& m
 {
 	std::string fullMsg = ":" + client->getFullName() + " PRIVMSG " + channel->getName() + " :" + message + "\r\n";
 	channel->broadcastToAll(fullMsg, client);
+}
+
+// Return the index of the recipient that occure multiple times or -1 if not found.
+size_t	sameRecipientMultipleTimes(std::vector<std::string> nicknames)
+{
+	std::string	temp;
+
+	for (size_t y = 0; y < nicknames.size(); ++y)
+	{
+		for (size_t i = y + 1; i < nicknames.size(); ++i)
+		{
+			if (nicknames[y] == nicknames[i])
+				return y;
+		}
+	}
+	return -1;
 }

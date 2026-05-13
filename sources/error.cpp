@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/20 16:27:20 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/12 15:45:16 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/13 11:49:16 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,5 +127,11 @@ void	ERR_UMODEUNKNOWNFLAG(std::string const& serverName, Client* client)
 void	ERR_USERONCHANNEL(std::string const& serverName, Client* client, std::string const& target, std::string const& channelName)
 {
 	std::string msgToClient = ":" + serverName + " 443 " + client->getNickname() + SPACE + target + SPACE + channelName + " :Is already on channel\r\n";
+	sendError(client, msgToClient);
+}
+
+void	ERR_TOOMANYTARGETS(std::string const& serverName, Client* client, std::string const& target)
+{
+	std::string msgToClient = ":" + serverName + " 407 " + client->getNickname() + SPACE + target + " :Duplicate recipients. No message delivered\r\n";
 	sendError(client, msgToClient);
 }

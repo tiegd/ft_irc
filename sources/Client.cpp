@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/16 17:03:42 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/11 18:34:25 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/13 11:16:25 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 
 Client::Client( void ) {}
 
-Client::Client( SOCKET sockClient ) : _clientSocket(sockClient), _nickname("*"), _username("*"), _registered(false) {}
+Client::Client( SOCKET sockClient ) : _clientSocket(sockClient), _nickname("*"), _username("*"),
+									_registered(false), _passValid(0), _nickValid(0), _userValid(0) {}
 
 /* { SETTER } */
 void		Client::setNickname( std::string const & newNickname )	{ _nickname = newNickname; }

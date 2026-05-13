@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 11:13:50 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/12 13:21:59 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/13 08:42:31 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ void	Server::JOIN(std::string const& line, Client* client)
 	//Diviser la string en <channel> / <password>
 	std::vector<std::string>	splitArgs = split(temp, SPACE);
 
+	/*Checker si le params est 0 dans ce cas faire PART a tous les channels du client*/
 	std::string					strChannel = splitArgs[0];
 	std::vector<std::string>	channels = split(strChannel, ',');
 	std::string					strPassword;
