@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/30 14:00:09 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/05/12 16:16:43 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/13 14:31:58 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,21 +69,6 @@ void Server::MODE(std::string const& line, Client* op)
 	{
 		switch (options[i])
 		{
-			case 'i':
-				modeInviteOnly(op, _channels[channelTarget], toDo);
-				break;
-			case 't':
-				modeRestrictionTopic(op, _channels[channelTarget], toDo);
-				break;
-			case 'k':
-				if (splitArgs.size() > 0)
-				{
-					modePassword(op, _channels[channelTarget], toDo, splitArgs[0]);
-					splitArgs.erase(splitArgs.begin());
-				}
-				else
-					ERR_NEEDMOREPARAMS(_name, op, "MODE");
-				break;
 			case 'o':
 				if (splitArgs.size() > 0)
 				{
@@ -93,6 +78,12 @@ void Server::MODE(std::string const& line, Client* op)
 				else
 					ERR_NEEDMOREPARAMS(_name, op, "MODE");
 				break;
+			case 'i':
+				modeInviteOnly(op, _channels[channelTarget], toDo);
+				break;
+			case 't':
+				modeRestrictionTopic(op, _channels[channelTarget], toDo);
+				break;
 			case 'l':
 				if (splitArgs.size() > 0)
 				{
@@ -101,6 +92,15 @@ void Server::MODE(std::string const& line, Client* op)
 				}
 				else if (!toDo)
 					modeRmLimitUser(op, _channels[channelTarget], toDo);
+				else
+					ERR_NEEDMOREPARAMS(_name, op, "MODE");
+				break;
+			case 'k':
+				if (splitArgs.size() > 0)
+				{
+					modePassword(op, _channels[channelTarget], toDo, splitArgs[0]);
+					splitArgs.erase(splitArgs.begin());
+				}
 				else
 					ERR_NEEDMOREPARAMS(_name, op, "MODE");
 				break;

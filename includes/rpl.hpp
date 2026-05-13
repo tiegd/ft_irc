@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/29 18:48:05 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/11 15:29:23 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/13 17:01:48 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,5 +28,8 @@ void	RPL_ENDOFNAMES(std::string const& serverName, Client* client, std::string c
 void	RPL_NAMREPLY(std::string const& serverName, Client* client, Channel* channel);
 void    RPL_CHANNELMODEIS(std::string const& serverName, Client* client, Channel* channel);
 void	RPL_WELCOME(std::string const& serverName, Client* client);
+
+void	RPL_CHANNELKICK(std::string const& serverName, Client *op, Client* client, Channel* channel);
+void	RPL_CHANMSGKICK(std::string const& serverName, Client *op, Client* client, Channel* channel, std::string comment);
 
 #endif

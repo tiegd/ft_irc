@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/15 12:42:23 by amerzone          #+#    #+#             */
-/*   Updated: 2026/05/11 15:54:13 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/13 13:32:24 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,10 +150,7 @@ void	Server::parseCommand( std::string const & line , Client* client )
 				KICK(line, client);
 			}
 			if (!line.compare(0, 4, "MODE") && (line[4] == ' '  || line.size() == 5))
-			{
-				std::cout << "in mode" << std::endl;
 				MODE(line, client);
-			}
 		}
 	}
 	catch(const std::exception& e)

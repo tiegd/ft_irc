@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 11:34:51 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/05/13 11:35:10 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/13 16:39:54 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,15 +77,14 @@ std::string Channel::getTopic() const
 std::string Channel::getModeString() const
 {
 	std::string	str;
-	if (this->getHasLimit())
-		str += 'l';
-	if (this->getHasPassword())
-		str += 'k';
 	if (this->getInvitOnly())
 		str += 'i';
 	if (this->getResTopic())
 		str += 't';
-	std::cout << str << std::endl;
+	if (this->getHasLimit())
+		str += 'l';
+	if (this->getHasPassword())
+		str += 'k';
 	return (str);
 }
 
@@ -185,13 +184,12 @@ void Channel::rmUser(Client *target)
 	this->setNbMembers();
 }
 
-void Channel::kickUser(Client *target, Client *op, std::string msg)
+void Channel::kickUser(Client *target, Client *op)
 {
 	if (this->isOperator(op))
 	{
 		this->rmOperator(target);
 		this->rmUser(target);
-		// this->broadcastToAll(msg, op);
 	}
 }
 

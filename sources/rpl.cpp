@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/06 16:22:12 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/12 14:21:16 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/13 17:13:48 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,5 +57,17 @@ void	RPL_WELCOME(std::string const& serverName, Client* client)
 void    RPL_CHANNELMODEIS(std::string const& serverName, Client* client, Channel* channel)
 {
 	std::string msgToClient = ":" + serverName + " 324 " + client->getNickname() + channel->getName() + " "  + channel->getModeString() + "\r\n";
+	sendRpl(client, msgToClient);
+}
+
+void	RPL_CHANNELKICK(std::string const& serverName, Client *op, Client* client, Channel* channel)
+{
+	std::string msgToClient = ":" + serverName + " 808 " + ":" + op->getFullName() + " KICK " + channel->getName() + " " + client->getNickname() + "\r\n";
+	sendRpl(client, msgToClient);
+}
+
+void	RPL_CHANMSGKICK(std::string const& serverName, Client *op, Client* client, Channel* channel, std::string comment)
+{
+	std::string msgToClient = ":" + serverName + " 909 " + ":" + op->getFullName() + " KICK " + channel->getName() + " " + client->getNickname() + " " + comment + "\r\n";
 	sendRpl(client, msgToClient);
 }
