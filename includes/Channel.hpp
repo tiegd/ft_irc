@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/21 17:00:04 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/05/11 17:13:14 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/13 09:53:10 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,8 @@ class Channel
 		// bool		clientIsOperator( Client* client );
 		// bool		clientIsUser( Client* client );
 		bool		clientIsOnChannel( Client* client );
+
+		void		printUsers() const;
 
 };
 

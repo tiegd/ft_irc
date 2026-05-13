@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 11:34:51 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/05/12 16:17:36 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/13 10:22:42 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -369,4 +369,14 @@ bool		Channel::clientIsOnChannel( Client* client )
 	if (isUser(client) == true || isOperator(client) == true)
 		return true;
 	return false;
+}
+
+void Channel::printUsers() const
+{
+	std::cout << "Users : " << std::endl;
+	for (int i = 0; i < _users.size(); i++)
+		std::cout << _users[i]->getNickname() << std::endl;
+	std::cout << "Operators : " << std::endl;
+	for (int i = 0; i < _operator.size(); i++)
+		std::cout << _operator[i]->getNickname() << std::endl;
 }

@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/30 10:59:44 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/05/12 16:31:02 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/13 10:26:52 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ std::vector<std::string>	split( std::string & str, char c );
 
 void Server::KICK(std::string const& line, Client* op)
 {
-	// Client send : [KICK <channel from> <channel target> :target]
+	// Client send : [KICK <channel> :target]
 
 	std::string temp(line);
 	temp.erase(0, 5);
@@ -28,11 +28,6 @@ void Server::KICK(std::string const& line, Client* op)
 	std::string 				channelTarget = splitArgs[0];
 	std::string					clientToKick = splitArgs[1];
 
-	clientToKick.erase(0, 1);
-	std::cout << clientR
-	// msg = ":" + op->getNickname() + " KICK " + channelTarget + " " + clientToKick;
-	// if (splitArgs.size() == 3)
-	// 	msg += " :" + splitArgs[2];
 	for (std::map<std::string, Channel*>::iterator it = _channels.begin(); it != _channels.end(); it++)
 	{
 		if (it->second->getName() == channelTarget)
@@ -51,7 +46,7 @@ void Server::KICK(std::string const& line, Client* op)
 				return;
 			if (_channels[channelTarget]->isOperator(op))
 			{
-				if (!_channels[channelTarget]->isOperator(it->second) || !_channels[channelTarget]->isUser(it->second))
+				if (!_channels[channelTarget]->isOperator(it->second) && !_channels[channelTarget]->isUser(it->second))
 				{
 					ERR_NOTONCHANNEL(_name, it->second, _channels[channelTarget]->getName());
 					return;
