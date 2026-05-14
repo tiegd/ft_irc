@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/29 18:48:05 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/13 14:31:55 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/14 11:43:18 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,5 +34,9 @@ void	RPL_WELCOME( std::string const& serverName, Client* client );
 void	RPL_YOURHOST( std::string const& serverName, Client* client );
 void	RPL_CREATED( std::string const& serverName, Client* client );
 void	RPL_MYINFO( std::string const& serverName, Client* client );
+
+void	RPL_MOTDSTART( std::string const& serverName, Client* client );
+void	RPL_MOTD( std::string const& serverName, Client* client, std::string const& motdString );
+void	RPL_ENDOFMOTD( std::string const& serverName, Client* client );
 
 #endif

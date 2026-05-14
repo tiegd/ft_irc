@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/20 16:27:20 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/13 11:49:16 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/14 14:43:26 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,5 +133,11 @@ void	ERR_USERONCHANNEL(std::string const& serverName, Client* client, std::strin
 void	ERR_TOOMANYTARGETS(std::string const& serverName, Client* client, std::string const& target)
 {
 	std::string msgToClient = ":" + serverName + " 407 " + client->getNickname() + SPACE + target + " :Duplicate recipients. No message delivered\r\n";
+	sendError(client, msgToClient);
+}
+
+void	ERR_NOMOTD( std::string const& serverName, Client* client )
+{
+	std::string msgToClient = ":" + serverName + " 422 " + client->getNickname() + " :MOTD File is missing\r\n";
 	sendError(client, msgToClient);
 }

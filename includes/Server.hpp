@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/09 12:20:30 by amerzone          #+#    #+#             */
-/*   Updated: 2026/05/13 10:28:26 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/14 15:41:13 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 #include <map>
 #include <stdbool.h>
 #include <csignal>
+#include <fstream>
 
 /* SOCKET */
 #include <sys/socket.h>
@@ -30,9 +31,10 @@
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <fcntl.h>
 
 #define	SOCKET int
-#define MAXLINE	4096
+#define MAXLINE	512
 #define MAXCLIENTS 10
 
 #define SPACE ' '
@@ -132,6 +134,7 @@ class Server
 			bool			parseOptions( std::string options );
 			bool			parseChannelPassword( std::string password );
 
+		void				MOTD(Client* client);
 
 
 		

@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/28 16:15:59 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/07 16:10:45 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/14 14:43:50 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,9 @@ void	Server::PING( std::string const& line, Client* client )
 
 void	Server::PONG( std::string params, Client* client )
 {
-	std::string	strPong =  "PONG " + params + "\r\n";
+	std::string	strPong =  ":" + _name + " PONG " + params + "\r\n";
 	if(send(client->getSocketClient(), strPong.c_str(), strPong.size(), 0) < 0)
 	{
-		throw FunctionError();
+		std::cout << "send() error ocurred" << std::endl;
 	}
 }

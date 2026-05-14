@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/15 12:42:23 by amerzone          #+#    #+#             */
-/*   Updated: 2026/05/13 14:34:10 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/14 15:52:01 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,8 @@ void	Server::setSocketServ( void )
 	{
 		std::cout << "Socket error" << std::endl;
 	}
+	int flags = fcntl(_socketServ, F_GETFL);
+	fcntl(_socketServ, F_SETFL, flags | O_NONBLOCK);
 	bzero(&servaddr, sizeof(servaddr));
 	servaddr.sin_family			= AF_INET;
 	servaddr.sin_addr.s_addr	= htonl(INADDR_ANY);
@@ -161,14 +163,14 @@ void	Server::parseCommand( std::string const & line , Client* client )
 			{
 				INVITE(line, client);
 			}
-			// if (line.compare(0, 5, "KICK") && line[4] == ' ')
-			// {
-			// 	KICK(line, client);
-			// }
-			// if (line.compare(0, 5, "MODE") && line[4] == ' ')
-			// {
-			// 	MODE(line, client);
-			// }
+			if (!line.compare(0, 4, "PING") && (line[4] == ' ' || line.size() > 5))
+			{
+				PING(line, client);
+			}
+			if (!line.compare(0, 4, "MOTD") && (line[4] == ' ' || line.size() == 4))
+			{
+				MOTD(client);
+			}
 		}
 	}
 	catch(const std::exception& e)
@@ -182,6 +184,7 @@ void	Server::parseCommand( std::string const & line , Client* client )
 		RPL_YOURHOST(_name, client);
 		RPL_CREATED(_name, client);
 		RPL_MYINFO(_name, client);
+		MOTD(client);
 	}
 }
 
@@ -198,6 +201,8 @@ void	Server::addClientSocket( void )
 		std::cout << "Error occured during accept()" << std::endl;
 		throw ;
 	}
+	int flags = fcntl(client, F_GETFL);
+	fcntl(client, F_SETFL, flags | O_NONBLOCK);
 	t_fd.fd = client;
 	t_fd.events = POLLIN;
 	t_fd.revents = 0;
@@ -231,6 +236,24 @@ Client*	Server::searchClient( std::string target )
 		}
 	}
 	return NULL;
+}
+
+void	Server::MOTD(Client* client)
+{
+	std::ifstream	motd("files/motd_3.txt");
+	std::string		buffer;
+
+	RPL_MOTDSTART(_name, client);
+	if (!motd.is_open())
+	{
+		ERR_NOMOTD(_name, client);
+		return ;
+	}
+	while (std::getline(motd, buffer, '\n'))
+	{
+		RPL_MOTD(_name, client, buffer);
+	}
+	RPL_ENDOFMOTD(_name, client);
 }
 
 Server::~Server( void )

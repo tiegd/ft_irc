@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/06 16:22:12 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/13 14:30:06 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/14 14:43:32 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,17 +100,20 @@ void	RPL_MYINFO(std::string const& serverName, Client* client)
 	sendRpl(client, msgToClient);
 }
 
-/*       001    RPL_WELCOME
-              "Welcome to the Internet Relay Network
-               <nick>!<user>@<host>"
-       002    RPL_YOURHOST
-              "Your host is <servername>, running version <ver>"
-       003    RPL_CREATED
-              "This server was created <date>"
-       004    RPL_MYINFO
-              "<servername> <version> <available user modes>
-               <available channel modes>"
+void	RPL_MOTDSTART( std::string const& serverName, Client* client )
+{
+	std::string msgToClient = ":" + serverName + " 375 " + client->getNickname() + ":- " + serverName + " Message of the day -\r\n";
+	sendRpl(client, msgToClient);
+}
 
-         - The server sends Replies 001 to 004 to a user upon
-           successful registration.
-*/
+void	RPL_MOTD( std::string const& serverName, Client* client, std::string const& motdString )
+{
+	std::string msgToClient = ":" + serverName + " 372 " + client->getNickname() + " :" + motdString + "\r\n";
+	sendRpl(client, msgToClient);
+}
+
+void	RPL_ENDOFMOTD( std::string const& serverName, Client* client )
+{
+	std::string msgToClient = ":" + serverName + " 376 " + client->getNickname() + " :End of /MOTD command\r\n";
+	sendRpl(client, msgToClient);
+}
