@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/30 10:59:44 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/05/15 12:28:41 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/15 14:34:25 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,9 @@ void Server::KICK(std::string const& line, Client* op)
 	_channels[channelTarget]->printUsers();
 	for (int i = 0; i < clientToKick.size(); i++)
 	{
-		for (std::map<SOCKET, Client *>::iterator it = _clients.begin(); it != _clients.end(); it++)
+		bool									kicked = false;
+		std::map<SOCKET, Client *>::iterator	it;
+		for (it = _clients.begin(); it != _clients.end(); it++)
 		{
 			if (it->second->getNickname() == clientToKick[i])
 			{
@@ -61,6 +63,7 @@ void Server::KICK(std::string const& line, Client* op)
 						return;
 					}
 					_channels[channelTarget]->kickUser(it->second, op);
+					kicked = true;
 					if (splitArgs.size() >= 3)
 					{
 						comment = parseComment(splitArgs);
@@ -73,7 +76,8 @@ void Server::KICK(std::string const& line, Client* op)
 					ERR_CHANOPRIVSNEEDED(_name, op, _channels[channelTarget]->getName());
 			}
 		}
-		ERR_USERNOTINCHANNEL(_name, op, _channels[channelTarget]->getName());
+		if (it == _clients.end() && !kicked)
+			ERR_USERNOTINCHANNEL(_name, op, _channels[channelTarget]->getName());
 	}
 }
 
