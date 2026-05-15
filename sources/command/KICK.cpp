@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/30 10:59:44 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/05/13 17:04:03 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/15 12:28:41 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ std::vector<std::string>	split( std::string & str, char c );
 
 void Server::KICK(std::string const& line, Client* op)
 {
-	// Client send : [KICK <channel> :target [:comment]]
+	// Client send : KICK <channel> <user> *( "," <user> ) [<:comment>]
 
 	std::string temp(line);
 	temp.erase(0, 5);
@@ -28,27 +28,23 @@ void Server::KICK(std::string const& line, Client* op)
 		ERR_NEEDMOREPARAMS(_name, op, "KICK");
 		return ;
 	}
-	// splitArgs[1].erase(0);
-	std::cout << "channelTarget = " << splitArgs[0] << std::endl;
-	std::cout << "client to kick = " << splitArgs[1] << std::endl;
-	std::cout << "comment = " << splitArgs[2] << std::endl;
+	
 	std::string				 	channelTarget = splitArgs[0];
 	std::vector<std::string>	clientToKick = split(splitArgs[1], ',');
 	std::string					comment;
-	// if (splitArgs.size() == 3)
-	// 	comment = parseComment(splitArgs[2]);
-	// else
-	// 	comment = '\0';
-	for (std::map<std::string, Channel*>::iterator it = _channels.begin(); it != _channels.end(); it++)
-	{
+	std::map<std::string, Channel*>::iterator it;
+
+	for (it = _channels.begin(); it != _channels.end(); it++)
+	{	
 		if (it->second->getName() == channelTarget)
 			break;
-		if (it == _channels.end())
-		{
-			ERR_NOSUCHCHANNEL(_name, op, channelTarget);
-			return;
-		}
 	}
+	if (it == _channels.end())
+	{
+		ERR_NOSUCHCHANNEL(_name, op, channelTarget);
+		return;
+	}
+	_channels[channelTarget]->printUsers();
 	for (int i = 0; i < clientToKick.size(); i++)
 	{
 		for (std::map<SOCKET, Client *>::iterator it = _clients.begin(); it != _clients.end(); it++)
@@ -59,35 +55,33 @@ void Server::KICK(std::string const& line, Client* op)
 					return;
 				if (_channels[channelTarget]->isOperator(op))
 				{
-					std::cout << "yes" << std::endl;
 					if (!_channels[channelTarget]->isOperator(it->second) && !_channels[channelTarget]->isUser(it->second))
 					{
 						ERR_USERNOTINCHANNEL(_name, op, _channels[channelTarget]->getName());
 						return;
 					}
 					_channels[channelTarget]->kickUser(it->second, op);
-					if (splitArgs.size() == 3)
-						RPL_CHANNELKICK(_name, op, it->second, _channels[channelTarget]); // reply avec le comment
+					if (splitArgs.size() >= 3)
+					{
+						comment = parseComment(splitArgs);
+						RPL_CHANMSGKICK(_name, op, it->second, _channels[channelTarget], comment); // reply avec le comment
+					}
 					else
-						RPL_CHANMSGKICK(_name, op, it->second, _channels[channelTarget], splitArgs[2]);
-					return ;
+						RPL_CHANNELKICK(_name, op, it->second, _channels[channelTarget]);
 				}
+				else
+					ERR_CHANOPRIVSNEEDED(_name, op, _channels[channelTarget]->getName());
 			}
 		}
 		ERR_USERNOTINCHANNEL(_name, op, _channels[channelTarget]->getName());
 	}
 }
 
-std::string	Server::parseComment(std::string str)
+std::string	Server::parseComment(std::vector<std::string> args)
 {
-	if (str[0] != ':')
-	{
-		std::vector<std::string>	newStr = split(str, SPACE);
-		return (newStr[0]);
-	}
-	else
-	{
-		str.erase(0, 1);
-		return (str);
-	}
+	std::string	str = args[2];
+
+	for (int i = 3; i < args.size(); i++)
+		str += " " + args[i];
+	return (str);
 }

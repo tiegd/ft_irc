@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/09 12:20:30 by amerzone          #+#    #+#             */
-/*   Updated: 2026/05/13 11:36:55 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/15 11:52:49 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ class Server
 
 
 		void			KICK(std::string const& line, Client* op);
-			std::string		parseComment(std::string str);
+			std::string		parseComment(std::vector<std::string> args);
 		void 			MODE(std::string const& line, Client* op);
 			void			modeInviteOnly(Client* op, Channel* channel, bool toDo);
 			void			modeRestrictionTopic(Client* op, Channel* channel, bool toDo);
