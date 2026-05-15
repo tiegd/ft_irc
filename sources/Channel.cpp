@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 11:34:51 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/05/13 16:39:54 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/15 14:57:24 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <sys/types.h>
 #include <algorithm>
 #include "FunctionError.hpp"
+#include "sstream"
 // #include <cstdint>
 
 Channel::Channel()
@@ -85,6 +86,26 @@ std::string Channel::getModeString() const
 		str += 'l';
 	if (this->getHasPassword())
 		str += 'k';
+	return (str);
+}
+
+std::string Channel::getModeArgs() const
+{
+	std::string	str;
+	if (this->getHasLimit() && !this->getHasPassword())
+	{
+		std::stringstream	out;
+		out << this->getUserLimit();
+		str += out.str();
+	}
+	if (this->getHasPassword() && !this->getHasLimit())
+		str += this->getPassword();
+	if (this->getHasLimit() && this->getHasPassword())
+	{
+		std::stringstream	out;
+		out << this->getUserLimit();
+		str += out.str() + " " + this->getPassword();
+	}
 	return (str);
 }
 

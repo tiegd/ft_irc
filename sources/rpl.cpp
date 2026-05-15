@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/06 16:22:12 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/13 17:13:48 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/15 14:46:34 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,8 @@ void	RPL_WELCOME(std::string const& serverName, Client* client)
 
 void    RPL_CHANNELMODEIS(std::string const& serverName, Client* client, Channel* channel)
 {
-	std::string msgToClient = ":" + serverName + " 324 " + client->getNickname() + channel->getName() + " "  + channel->getModeString() + "\r\n";
+	std::cout << channel->getModeString() << " " << channel->getModeArgs() << std::endl;
+	std::string msgToClient = ":" + serverName + " 324 " + client->getNickname() + channel->getName() + " "  + channel->getModeString() + " " + channel->getModeArgs() + "\r\n";
 	sendRpl(client, msgToClient);
 }
 
