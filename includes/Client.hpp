@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/09 12:18:51 by amerzone          #+#    #+#             */
-/*   Updated: 2026/05/08 15:33:22 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/15 15:40:58 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,14 @@ class Client
 		/*Username ne peut pas etre modifier mais n'est pas forcement unique*/
 		std::string						_username;
 		std::string						_hostname;
+		std::string						_realname;
 
 		bool							_registered;
-		/*Map de tous les channels rejoint par le client.*/
 		std::vector<Channel*>			_chanJoined;
-		// peut rejoindre 10 channel maximum
+
+		int								_passValid;
+		int								_nickValid;
+		int								_userValid;
 
 		Client( Client const& src );
 		// Client & operator=(Client const& rightSide);
@@ -55,15 +58,26 @@ class Client
 		std::string	getHostname( void ) const;
 		bool		getRegister( void ) const;
 		std::string	getFullName( void ) const;
+		std::string	getRealname( void ) const;
 
 		/* SETTER */
 		void	setNickname( std::string const & newNickname );
 		void	setUsername( std::string const & newNickname );
 		void	setHostname( std::string const & newNickname );
+		void	setRealname( std::string const & realname );
 		void	setRegister( bool val );
+
+		void	setPassValid( int val );
+		void	setNickValid( int val );
+		void	setUserValid( int val );
 		
 		void	addChanJoined( Channel* newChannel );
+		void	rmChanJoined( Channel* newChannel );
 		void	broadcastToMyChannels( std::string notification );
+		bool	canBeRegistered( void ) const;
+
+		/* TESTS */
+		void	printChanJoined() const;
 };
 
 #endif

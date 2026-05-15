@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/08 16:33:44 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/08 17:29:57 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/14 14:08:15 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@ void	Server::PART(std::string const& line, Client* client)
 	std::vector<std::string>	nameChannels = split(splitArgs[0], ',');
 	std::string					message = splitArgs[1];
 
-	std::cout << "channel name : " << splitArgs[0] << std::endl;
-	std::cout << "message : " << message << std::endl;
+	// std::cout << "channel name : " << splitArgs[0] << std::endl;
+	// std::cout << "message : " << message << std::endl;
 
 	for (size_t i = 0; i < nameChannels.size(); ++i)
 	{
@@ -54,6 +54,10 @@ void	Server::PART(std::string const& line, Client* client)
 			_channels[nameChannels[i]]->rmOperator(client);
 		}
 		sendPartMsg(client, client->getFullName(), _channels[nameChannels[i]], message);
+		if (_channels[nameChannels[i]]->getNbMembers() == 0 && _channels[nameChannels[i]]->getNbOp() == 0)
+		{
+			delete _channels[nameChannels[i]];
+		}
 	}
 }
 

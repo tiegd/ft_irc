@@ -6,13 +6,15 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/15 12:42:23 by amerzone          #+#    #+#             */
-/*   Updated: 2026/05/13 13:32:24 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/15 16:09:38 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 // #include "Client.hpp"
 // #include "function.hpp"
+
+volatile std::sig_atomic_t gSignalStatus = 0;
 
 Server::Server( void ) {};
 
@@ -27,7 +29,10 @@ Server::Server( std::string name, u_int16_t port, std::string password )
 	_fds.push_back(t_fd);
 }
 
-Server::~Server( void ) {};
+void	signalHandler(int signal)
+{
+	gSignalStatus = 1;
+}
 
 void	Server::setSocketServ( void )
 {
@@ -37,6 +42,8 @@ void	Server::setSocketServ( void )
 	{
 		std::cout << "Socket error" << std::endl;
 	}
+	int flags = fcntl(_socketServ, F_GETFL);
+	fcntl(_socketServ, F_SETFL, flags | O_NONBLOCK);
 	bzero(&servaddr, sizeof(servaddr));
 	servaddr.sin_family			= AF_INET;
 	servaddr.sin_addr.s_addr	= htonl(INADDR_ANY);
@@ -56,13 +63,18 @@ void	Server::setSocketServ( void )
 
 void	Server::runServer( void )
 {
-	char	buff[1024];
-	
+	char	buff[512];
+
+	std::signal(SIGINT, signalHandler);
 	while (true)
 	{
+		if (gSignalStatus == 1)
+		{
+			throw std::exception();
+		}
 		if (poll(_fds.data(), _fds.size(), -1) < 0)
 		{
-			std::cout << "Error occured during poll().";
+			std::cout << "Error occured during poll()." << std::endl;
 			continue;
 		}
 		
@@ -113,22 +125,20 @@ void	Server::parseCommand( std::string const & line , Client* client )
 {
 	try
 	{
-		if (line.size() >= 4)
+		if (!line.compare(0, 4, "PASS") && (line[4] == ' ' || line.size() == 4))
 		{
-			if (!line.compare(0, 4, "PASS") && (line[4] == ' ' || line.size() == 4))
-			{
-				PASS(line, client);
-			}
-			if (!line.compare(0, 4, "NICK") && (line[4] == ' ' || line.size() == 4))
-			{
-				NICK(line, client);
-			}
-			if (!line.compare(0, 4, "USER") && (line[4] == ' ' || line.size() == 4))
-			{
-				USER(line, client);
-				client->setRegister(true);
-				RPL_WELCOME(_name, client);
-			}
+			client->setPassValid(PASS(line, client));
+		}
+		if (!line.compare(0, 4, "NICK") && (line[4] == ' ' || line.size() == 4))
+		{
+			client->setNickValid(NICK(line, client));
+		}
+		if (!line.compare(0, 4, "USER") && (line[4] == ' ' || line.size() == 4))
+		{
+			client->setUserValid(USER(line, client));
+		}
+		if (client->getRegister() == true)
+		{
 			if (!line.compare(0, 4, "JOIN") && (line[4] == ' ' || line.size() == 4))
 			{
 				JOIN(line, client);
@@ -151,11 +161,36 @@ void	Server::parseCommand( std::string const & line , Client* client )
 			}
 			if (!line.compare(0, 4, "MODE") && (line[4] == ' '  || line.size() == 5))
 				MODE(line, client);
+			if (!line.compare(0, 3, "WHO") && (line[3] == ' ' || line.size() == 3))
+			{
+				WHO(line, client);
+			}
+			if (!line.compare(0, 6, "INVITE") && (line[6] == ' ' || line.size() == 6))
+			{
+				INVITE(line, client);
+			}
+			if (!line.compare(0, 4, "PING") && (line[4] == ' ' || line.size() > 5))
+			{
+				PING(line, client);
+			}
+			if (!line.compare(0, 4, "MOTD") && (line[4] == ' ' || line.size() == 4))
+			{
+				MOTD(client);
+			}
 		}
 	}
 	catch(const std::exception& e)
 	{
 		std::cerr << e.what() << '\n';
+	}
+	if ( client->getRegister() != true && client->canBeRegistered() == true)
+	{
+		client->setRegister(true);
+		RPL_WELCOME(_name, client);
+		RPL_YOURHOST(_name, client);
+		RPL_CREATED(_name, client);
+		RPL_MYINFO(_name, client);
+		MOTD(client);
 	}
 }
 
@@ -172,6 +207,8 @@ void	Server::addClientSocket( void )
 		std::cout << "Error occured during accept()" << std::endl;
 		throw ;
 	}
+	int flags = fcntl(client, F_GETFL);
+	fcntl(client, F_SETFL, flags | O_NONBLOCK);
 	t_fd.fd = client;
 	t_fd.events = POLLIN;
 	t_fd.revents = 0;
@@ -181,4 +218,60 @@ void	Server::addClientSocket( void )
 	_clients[client] = newClient;
 
 	std::cout << "New client connected" << std::endl;
+}
+
+bool	Server::nicknameExist( std::string target)
+{
+	for (std::map<SOCKET, Client*>::iterator it = _clients.begin(); it != _clients.end(); it++)
+	{
+		if (it->second->getNickname() == target)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+Client*	Server::searchClient( std::string target )
+{
+	for (std::map<SOCKET, Client*>::iterator it = _clients.begin(); it != _clients.end(); it++)
+	{
+		if (target.compare(it->second->getNickname()) == 0)
+		{
+			return it->second;
+		}
+	}
+	return NULL;
+}
+
+void	Server::MOTD(Client* client)
+{
+	std::ifstream	motd("files/motd_3.txt");
+	std::string		buffer;
+
+	RPL_MOTDSTART(_name, client);
+	if (!motd.is_open())
+	{
+		ERR_NOMOTD(_name, client);
+		return ;
+	}
+	while (std::getline(motd, buffer, '\n'))
+	{
+		RPL_MOTD(_name, client, buffer);
+	}
+	RPL_ENDOFMOTD(_name, client);
+}
+
+Server::~Server( void )
+{
+	std::cout << "Server destructor called !" << std::endl;
+
+	for (std::map<SOCKET, Client*>::iterator it = _clients.begin(); it != _clients.end(); ++it)
+	{
+		delete it->second;
+	}
+	for (std::map<std::string, Channel*>::iterator it = _channels.begin(); it != _channels.end(); ++it)
+	{
+		delete it->second;
+	}
 }

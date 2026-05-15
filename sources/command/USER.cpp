@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/21 09:44:33 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/07 16:33:09 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/11 18:29:46 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,13 @@ Format : USER <username> <hostname> <servername> :<realname>
 Il faut qu'il y ait les 4 parametres sinon : ERR_NEEDMOREPARAMS
 Pas que le client soit deja enregistré (que nick et user est dejà été recu): ERR_ALREADYREGISTRED
 */
-void	Server::USER( std::string const & line, Client* client )
+int	Server::USER( std::string const & line, Client* client )
 {
 	if (client->getRegister() == true)
 	{
 		ERR_ALREADYREGISTRED(_name, client);
-		throw std::invalid_argument("already registered");
+		return -1;
+		// throw std::invalid_argument("already registered");
 	}
 
 	std::string temp(line);
@@ -34,23 +35,27 @@ void	Server::USER( std::string const & line, Client* client )
 	if (pos == std::string::npos)
 	{
 		ERR_NEEDMOREPARAMS(_name, client, "USER");
-		throw std::invalid_argument("Need more params");
+		return -1;
+		// throw std::invalid_argument("Need more params");
 	}
 
 	std::string first_part = temp.substr(0, pos);
 	std::string realname = temp.substr(pos + 1, temp.size() - pos );
 
-	std::cout << first_part << std::endl;
-	std::cout << realname << std::endl;
+	// std::cout << first_part << std::endl;
+	// std::cout << realname << std::endl;
 
 	std::vector<std::string>	splitParams = split(first_part, SPACE);
 	if (splitParams.size() != 3)
 	{
 		ERR_NEEDMOREPARAMS(_name, client, "USER");
-		throw std::invalid_argument("Need more params");
+		return -1;
+		// throw std::invalid_argument("Need more params");
 	}
 	client->setUsername(splitParams[0]);
 	client->setHostname(splitParams[1]);
+	client->setRealname(realname);
+	return 1;
 }
 
 // std::vector<std::string>	split( std::string & str, char c )

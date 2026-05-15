@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/20 16:27:20 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/13 10:43:27 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/15 15:10:22 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,20 +58,20 @@ void	ERR_PASSWDMISMATCH(std::string const& serverName, Client* client)
 
 void	ERR_NEEDMOREPARAMS(std::string const& serverName, Client* client, std::string const& command)
 {
-	std::string msgToClient = ":" + serverName + " 461 " + client->getNickname() + " " + command + " :Not enough parameters\r\n";
+	std::string msgToClient = ":" + serverName + " 461 " + client->getNickname() + SPACE + command + " :Not enough parameters\r\n";
 	sendError(client, msgToClient);
 }
 
 // { -------------- JOIN ----------------- }
 void	ERR_BADCHANMASK(std::string const& serverName, Client* client, std::string const& channel)
 {
-	std::string msgToClient = ":" + serverName + " 476 " + client->getNickname() + " " + channel + " :Bad Channel Mask\r\n";
+	std::string msgToClient = ":" + serverName + " 476 " + client->getNickname() + SPACE + channel + " :Bad Channel Mask\r\n";
 	sendError(client, msgToClient);
 }
 
 void	ERR_BADCHANNELKEY(std::string const& serverName, Client* client, std::string const& channel)
 {
-	std::string msgToClient = ":" + serverName + " 475 " + client->getNickname() + " " + channel + " :Cannot join channel (+k)\r\n";
+	std::string msgToClient = ":" + serverName + " 475 " + client->getNickname() + SPACE + channel + " :Cannot join channel (+k)\r\n";
 	sendError(client, msgToClient);
 }
 
@@ -90,31 +90,31 @@ void	ERR_NOTEXTTOSEND(std::string const& serverName, Client* client)
 
 void	ERR_NOSUCHNICK(std::string const& serverName, Client* client, std::string const& nick)
 {
-	std::string msgToClient = ":" + serverName + " 401 " + client->getNickname() + " " + nick + " :No such nick/channel\r\n";
+	std::string msgToClient = ":" + serverName + " 401 " + client->getNickname() + SPACE + nick + " :No such nick/channel\r\n";
 	sendError(client, msgToClient);
 }
 
 void	ERR_NOSUCHCHAN(std::string const& serverName, Client* client, std::string const& channel)
 {
-	std::string msgToClient = ":" + serverName + " 403 " + client->getNickname() + " " + channel + " :No such channel\r\n";
+	std::string msgToClient = ":" + serverName + " 403 " + client->getNickname() + SPACE + channel + " :No such channel\r\n";
 	sendError(client, msgToClient);
 }
 
 void	ERR_INVITEONLYCHAN(std::string const& serverName, Client* client, std::string const& channel)
 {
-	std::string msgToClient = ":" + serverName + " 473 " + client->getNickname() + " " + channel + " :Cannot join channel (+i)\r\n";
+	std::string msgToClient = ":" + serverName + " 473 " + client->getNickname() + SPACE + channel + " :Cannot join channel (+i)\r\n";
 	sendError(client, msgToClient);
 }
 
 void	ERR_NOTONCHANNEL(std::string const& serverName, Client* client, std::string const& channel)
 {
-	std::string msgToClient = ":" + serverName + " 442 " + client->getNickname() + " " + channel + " :You're not on that channel\r\n";
+	std::string msgToClient = ":" + serverName + " 442 " + client->getNickname() + SPACE + channel + " :You're not on that channel\r\n";
 	sendError(client, msgToClient);
 }
 
 void	 ERR_CHANOPRIVSNEEDED(std::string const& serverName, Client* client, std::string const& channel)
 {
-	std::string msgToClient = ":" + serverName + " 482 " + client->getNickname() + " " + channel + " :You're not channel operator\r\n";
+	std::string msgToClient = ":" + serverName + " 482 " + client->getNickname() + SPACE + channel + " :You're not channel operator\r\n";
 	sendError(client, msgToClient);
 }
 
@@ -148,3 +148,20 @@ void	ERR_USERNOTINCHANNEL(std::string const& serverName, Client* client, std::st
 // 	std::string msgToClient = ":" + serverName + " 481 " + client->getNickname() + " ::Permission Denied- You're not an IRC operator\r\n";
 // 	sendError(client, msgToClient);
 // }
+void	ERR_USERONCHANNEL(std::string const& serverName, Client* client, std::string const& target, std::string const& channelName)
+{
+	std::string msgToClient = ":" + serverName + " 443 " + client->getNickname() + SPACE + target + SPACE + channelName + " :Is already on channel\r\n";
+	sendError(client, msgToClient);
+}
+
+void	ERR_TOOMANYTARGETS(std::string const& serverName, Client* client, std::string const& target)
+{
+	std::string msgToClient = ":" + serverName + " 407 " + client->getNickname() + SPACE + target + " :Duplicate recipients. No message delivered\r\n";
+	sendError(client, msgToClient);
+}
+
+void	ERR_NOMOTD( std::string const& serverName, Client* client )
+{
+	std::string msgToClient = ":" + serverName + " 422 " + client->getNickname() + " :MOTD File is missing\r\n";
+	sendError(client, msgToClient);
+}

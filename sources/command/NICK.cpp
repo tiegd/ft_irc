@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/20 18:34:09 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/08 15:28:08 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/12 15:23:59 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ il ne doit pas commencer par un chiffre.
 caratere interdit : :, espace, *, ?, @, !
 - Checker si il existe deja. Sinon renvoyer une erreur ERR_NICKNAMEINUSE.
 */
-void	Server::NICK( std::string const & line, Client* client )
+int	Server::NICK( std::string const & line, Client* client )
 {
 	std::string temp(line);
 
@@ -34,17 +34,20 @@ void	Server::NICK( std::string const & line, Client* client )
 	if (noNicknameGiven(temp) == true)
 	{
 		ERR_NONICKNAMEGIVEN(_name, client);
-		throw std::invalid_argument("Nickname is empty");
+		return -1;
+		// throw std::invalid_argument("Nickname is empty");
 	}
 	if (validNickname(temp) == false)
 	{
 		ERR_ERRONEUSNICKNAME(_name, client);
-		throw std::invalid_argument("Wrong nickname format");
+		return -1;
+		// throw std::invalid_argument("Wrong nickname format");
 	}
-	if (nicknameIsAvailable(temp, _clients) == false)
+	if (nicknameExist(temp) == true)
 	{
 		ERR_NICKNAMEINUSE(_name, client);
-		throw std::invalid_argument("Nickname already in use");
+		return -1;
+		// throw std::invalid_argument("Nickname already in use");
 	}
 	if (client->getRegister() == true)
 	{
@@ -58,11 +61,12 @@ void	Server::NICK( std::string const & line, Client* client )
 		}
 	}
 	std::string	notification = ":" + client->getNickname() + "!" + client->getUsername() + "@" + client->getHostname() + " NICK " + temp + "\r\n";
-	std::cout << "NOTIF CHANGEMENT DE NICK : " << notification << std::endl;
+	// std::cout << "NOTIF CHANGEMENT DE NICK : " << notification << std::endl;
 	client->sendNotif(notification);
 	client->broadcastToMyChannels(notification);
 	client->setNickname(temp);
 	_nicknameAlreadyUsed.push_back(temp);
+	return 1;
 }
 
 bool	validNickname( std::string line )

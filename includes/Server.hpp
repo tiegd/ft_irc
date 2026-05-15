@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/09 12:20:30 by amerzone          #+#    #+#             */
-/*   Updated: 2026/05/15 11:52:49 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/15 15:12:05 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@
 #include <vector>
 #include <map>
 #include <stdbool.h>
+#include <csignal>
+#include <fstream>
 
 /* SOCKET */
 #include <sys/socket.h>
@@ -29,9 +31,10 @@
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <fcntl.h>
 
 #define	SOCKET int
-#define MAXLINE	4096
+#define MAXLINE	512
 #define MAXCLIENTS 10
 
 #define SPACE ' '
@@ -83,40 +86,41 @@ class Server
 
 		/* SETTER */
 		void			setSocketServ( void );
-		// void	setPort( unsigned int port );
-		// void	setPassword( std::string password );
-
 		void			runServer( void );
 		void			addClientSocket( void );
+		bool			nicknameExist( std::string target );
+		Client*			searchClient( std::string target );
 
+		
 		// { PARSING }
 		void			parseCommand( std::string const & line, Client* client );
 
 		// { COMMAND }
-		void			PASS( std::string const & line, Client* client );
+		int			PASS( std::string const & line, Client* client );
 
-		void			NICK( std::string const & line, Client* client );
+		int			NICK( std::string const & line, Client* client );
 
-		void			USER( std::string const & line, Client* client );
+		int			USER( std::string const & line, Client* client );
 
 		void			JOIN( std::string const & line, Client* client );
-			void			sendJoinNotification(Client *client, Channel* Channel);
+			void			sendJoinNotification( Client *client, Channel* Channel );
 		
 		void			PRIVMSG( std::string const& line, Client* client );
 		void			NOTICE( std::string const& line, Client* client );
-			void			sendNotice( Client *client, std::string recipient, std::string message);
-			void			sendMessage( Client *client, std::string recipient, std::string message);
-			SOCKET			searchClient( std::string nicknameRecipient );
+			void			sendNotice( Client *client, std::string recipient, std::string message );
+			void			sendMessage( Client *client, std::string recipient, std::string message );
+			SOCKET			searchClientSocket( std::string nicknameRecipient );
 			bool			channelExist( std::string channelName );
 
 		// void			WHO( std::string const& line, Client* client );
 		void			PING( std::string const& line, Client* client );
 		void			PONG( std::string params, Client* client );
 
-		void			TOPIC(std::string line, Client* client);
+		void			TOPIC(std::string line, Client* client );
 
-		void			PART(std::string const& line, Client* client);
+		void			PART( std::string const& line, Client* client);
 
+		void			WHO( std::string const& line, Client* client );
 
 		void			KICK(std::string const& line, Client* op);
 			std::string		parseComment(std::vector<std::string> args);
@@ -129,7 +133,9 @@ class Server
 			void			modeRmLimitUser(Client* op, Channel* channel, bool toDo);
 			bool			parseOptions(std::string options, Client *client);
 			bool			parseChannelPassword(Client* op, Channel* channel, std::string password);
+		void			INVITE(std::string const& line, Client* client);
 
+		void				MOTD(Client* client);
 
 
 		

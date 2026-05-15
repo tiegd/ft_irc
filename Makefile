@@ -6,7 +6,7 @@
 #    By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/04/15 14:12:34 by amerzone          #+#    #+#              #
-#    Updated: 2026/05/11 15:34:33 by gaducurt         ###   ########.fr        #
+#    Updated: 2026/05/15 15:06:07 by gaducurt         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,7 +41,9 @@ SRC =	main.cpp \
 		sources/command/PRIVMSG.cpp \
 		sources/command/TOPIC.cpp \
 		sources/command/WHO.cpp \
-		sources/command/PART.cpp
+		sources/command/PART.cpp \
+		sources/command/INVITE.cpp
+		
 
 OBJ := $(addprefix $(OBJDIR), $(SRC:.cpp=.o))
 DEPS = $(OBJ:.o=.d)

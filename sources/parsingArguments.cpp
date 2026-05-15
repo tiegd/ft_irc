@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/15 12:34:11 by amerzone          #+#    #+#             */
-/*   Updated: 2026/04/29 13:37:19 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/11 15:30:41 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	parseArg( int ac, char **av, u_int16_t & port, std::string & password)
 	port = static_cast<u_int16_t>(tport);
 
 	password = av[2];
-	if (password.size() < 5 || password.size() > 50)
+	if (password.size() < 1 || password.size() > 50)
 		throw std::invalid_argument("Password must contain between 5 & 50 characters");
 
 	for (std::string::const_iterator it = password.begin(); it != password.end(); ++it)
