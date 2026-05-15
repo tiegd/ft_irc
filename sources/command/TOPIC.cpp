@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   TOPIC.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/06 14:46:20 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/11 15:34:07 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/15 16:42:45 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,11 @@ void	Server::TOPIC(std::string line, Client* client)
 	if (endOfChannelName != std::string::npos)
 	{
 		topic = temp.substr(endOfChannelName + 1);
+	}
+	if (!_channels[channelName])
+	{
+		ERR_NOSUCHCHAN(_name, client, channelName);
+		throw std::invalid_argument("User cannot access topic if channel doesn't exists");
 	}
 	if (_channels[channelName]->clientIsOnChannel(client) == false)
 	{
