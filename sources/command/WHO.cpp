@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/28 14:56:10 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/13 13:29:07 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/15 16:03:20 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ void	Server::WHO( std::string const& line, Client* client )
 	std::cout << line.size() << std::endl;
 	if (line.size() == 3 || (line[3] == ' ' && line.size() == 4))
 	{
-		std::cout << "HALLO !!!!!!!!" << std::endl;
 		for (std::map<SOCKET, Client*>::iterator it = _clients.begin(); it != _clients.end(); ++it)
 		{
 			RPL_WHOREPLY(_name, client, it->second, "*");

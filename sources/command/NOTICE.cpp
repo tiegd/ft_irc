@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 14:21:16 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/14 14:43:46 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/15 16:17:02 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	Server::NOTICE( std::string const& line, Client* client)
 	{
 		for(std::vector<std::string>::iterator it = recipient.begin(); it != recipient.end(); it++)
 		{
-			sendMessage(client, *it, strMessage);
+			sendNotice(client, *it, strMessage);
 		}
 	}
 	else
@@ -63,6 +63,7 @@ void	Server::sendNotice( Client *client, std::string recipient, std::string mess
 	else
 	{
 		SOCKET	sockRecipient = searchClientSocket(recipient);
+		std::cout << "HALLO !" << std::endl;
 		sendNoticeToUser(client, recipient, sockRecipient, message);
 	}
 }
@@ -73,6 +74,7 @@ void	Server::sendNotice( Client *client, std::string recipient, std::string mess
 void	sendNoticeToUser(Client* client, std::string const& target, SOCKET sockTarget, std::string const& message)
 {
 	std::string fullMsg = ":" + client->getFullName() + " PRIVMSG " + target + " :" + message + "\r\n";
+	std::cout << fullMsg << std::endl;
 	if (send(sockTarget, fullMsg.c_str(), fullMsg.size(), 0) < 0)
 			throw FunctionError();
 }

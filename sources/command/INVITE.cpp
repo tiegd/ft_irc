@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/11 17:33:07 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/14 14:43:42 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/15 16:02:30 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,6 @@ void	sendInviteToUser(Client* client, Client* target, std::string const& channel
 
 /*
 INVITE <nickname> <channel>
-- Le channel n'est pas obligé d'exister ni d'etre un channel valide pour que le nickname puisse etre invité.
-- Checker qu'il y a bien 2 paramettre sinon renvoyer ERR_NEEDMOREPARAMS [x]
-- Checker si le <nickname> existe sinon renvoyer ERR_NOSUCHNICK [x]
-- Checker si le user qui invite est bien sur le channel sinon renvoyer ERR_NOTONCHANNEL [x]
-- Checker si le <nickname> n'est pas déja sur le channel sinon renvoyer ERR_USERONCHANNEL [x]
-- Si le channel est en invite only (+i) le USER qui invite doit être operateur du channel sinon renvoyer ERR_CHANOPRIVSNEEDED [x]
 */
 void	Server::INVITE(std::string const& line, Client* client)
 {
@@ -84,8 +78,3 @@ void	sendInviteToUser(Client* client, Client* target, std::string const& channel
 	if (send(target->getSocketClient(), fullMsg.c_str(), fullMsg.size(), 0) < 0)
 			throw FunctionError();
 }
-
-// bool	isAlreadyOnChannel(std::map<SOCKET, Client*> clientList, std::string const& nickname, Channel* channel)
-// {
-	
-// }

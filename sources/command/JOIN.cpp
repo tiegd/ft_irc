@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 11:13:50 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/14 14:12:24 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/15 16:02:51 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,20 +19,9 @@
 
 bool	nameChannelWellFormated( std::string nameChannel );
 
-// std::string line = "JOIN #newchannel, #otherchannel password";
 // JOIN <channel>{,<channel>} [<key>{,<key>}]
 void	Server::JOIN(std::string const& line, Client* client)
 {
-	/* CHECK
-	- Verifier qu'il y a assez de parametre.(au moins 1)
-	- Verifier si le channel existe deja ou pas.
-	- Si il existe checker si il a un mot de passe, checker si il est mode invite only, et checker si c'est le bon mot de pass si il y en a un.
-	- Creer le channel.
-	- Verifier que le nom du channel a le bon format.(commance par #, 200 char max et pas de SPACE, pas de ',' et pas de (G^))
-	- Checker si il y a une ',' apres le nom du channel ou le password car on peut rejoindre plusieur channels en meme temps.
-	
-	- Split pour chaque "," si il y en a une, ensuite parser chaque string et faire les verifs.
-	*/
 	if (line.size() <= 5)
 	{
 		ERR_NEEDMOREPARAMS(_name, client, "JOIN");
@@ -76,6 +65,11 @@ void	Server::JOIN(std::string const& line, Client* client)
 				_channels[nameChannel] = newChannel;
 				client->addChanJoined(_channels[nameChannel]);
 				sendJoinNotification(client, _channels[nameChannel]);
+			}
+			else
+			{
+				ERR_BADCHANMASK(_name, client, nameChannel);
+				std::cout << "Bad channel mask" << std::endl;
 			}
 		}
 		else // si il existe

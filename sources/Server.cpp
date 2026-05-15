@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/15 12:42:23 by amerzone          #+#    #+#             */
-/*   Updated: 2026/05/14 15:52:01 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/15 16:13:49 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,6 @@ void	Server::runServer( void )
 			std::cout << "Error occured during poll()." << std::endl;
 			continue;
 		}
-		
 		for (size_t i = 0; i < _fds.size(); i++)
 		{
 			if (_fds[i].revents & POLLIN)
@@ -89,6 +88,7 @@ void	Server::runServer( void )
 				else
 				{
 					int bytes = recv(_fds[i].fd, buff, sizeof(buff), 0);
+					_clients[_fds[i].fd]->_inBuff.append(buff, bytes);
 					if (bytes == 0)
 					{
 						std::cout << "Client disconnected" << std::endl;
@@ -103,14 +103,13 @@ void	Server::runServer( void )
 					}
 					else
 					{
-						std::string	message;
-						buff[bytes] = '\0';
-						message += buff;
+						// std::cout << "Raw buff : " <<  buff << std::endl;
+						// std::cout << "inBuff Client : " <<  _clients[_fds[i].fd]->_inBuff << std::endl;
 						size_t pos;
-						while ((pos = message.find("\r\n")) != std::string::npos) 
+						while ((pos = _clients[_fds[i].fd]->_inBuff.find("\r\n")) != std::string::npos) 
 						{
-							std::string line = message.substr(0, pos);
-							message.erase(0, pos + 2);
+							std::string line = _clients[_fds[i].fd]->_inBuff.substr(0, pos);
+							_clients[_fds[i].fd]->_inBuff.erase(0, pos + 2);
 							std::cout << "Recu : "<< line << std::endl;
 							parseCommand(line, _clients[_fds[i].fd]);
 						}
@@ -170,6 +169,10 @@ void	Server::parseCommand( std::string const & line , Client* client )
 			if (!line.compare(0, 4, "MOTD") && (line[4] == ' ' || line.size() == 4))
 			{
 				MOTD(client);
+			}
+			if (!line.compare(0, 6, "NOTICE") && (line[6] == ' ' || line.size() == 6))
+			{
+				NOTICE(line, client);
 			}
 		}
 	}
