@@ -3,14 +3,14 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+         #
+#    By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/04/15 14:12:34 by amerzone          #+#    #+#              #
-#    Updated: 2026/05/12 16:07:26 by jpiquet          ###   ########.fr        #
+#    Updated: 2026/05/15 15:06:07 by gaducurt         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = IntelligentRapidCacaboudin
+NAME = InternationalRaclureDeCroute
 
 CXX = c++
 
@@ -34,15 +34,15 @@ SRC =	main.cpp \
 		sources/command/PASS.cpp \
 		sources/command/USER.cpp \
 		sources/command/JOIN.cpp \
-		sources/command/NOTICE.cpp \
-		sources/command/PRIVMSG.cpp \
-		sources/command/PING_PONG.cpp \
-		sources/command/TOPIC.cpp \
-		sources/command/MODE.cpp \
-		sources/command/PART.cpp \
 		sources/command/KICK.cpp \
+		sources/command/MODE.cpp \
+		sources/command/NOTICE.cpp \
+		sources/command/PING_PONG.cpp \
+		sources/command/PRIVMSG.cpp \
+		sources/command/TOPIC.cpp \
 		sources/command/WHO.cpp \
-		sources/command/INVITE.cpp \
+		sources/command/PART.cpp \
+		sources/command/INVITE.cpp
 		
 
 OBJ := $(addprefix $(OBJDIR), $(SRC:.cpp=.o))

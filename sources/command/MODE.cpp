@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   MODE.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/30 14:00:09 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/05/07 16:10:07 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/15 15:26:30 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,46 +28,47 @@ void Server::MODE(std::string const& line, Client* op)
 	// Envoyer dans l'ordes dans les differents methodes.
 	
 	std::string	temp(line);
-	if (temp.size() <= 5)
+	std::cout << temp << " : " << temp.size() << std::endl;
+	if (temp.size() <= 6) // check qu'il y ait bien une #channel après MODE
 	{
-		// display mode
+		ERR_NEEDMOREPARAMS(_name, op, "MODE");
 		return ;
 	}
 	temp.erase(0, 5);
 
 	std::vector<std::string>	splitArgs = split(temp, SPACE);
 	std::string					channelTarget = splitArgs[0];
-	std::string					options;
-	bool						toDo = true;
-
-	if (splitArgs.size() < 2)
+	if (!_channels[channelTarget]) // check l'existance du #channel
 	{
-		ERR_NEEDMOREPARAMS(_name, op, "MODE");
+		ERR_NOSUCHCHANNEL(_name, op, channelTarget);
+		return ;	
+	}
+	if (splitArgs.size() == 1) // s'il n'y a aucun parametre après #channel
+	{
+		RPL_CHANNELMODEIS(_name, op, _channels[channelTarget]);
 		return ;
 	}
+	std::string					options;
+	bool						toDo = true;
 	options = splitArgs[1];
-	if (!parseOptions(options))
+	if (options[0] == '-' || options[0] == '+')
+	{
+		if (options[0] == '-')
+			toDo = false;
+		if (options.size() == 1)
+		{
+			ERR_NEEDMOREPARAMS(_name, op, "MODE");
+			return ;	
+		}
+		options.erase(0, 1);
+	}
+	if (!parseOptions(options, op))
 		return ;
-	if (options[0] == '-')
-		toDo = false;
-	options.erase(0, 1);
 	splitArgs.erase(splitArgs.begin(), splitArgs.begin() + 2);
 	for (int i = 0; i < options.size(); i++)
 	{
 		switch (options[i])
 		{
-			case 'i':
-				modeInviteOnly(op, _channels[channelTarget], toDo);
-			case 't':
-				modeRestrictionTopic(op, _channels[channelTarget], toDo);
-			case 'k':
-				if (splitArgs.size() > 0)
-				{
-					modePassword(op, _channels[channelTarget], toDo, splitArgs[0]);
-					splitArgs.erase(splitArgs.begin());
-				}
-				else
-					ERR_NEEDMOREPARAMS(_name, op, "MODE");
 			case 'o':
 				if (splitArgs.size() > 0)
 				{
@@ -76,16 +77,36 @@ void Server::MODE(std::string const& line, Client* op)
 				}
 				else
 					ERR_NEEDMOREPARAMS(_name, op, "MODE");
+				break;
+			case 'i':
+				modeInviteOnly(op, _channels[channelTarget], toDo);
+				break;
+			case 't':
+				modeRestrictionTopic(op, _channels[channelTarget], toDo);
+				break;
 			case 'l':
 				if (splitArgs.size() > 0)
 				{
-					modeLimitUser(op, _channels[channelTarget], toDo, splitArgs[0]);
+					modeAddLimitUser(op, _channels[channelTarget], toDo, splitArgs[0]);
+					splitArgs.erase(splitArgs.begin());
+				}
+				else if (!toDo)
+					modeRmLimitUser(op, _channels[channelTarget], toDo);
+				else
+					ERR_NEEDMOREPARAMS(_name, op, "MODE");
+				break;
+			case 'k':
+				if (splitArgs.size() > 0)
+				{
+					modePassword(op, _channels[channelTarget], toDo, splitArgs[0]);
 					splitArgs.erase(splitArgs.begin());
 				}
 				else
 					ERR_NEEDMOREPARAMS(_name, op, "MODE");
+				break;
 		}
 	}
+	RPL_CHANNELMODEIS(_name, op, _channels[channelTarget]);
 }
 
 void Server::modeInviteOnly(Client* op, Channel* channel, bool toDo)
@@ -99,6 +120,8 @@ void Server::modeInviteOnly(Client* op, Channel* channel, bool toDo)
 		else
 			return;
 	}
+	else
+		ERR_CHANOPRIVSNEEDED(_name, op, channel->getName());
 }
 
 void Server::modeRestrictionTopic(Client* op, Channel* channel, bool toDo)
@@ -112,11 +135,13 @@ void Server::modeRestrictionTopic(Client* op, Channel* channel, bool toDo)
 		else
 			return;
 	}
+	else
+		ERR_CHANOPRIVSNEEDED(_name, op, channel->getName());
 }
 
 void Server::modePassword(Client* op, Channel* channel, bool toDo, std::string password)
 {
-	if (!parseChannelPassword(password))
+	if (!parseChannelPassword(op, channel, password))
 		return ;
 	if (channel->isOperator(op))
 	{
@@ -130,6 +155,8 @@ void Server::modePassword(Client* op, Channel* channel, bool toDo, std::string p
 				ERR_PASSWDMISMATCH(_name, op);
 		}
 	}
+	else
+		ERR_CHANOPRIVSNEEDED(_name, op, channel->getName());
 }
 
 void Server::modeOpPrivilege(Client* op, Channel* channel, bool toDo, std::string user)
@@ -140,6 +167,11 @@ void Server::modeOpPrivilege(Client* op, Channel* channel, bool toDo, std::strin
 		{
 			if (it->second->getNickname() == user)
 			{
+				if (!channel->isOperator(it->second) && !channel->isUser(it->second))
+				{
+					ERR_USERNOTINCHANNEL(_name, op, channel->getName());
+					return;
+				}
 				if (toDo)
 					channel->addOperator(it->second);
 				else if (!toDo)
@@ -147,37 +179,65 @@ void Server::modeOpPrivilege(Client* op, Channel* channel, bool toDo, std::strin
 			}
 		}
 	}
+	else
+		ERR_CHANOPRIVSNEEDED(_name, op, channel->getName());
 }
 
-void Server::modeLimitUser(Client* op, Channel* channel, bool toDo, std::string limit)
+void Server::modeAddLimitUser(Client* op, Channel* channel, bool toDo, std::string limit)
 {
-	
-}
-
-bool Server::parseOptions(std::string options)
-{
-	if (options[0] != '+' || options[0] != '-')
+	if (channel->isOperator(op))
 	{
-		// ERR_NEEDMOREPARAMS(_name, "MODE");
-		return (false);
+		u_int64_t	nb;
+		if (toDo)
+		{
+			for (int i = 0; i < limit.size(); i++)
+			{
+				if (!std::isdigit(limit[i]))
+				{
+					ERR_INVALIDMODEPARAM(_name, op, channel->getName(), 'l', limit, "limit can be only numeric characters");
+					return ;
+				}
+			}
+			nb = std::atoi(limit.c_str());
+			if (limit[0] != '0' && limit.size() == 1 && nb == 0)
+				return ;
+		}
+		channel->setUserLimit(nb, toDo);
 	}
-	for (int i = 1; i < options.size(); i++)
+	else
+		ERR_CHANOPRIVSNEEDED(_name, op, channel->getName());
+}
+
+void Server::modeRmLimitUser(Client* op, Channel* channel, bool toDo)
+{
+	if (channel->isOperator(op))
+		channel->setUserLimit(0, toDo);
+	else
+		ERR_CHANOPRIVSNEEDED(_name, op, channel->getName());
+}
+
+bool Server::parseOptions(std::string options, Client *client)
+{
+	for (int i = 0; i < options.size(); i++)
 	{
 		if (options[i] != 'i' && options[i] != 't' && options[i] != 'k' && options[i] != 'o' && options[i] != 'l')
 		{
-			// ERR_UMODEUNKNOWNFLAG(options[i]);
+			ERR_UMODEUNKNOWNFLAG(_name, client);
 			return (false);
 		}
 	}
 	return (true);
 }
 
-bool Server::parseChannelPassword(std::string password)
+bool Server::parseChannelPassword(Client* op, Channel* channel, std::string password)
 {
 	for (int i = 0; i < password.size(); i++)
 	{
 		if (password[i] < 33 || password[i] > 126)
+		{
+			ERR_INVALIDMODEPARAM(_name, op, channel->getName(), 'k', password, "the characters in the keyword must be printable");
 			return (false);
+		}
 	}
 	return (true);
 }

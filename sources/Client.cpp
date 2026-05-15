@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/16 17:03:42 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/14 14:43:19 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/15 15:43:54 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Client.hpp"
+#include <algorithm>
 #include <iostream>
 
 Client::Client( void ) {}
@@ -65,12 +66,30 @@ void		Client::addChanJoined( Channel *newChannel )
 	_chanJoined.push_back(newChannel);
 }
 
+void		Client::rmChanJoined( Channel *newChannel )
+{
+	std::vector<Channel*>::iterator it;
+	it = std::find(_chanJoined.begin(), _chanJoined.end(), newChannel);
+	if (it != _chanJoined.end())
+		_chanJoined.erase(it);
+}
+
 bool		Client::canBeRegistered() const
 {
 	if (_passValid == 1 && _nickValid == 1 && _userValid == 1)
 		return true;
 	else
 		return false;
+}
+
+/* TESTS */
+
+void		Client::printChanJoined() const
+{
+	std::cout << getNickname() << "._chanJoined = " << std::endl;
+	for (int i = 0; i < _chanJoined.size(); i++)
+		std::cout << _chanJoined[i] << std::endl;
+	std::cout << std::endl;
 }
 
 Client::~Client( void ) {}

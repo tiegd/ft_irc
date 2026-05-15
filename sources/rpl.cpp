@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rpl.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/06 16:22:12 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/14 14:43:32 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/15 15:10:31 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,5 +115,24 @@ void	RPL_MOTD( std::string const& serverName, Client* client, std::string const&
 void	RPL_ENDOFMOTD( std::string const& serverName, Client* client )
 {
 	std::string msgToClient = ":" + serverName + " 376 " + client->getNickname() + " :End of /MOTD command\r\n";
+	sendRpl(client, msgToClient);
+}
+
+void    RPL_CHANNELMODEIS(std::string const& serverName, Client* client, Channel* channel)
+{
+	std::cout << channel->getModeString() << " " << channel->getModeArgs() << std::endl;
+	std::string msgToClient = ":" + serverName + " 324 " + client->getNickname() + channel->getName() + " "  + channel->getModeString() + " " + channel->getModeArgs() + "\r\n";
+	sendRpl(client, msgToClient);
+}
+
+void	RPL_CHANNELKICK(std::string const& serverName, Client *op, Client* client, Channel* channel)
+{
+	std::string msgToClient = ":" + serverName + " 808 " + ":" + op->getFullName() + " KICK " + channel->getName() + " " + client->getNickname() + "\r\n";
+	sendRpl(client, msgToClient);
+}
+
+void	RPL_CHANMSGKICK(std::string const& serverName, Client *op, Client* client, Channel* channel, std::string comment)
+{
+	std::string msgToClient = ":" + serverName + " 909 " + ":" + op->getFullName() + " KICK " + channel->getName() + " " + client->getNickname() + " " + comment + "\r\n";
 	sendRpl(client, msgToClient);
 }

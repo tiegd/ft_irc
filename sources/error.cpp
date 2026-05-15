@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/20 16:27:20 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/14 14:43:26 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/15 15:10:22 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,12 +118,36 @@ void	 ERR_CHANOPRIVSNEEDED(std::string const& serverName, Client* client, std::s
 	sendError(client, msgToClient);
 }
 
+// { ------------------- MODE -------------- }
 void	ERR_UMODEUNKNOWNFLAG(std::string const& serverName, Client* client)
 {
-	std::string msgToClient = ":" + serverName + " 501 " + client->getNickname() + " :Unknown MODE flag";
+	std::string msgToClient = ":" + serverName + " 501 " + client->getNickname() + " :Unknown MODE flag\r\n";
 	sendError(client, msgToClient);
 }
 
+void	ERR_INVALIDMODEPARAM(std::string const& serverName, Client* client, std::string const& channel, char mode, std::string params, std::string str)
+{
+	std::string msgToClient = ":" + serverName + " 696 " + client->getNickname() + " " + channel + " " + mode + " " + params + " :" + str + "\r\n";
+	sendError(client, msgToClient);
+}
+
+void	ERR_NOSUCHCHANNEL(std::string const& serverName, Client* client, std::string channel)
+{
+	std::string msgToClient = ":" + serverName + " 403 " + client->getNickname() + " " + channel +  " :No such channel\r\n";
+	sendError(client, msgToClient);
+}
+
+void	ERR_USERNOTINCHANNEL(std::string const& serverName, Client* client, std::string channel)
+{
+	std::string msgToClient = ":" + serverName + " 441 " + client->getNickname() + " " + channel +  " :They aren't on that channel\r\n";
+	sendError(client, msgToClient);
+}
+
+// void	ERR_NOPRIVILEGES(std::string const& serverName, Client* client)
+// {
+// 	std::string msgToClient = ":" + serverName + " 481 " + client->getNickname() + " ::Permission Denied- You're not an IRC operator\r\n";
+// 	sendError(client, msgToClient);
+// }
 void	ERR_USERONCHANNEL(std::string const& serverName, Client* client, std::string const& target, std::string const& channelName)
 {
 	std::string msgToClient = ":" + serverName + " 443 " + client->getNickname() + SPACE + target + SPACE + channelName + " :Is already on channel\r\n";

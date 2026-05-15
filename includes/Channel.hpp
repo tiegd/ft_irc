@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/21 17:00:04 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/05/07 18:38:55 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/13 16:40:00 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,8 @@ class Channel
 		std::vector<Client*>				getOperators() const;
 		void								displayOps() const;
 		std::string							getTopic() const;
-		std::map<std::string, void (*)()>	getMode() const;
+		std::string							getModeString() const;
+		std::string							getModeArgs() const;
 		unsigned int						getNbMembers() const;
 		unsigned int						getNbOp() const;
 		bool								getInvitOnly() const;
@@ -71,7 +72,7 @@ class Channel
 		void	setName(std::string name);
 		void	setPassword(Client *op, std::string password); //set the password if mode's parameter is +k
 		void	rmPassword(Client *op); //remove the password if mode's parameter is -k
-		void	kickUser(Client *target, Client *op, std::string msg); //Remove the client specified in parameter and call the destructor if _n_members == 0
+		void	kickUser(Client *target, Client *op); //Remove the client specified in parameter and call the destructor if _n_members == 0
 		void	addOperator(Client *target);
 		void	rmOperator(Client *target);
 		void	setTopic(Client *op, std::string topic);
@@ -81,7 +82,7 @@ class Channel
 		void	setHasPassword(bool arg);
 		void	setHasTopic(bool arg);
 		void	setHasLimit(bool arg);
-		void	setUserLimit(Client* op, u_int64_t nb, bool arg);
+		void	setUserLimit(u_int64_t nb, bool arg);
 		void	setNbMembers();
 		void	setNbOp();
 		bool	isOperator(Client *op);
@@ -95,6 +96,8 @@ class Channel
 		// bool		clientIsOperator( Client* client );
 		// bool		clientIsUser( Client* client );
 		bool		clientIsOnChannel( Client* client );
+
+		void		printUsers() const;
 
 };
 

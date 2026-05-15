@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error_IRC.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/20 17:33:30 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/14 11:32:05 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/15 15:06:54 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,12 @@ void	ERR_TOOMANYTARGETS ( std::string const& serverName, Client* client, std::st
 void	ERR_NOTONCHANNEL( std::string const& serverName, Client* client, std::string const& channel );
 void	ERR_CHANOPRIVSNEEDED( std::string const& serverName, Client* client, std::string const& channel );
 
+void	ERR_NOSUCHCHANNEL(std::string const& serverName, Client* client, std::string channel);
+
+// {MODE}
+void	ERR_NOPRIVILEGES(std::string const& serverName, Client* client);
+void	ERR_INVALIDMODEPARAM(std::string const& serverName, Client* client, std::string const& channel, char mode, std::string limit, std::string str);
+void	ERR_USERNOTINCHANNEL(std::string const& serverName, Client* client, std::string channel);
 void	ERR_UMODEUNKNOWNFLAG( std::string const& serverName, Client* client );
 void	ERR_NOMOTD( std::string const& serverName, Client* client );
 

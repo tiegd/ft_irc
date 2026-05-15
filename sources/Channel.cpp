@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 11:34:51 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/05/14 14:43:12 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/15 15:44:37 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <sys/types.h>
 #include <algorithm>
 #include "FunctionError.hpp"
+#include "sstream"
 // #include <cstdint>
 
 Channel::Channel()
@@ -74,9 +75,38 @@ std::string Channel::getTopic() const
 	return (this->_topic);
 }
 
-std::map<std::string, void (*)()> Channel::getMode() const
+std::string Channel::getModeString() const
 {
-	return (this->_mode);
+	std::string	str;
+	if (this->getInvitOnly())
+		str += 'i';
+	if (this->getResTopic())
+		str += 't';
+	if (this->getHasLimit())
+		str += 'l';
+	if (this->getHasPassword())
+		str += 'k';
+	return (str);
+}
+
+std::string Channel::getModeArgs() const
+{
+	std::string	str;
+	if (this->getHasLimit() && !this->getHasPassword())
+	{
+		std::stringstream	out;
+		out << this->getUserLimit();
+		str += out.str();
+	}
+	if (this->getHasPassword() && !this->getHasLimit())
+		str += this->getPassword();
+	if (this->getHasLimit() && this->getHasPassword())
+	{
+		std::stringstream	out;
+		out << this->getUserLimit();
+		str += out.str() + " " + this->getPassword();
+	}
+	return (str);
 }
 
 unsigned int Channel::getNbMembers() const
@@ -175,18 +205,13 @@ void Channel::rmUser(Client *target)
 	this->setNbMembers();
 }
 
-void Channel::kickUser(Client *target, Client *op, std::string msg)
+void Channel::kickUser(Client *target, Client *op)
 {
-	if (target == op)
-		return ;
-	// std::vector<Client*>::iterator it;
-	// it = std::find(this->_operator.begin(), this->_operator.end(), op);
-	// if (it != this->_operator.end())
 	if (this->isOperator(op))
 	{
 		this->rmOperator(target);
 		this->rmUser(target);
-		this->broadcastToAll(msg, op);
+		target->rmChanJoined(this);
 	}
 }
 
@@ -212,11 +237,6 @@ bool Channel::isUser(Client *target)
 
 void Channel::addOperator(Client *target)
 {
-	// if (!this->isUser(target) && !this->isOperator(target))
-	// {
-	// 	ERR_NOTONCHANNEL(serverName, target, this->_name);
-	// 	return ;
-	// }
 	this->_operator.push_back(target);
 	std::vector<Client*>::iterator it;
 	it = std::find(this->_users.begin(), this->_users.end(), target);
@@ -296,24 +316,16 @@ void Channel::setHasLimit(bool arg)
 		this->_modeUsed -= 1;
 }
 
-void Channel::setUserLimit(Client* op, u_int64_t nb, bool arg)
+void Channel::setUserLimit(u_int64_t nb, bool arg)
 {
-	if (arg == true && nb == 0)
-		return;
-	if (nb <= __UINT64_MAX__) // limite du serveur à definir.
-		return;
-	std::vector<Client*>::iterator it;
-	it = std::find(this->_operator.begin(), this->_operator.end(), op);
-	if (it != this->_operator.end())
+	if (arg == true && nb >= this->getNbMembers())
 	{
-		if (arg == true)
-		{
-			this->_userLimit = nb;
-			this->setHasLimit(true);
-		}
-		else if (arg == false)
-			this->setHasLimit(false);
+		std::cout << "set limit" << std::endl;
+		this->_userLimit = nb;
+		this->setHasLimit(true);
 	}
+	else if (arg == false || nb == 0)
+		this->setHasLimit(false);
 }
 
 void Channel::setNbMembers()
@@ -372,33 +384,19 @@ std::string	Channel::getStrAllOperatorsNames( void )
 	return allOps;
 }
 
-// bool		Channel::clientIsOperator( Client* client )
-// {
-// 	for (size_t i = 0; i < _operator.size(); i++)
-// 	{
-// 		if (_operator[i] == client)
-// 		{
-// 			return true;
-// 		}
-// 	}
-// 	return false;
-// }
-
-// bool		Channel::clientIsUser( Client* client )
-// {
-// 	for (size_t i = 0; i < _users.size(); i++)
-// 	{
-// 		if (_users[i] == client)
-// 		{
-// 			return true;
-// 		}
-// 	}
-// 	return false;
-// }
-
 bool		Channel::clientIsOnChannel( Client* client )
 {
 	if (isUser(client) == true || isOperator(client) == true)
 		return true;
 	return false;
+}
+
+void Channel::printUsers() const
+{
+	std::cout << "Users : " << std::endl;
+	for (int i = 0; i < _users.size(); i++)
+		std::cout << _users[i]->getNickname() << std::endl;
+	std::cout << "Operators : " << std::endl;
+	for (int i = 0; i < _operator.size(); i++)
+		std::cout << _operator[i]->getNickname() << std::endl;
 }

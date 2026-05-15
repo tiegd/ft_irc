@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/09 12:18:51 by amerzone          #+#    #+#             */
-/*   Updated: 2026/05/15 15:08:01 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/15 16:27:02 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,8 +74,12 @@ class Client
 		void	setUserValid( int val );
 		
 		void	addChanJoined( Channel* newChannel );
+		void	rmChanJoined( Channel* newChannel );
 		void	broadcastToMyChannels( std::string notification );
 		bool	canBeRegistered( void ) const;
+
+		/* TESTS */
+		void	printChanJoined() const;
 };
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 11:13:50 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/15 16:02:51 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/15 16:27:19 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,19 +91,22 @@ void	Server::JOIN(std::string const& line, Client* client)
 						}
 					}
 					else //sinon ca veut dire qu'il manque un parametre password pour le channel donc renvoyer badchannelkey
+					{
+						
 						ERR_BADCHANNELKEY(_name, client, nameChannel);
+					}
 				}
 				else //si il y a pas de password faire addUser
 				{
 					_channels[nameChannel]->addUser(client);
 					client->addChanJoined(_channels[nameChannel]);
 					sendJoinNotification(client, _channels[nameChannel]);
+					// _channels[nameChannel]->printUsers();
+					// client->printChanJoined();
 				}
 			}
 			else // renvoyer une erreur car le mode invite only est activé
-			{
 				ERR_INVITEONLYCHAN(_name, client, nameChannel);
-			}
 		}
 	}
 }

@@ -254,8 +254,7 @@ l : /mode <channel> {+l} <limit>
     /mode <channel> {-l}
 
 #set a channel key (password) :
-k : /mode <channel> {+k} <password>
-    /mode <channel> {-k}
+k : /mode <channel> {[+|-]k} <password>
 ```
 
 ## Ressources
