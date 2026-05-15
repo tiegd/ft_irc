@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/21 17:00:04 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/05/13 16:40:00 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/15 16:52:21 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ class Channel
 		std::string							_password;
 		std::vector<Client*>				_users;
 		std::vector<Client*>				_operator;
+		std::vector<Client*>				_invited;
 		std::string							_topic;
 		std::map<std::string, void (*)()>	_mode;
 		unsigned int						_nbMembers;
