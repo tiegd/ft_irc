@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/30 14:00:09 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/05/18 14:04:55 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/18 14:19:12 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,6 @@ void Server::MODE(std::string const& line, Client* op)
 	if (!parseOptions(options, op))
 		return ;
 	splitArgs.erase(splitArgs.begin(), splitArgs.begin() + 2);
-	// check nb occurence de la meme lettre dans options
 	for (int i = 0; i < options.size(); i++)
 	{
 		switch (options[i])
