@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/30 10:59:44 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/05/15 15:45:40 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/18 09:20:22 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,6 @@ void Server::KICK(std::string const& line, Client* op)
 						ERR_USERNOTINCHANNEL(_name, op, _channels[channelTarget]->getName());
 						return;
 					}
-					it->second->printChanJoined();
 					_channels[channelTarget]->kickUser(it->second, op);
 					kicked = true;
 					if (splitArgs.size() >= 3)
@@ -71,7 +70,6 @@ void Server::KICK(std::string const& line, Client* op)
 					}
 					else
 						RPL_CHANNELKICK(_name, op, it->second, _channels[channelTarget]);
-					it->second->printChanJoined();
 				}
 				else
 					ERR_CHANOPRIVSNEEDED(_name, op, _channels[channelTarget]->getName());

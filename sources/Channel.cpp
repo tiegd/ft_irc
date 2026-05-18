@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 11:34:51 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/05/15 15:44:37 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/18 08:57:55 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ Channel::Channel()
 Channel::Channel(std::string channel_name, Client *op) : _name(channel_name), _nbMembers(1), _hasTopic(false), _modeUsed(0)
 {
 	this->addOperator(op);
-	// Initialiser la map de modes.	
 }
 
 Channel::~Channel()
@@ -47,7 +46,6 @@ std::string Channel::getPassword() const
 
 std::vector<Client*> Channel::getUsers() const
 {
-	// this->displayUsers();
 	return (this->_users);
 }
 
@@ -59,7 +57,6 @@ void Channel::displayUsers() const
 
 std::vector<Client*> Channel::getOperators() const
 {
-	// this->displayOps();
 	return (this->_operator);
 }
 
@@ -149,6 +146,43 @@ u_int64_t Channel::getUserLimit() const
 	return (this->_userLimit);
 }
 
+bool Channel::isOperator(Client *op)
+{
+	std::vector<Client*>::iterator it;
+	it = std::find(this->_operator.begin(), this->_operator.end(), op);
+	if (it != this->_operator.end())
+		return (true);
+	else
+		return (false);
+}
+
+bool Channel::isUser(Client *target)
+{
+	std::vector<Client*>::iterator it;
+	it = std::find(this->_users.begin(), this->_users.end(), target);
+	if (it != this->_users.end())
+		return (true);
+	else
+		return (false);
+}
+
+bool Channel::isInvited(Client *target)
+{
+	std::vector<Client*>::iterator it;
+	it = std::find(this->_invited.begin(), this->_invited.end(), target);
+	if (it != this->_invited.end())
+		return (true);
+	else
+		return (false);
+}
+
+bool		Channel::clientIsOnChannel( Client* client )
+{
+	if (isUser(client) == true || isOperator(client) == true)
+		return true;
+	return false;
+}
+
 /*
 ----------Setters----------
 */
@@ -215,26 +249,6 @@ void Channel::kickUser(Client *target, Client *op)
 	}
 }
 
-bool Channel::isOperator(Client *op)
-{
-	std::vector<Client*>::iterator it;
-	it = std::find(this->_operator.begin(), this->_operator.end(), op);
-	if (it != this->_operator.end())
-		return (true);
-	else
-		return (false);
-}
-
-bool Channel::isUser(Client *target)
-{
-	std::vector<Client*>::iterator it;
-	it = std::find(this->_users.begin(), this->_users.end(), target);
-	if (it != this->_users.end())
-		return (true);
-	else
-		return (false);
-}
-
 void Channel::addOperator(Client *target)
 {
 	this->_operator.push_back(target);
@@ -261,8 +275,6 @@ void Channel::rmOperator(Client *target) // Called by another operator with mode
 
 void Channel::setTopic(Client *op, std::string topic)
 {
-	// if (!parserTopic(topic))
-	// 	return ;
 	if (!this->getResTopic() || (this->getResTopic() && this->isOperator(op)))
 	{
 		this->_topic = topic;
@@ -338,6 +350,19 @@ void Channel::setNbOp()
 	this->_nbOp = this->_operator.size();
 }
 
+void Channel::addBackInvite(Client *target)
+{
+	this->_invited.push_back(target);
+}
+
+void Channel::rmInvite(Client *target)
+{
+	std::vector<Client*>::iterator it;
+	it = std::find(this->_invited.begin(), this->_invited.end(), target);
+		if (it != this->_invited.end())
+			this->_invited.erase(it);
+}
+
 void	Channel::broadcastToAll( std::string const& message, Client* sender )
 {
 	// (void)sender;
@@ -384,12 +409,6 @@ std::string	Channel::getStrAllOperatorsNames( void )
 	return allOps;
 }
 
-bool		Channel::clientIsOnChannel( Client* client )
-{
-	if (isUser(client) == true || isOperator(client) == true)
-		return true;
-	return false;
-}
 
 void Channel::printUsers() const
 {

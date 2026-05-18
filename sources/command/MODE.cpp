@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/30 14:00:09 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/05/15 15:26:30 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/18 09:19:59 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void Server::MODE(std::string const& line, Client* op)
 	// Envoyer dans l'ordes dans les differents methodes.
 	
 	std::string	temp(line);
-	std::cout << temp << " : " << temp.size() << std::endl;
+	// std::cout << temp << " : " << temp.size() << std::endl;
 	if (temp.size() <= 6) // check qu'il y ait bien une #channel après MODE
 	{
 		ERR_NEEDMOREPARAMS(_name, op, "MODE");

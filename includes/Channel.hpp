@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/21 17:00:04 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/05/15 16:52:21 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/18 08:58:52 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,10 @@ class Channel
 		bool								getHasTopic() const;
 		bool								getHasLimit() const;
 		u_int64_t							getUserLimit() const;
+		bool								isOperator(Client *op);
+		bool								isUser(Client *target);
+		bool								isInvited(Client *target);
+		bool								clientIsOnChannel( Client* client );
 
 		//setters
 		void	addUser(Client *target); //add a new user whene a client use join
@@ -86,17 +90,13 @@ class Channel
 		void	setUserLimit(u_int64_t nb, bool arg);
 		void	setNbMembers();
 		void	setNbOp();
-		bool	isOperator(Client *op);
-		bool	isUser(Client *target);
+		void	addBackInvite(Client *target);
+		void	rmInvite(Client *target);
 
 		void		broadcastToAll( std::string const& message, Client* sender );
 
 		std::string	getStrAllUsersNames( void );
 		std::string	getStrAllOperatorsNames( void );
-
-		// bool		clientIsOperator( Client* client );
-		// bool		clientIsUser( Client* client );
-		bool		clientIsOnChannel( Client* client );
 
 		void		printUsers() const;
 

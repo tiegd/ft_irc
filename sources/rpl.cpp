@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rpl.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/06 16:22:12 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/15 16:34:03 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/18 09:20:58 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,7 +133,6 @@ void	RPL_CHANNELKICK(std::string const& serverName, Client *op, Client* client, 
 
 void	RPL_CHANMSGKICK(std::string const& serverName, Client *op, Client* client, Channel* channel, std::string comment)
 {
-	// std::string msgToClient = ":" + serverName + " 909 " + ":" + op->getFullName() + " KICK " + channel->getName() + " " + client->getNickname() + " " + comment + "\r\n";
 	std::string msgToClient = ":" + op->getFullName() + " KICK " + channel->getName() + " " + client->getNickname() + " " + comment + "\r\n";
 	sendRpl(client, msgToClient);
 }

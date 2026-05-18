@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   JOIN.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 11:13:50 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/15 16:27:19 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/18 09:30:34 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	Server::JOIN(std::string const& line, Client* client)
 		}
 		if (_channels.size() == 0 || !_channels[nameChannel]) // regarde si le channel n'existe pas
 		{
-			//si il existe pas checker que le nom u channel a le bon format
+			//si il existe pas checker que le nom du channel a le bon format
 			if (nameChannelWellFormated(nameChannel) == true) // faire la fonction
 			{
 				// créer le channel
