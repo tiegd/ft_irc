@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/30 14:00:09 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/05/18 09:19:59 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/18 14:04:55 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ void Server::MODE(std::string const& line, Client* op)
 	if (!parseOptions(options, op))
 		return ;
 	splitArgs.erase(splitArgs.begin(), splitArgs.begin() + 2);
+	// check nb occurence de la meme lettre dans options
 	for (int i = 0; i < options.size(); i++)
 	{
 		switch (options[i])
@@ -218,9 +219,14 @@ void Server::modeRmLimitUser(Client* op, Channel* channel, bool toDo)
 
 bool Server::parseOptions(std::string options, Client *client)
 {
+	std::string 			str = "oitkl";
+	std::string::size_type	n;
 	for (int i = 0; i < options.size(); i++)
 	{
-		if (options[i] != 'i' && options[i] != 't' && options[i] != 'k' && options[i] != 'o' && options[i] != 'l')
+		if (std::count(options.begin(), options.end(), options[i]) > 1)
+			return (false);
+		n = str.find(options[i]);
+		if (n == std::string::npos)
 		{
 			ERR_UMODEUNKNOWNFLAG(_name, client);
 			return (false);

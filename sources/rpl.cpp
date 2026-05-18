@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/06 16:22:12 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/18 09:20:58 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/18 11:24:41 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void	RPL_NAMREPLY(std::string const& serverName, Client* client, Channel* channe
 /* :serveur 352 <nick_qui_a_fait_WHO> <canal> <user> <host> <serveur> <nick_cible> :<hopcount> <realname> */
 void	RPL_WHOREPLY(std::string const& serverName, Client *client, Client* target, std::string const& channelName)
 {
-	std::cout << "rpl_whoreply\n";
+	// std::cout << "rpl_whoreply\n";
 	std::string	msgToClient = ":" + serverName + " 352 " + client->getNickname()
 							+ SPACE + channelName
 							+ SPACE + target->getUsername()
@@ -120,7 +120,7 @@ void	RPL_ENDOFMOTD( std::string const& serverName, Client* client )
 
 void    RPL_CHANNELMODEIS(std::string const& serverName, Client* client, Channel* channel)
 {
-	std::cout << channel->getModeString() << " " << channel->getModeArgs() << std::endl;
+	// std::cout << channel->getModeString() << " " << channel->getModeArgs() << std::endl;
 	std::string msgToClient = ":" + serverName + " 324 " + client->getNickname() + channel->getName() + " "  + channel->getModeString() + " " + channel->getModeArgs() + "\r\n";
 	sendRpl(client, msgToClient);
 }
