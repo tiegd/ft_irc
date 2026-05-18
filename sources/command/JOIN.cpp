@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 11:13:50 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/18 09:30:34 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/18 10:07:29 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ void	Server::JOIN(std::string const& line, Client* client)
 		else // si il existe
 		{
 			//checker si c'est en mode invite-only
-			if (_channels[nameChannel]->getInvitOnly() == false)
+			if (_channels[nameChannel]->getInvitOnly() == false || (_channels[nameChannel]->getInvitOnly() && _channels[nameChannel]->isInvited(client)))
 			{
 				// checker si il a un password
 				if (_channels[nameChannel]->getHasPassword())
@@ -91,10 +91,7 @@ void	Server::JOIN(std::string const& line, Client* client)
 						}
 					}
 					else //sinon ca veut dire qu'il manque un parametre password pour le channel donc renvoyer badchannelkey
-					{
-						
 						ERR_BADCHANNELKEY(_name, client, nameChannel);
-					}
 				}
 				else //si il y a pas de password faire addUser
 				{
@@ -104,6 +101,8 @@ void	Server::JOIN(std::string const& line, Client* client)
 					// _channels[nameChannel]->printUsers();
 					// client->printChanJoined();
 				}
+				if (_channels[nameChannel]->isInvited(client))
+					_channels[nameChannel]->rmInvite(client);
 			}
 			else // renvoyer une erreur car le mode invite only est activé
 				ERR_INVITEONLYCHAN(_name, client, nameChannel);

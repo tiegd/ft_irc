@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 11:34:51 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/05/18 08:57:55 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/18 10:12:53 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,9 +171,15 @@ bool Channel::isInvited(Client *target)
 	std::vector<Client*>::iterator it;
 	it = std::find(this->_invited.begin(), this->_invited.end(), target);
 	if (it != this->_invited.end())
+	{
+		std::cout << "true" << std::endl;
 		return (true);
+	}
 	else
+	{
+		std::cout << "false" << std::endl;
 		return (false);
+	}
 }
 
 bool		Channel::clientIsOnChannel( Client* client )
@@ -352,7 +358,10 @@ void Channel::setNbOp()
 
 void Channel::addBackInvite(Client *target)
 {
-	this->_invited.push_back(target);
+	std::vector<Client*>::iterator it;
+	it = std::find(this->_invited.begin(), this->_invited.end(), target);
+	if (it == this->_invited.end())
+		this->_invited.push_back(target);
 }
 
 void Channel::rmInvite(Client *target)
@@ -418,4 +427,10 @@ void Channel::printUsers() const
 	std::cout << "Operators : " << std::endl;
 	for (int i = 0; i < _operator.size(); i++)
 		std::cout << _operator[i]->getNickname() << std::endl;
+}
+
+void Channel::printInvited() const
+{
+	for (int i = 0; i < _invited.size(); i++)
+		std::cout << _invited[i]->getNickname() << std::endl;
 }

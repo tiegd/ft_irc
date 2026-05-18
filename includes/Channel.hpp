@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/21 17:00:04 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/05/18 08:58:52 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/18 09:54:41 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ class Channel
 		std::string	getStrAllOperatorsNames( void );
 
 		void		printUsers() const;
-
+		void 		printInvited() const;
 };
 
 #endif

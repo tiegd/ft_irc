@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   INVITE.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/11 17:33:07 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/15 16:02:30 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/18 09:56:31 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,8 @@ void	Server::INVITE(std::string const& line, Client* client)
 		}
 	}
 	std::cout << channel << std::endl;
+	_channels[channel]->addBackInvite(searchClient(target));
+	_channels[channel]->printInvited();
 	sendInviteToUser(client, searchClient(target), channel);
 	RPL_INVITING(_name, client, target, channel);
 }
