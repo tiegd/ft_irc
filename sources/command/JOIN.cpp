@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 11:13:50 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/19 12:02:56 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/19 14:08:34 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,8 @@ void	Server::JOIN(std::string const& line, Client* client)
 								_channels[nameChannel]->addUser(client);
 								client->addChanJoined(_channels[nameChannel]);
 								sendJoinNotification(client, _channels[nameChannel]);
+								if (_channels[nameChannel]->isInvited(client))
+									_channels[nameChannel]->rmInvite(client);
 							}
 							else
 								ERR_CHANNELISFULL(_name, client, nameChannel);
@@ -105,13 +107,13 @@ void	Server::JOIN(std::string const& line, Client* client)
 						_channels[nameChannel]->addUser(client);
 						client->addChanJoined(_channels[nameChannel]);
 						sendJoinNotification(client, _channels[nameChannel]);
+						if (_channels[nameChannel]->isInvited(client))
+							_channels[nameChannel]->rmInvite(client);
 					}
 					else
 						ERR_CHANNELISFULL(_name, client, nameChannel);
 						
 				}
-				if (_channels[nameChannel]->isInvited(client))
-					_channels[nameChannel]->rmInvite(client);
 			}
 			else // renvoyer une erreur car le mode invite only est activé
 				ERR_INVITEONLYCHAN(_name, client, nameChannel);

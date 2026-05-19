@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 11:34:51 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/05/19 11:56:13 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/19 14:00:06 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -239,7 +239,8 @@ void Channel::addUser(Client *target)
 	it = std::find(this->_users.begin(), this->_users.end(), target);
 	if (it == this->_users.end())
 		this->_users.push_back(target);
-	this->setNbMembers();
+	// this->setNbMembers();
+	this->setTotClient();
 }
 
 void Channel::rmUser(Client *target)
@@ -248,7 +249,8 @@ void Channel::rmUser(Client *target)
 	it = std::find(this->_users.begin(), this->_users.end(), target);
 		if (it != this->_users.end())
 			this->_users.erase(it);
-	this->setNbMembers();
+	// this->setNbMembers();
+	this->setTotClient();
 }
 
 void Channel::kickUser(Client *target, Client *op)
@@ -268,8 +270,9 @@ void Channel::addOperator(Client *target)
 	it = std::find(this->_users.begin(), this->_users.end(), target);
 	if (it != this->_users.end())
 		this->_users.erase(it);
-	this->setNbOp();
-	this->setNbMembers();
+	// this->setNbOp();
+	// this->setNbMembers();
+	this->setTotClient();
 }
 
 void Channel::rmOperator(Client *target) // Called by another operator with mode
@@ -281,8 +284,9 @@ void Channel::rmOperator(Client *target) // Called by another operator with mode
 		this->_operator.erase(it);
 		this->_users.push_back(target);
 	}
-	this->setNbOp();
-	this->setNbMembers();
+	// this->setNbOp();
+	// this->setNbMembers();
+	this->setTotClient();
 }
 
 void Channel::setTopic(Client *op, std::string topic)
@@ -350,6 +354,7 @@ void Channel::setUserLimit(u_int64_t nb, bool arg)
 	}
 	else if (arg == false || nb == 0)
 		this->setHasLimit(false);
+	std::cout << "limite = " << this->getHasLimit() << std::endl;
 }
 
 void Channel::setNbMembers()
@@ -364,6 +369,8 @@ void Channel::setNbOp()
 
 void Channel::setTotClient()
 {
+	this->setNbMembers();
+	this->setNbOp();
 	this->_totClient = getNbMembers() + getNbOp();
 }
 
