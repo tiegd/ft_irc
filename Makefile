@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+         #
+#    By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/04/15 14:12:34 by amerzone          #+#    #+#              #
-#    Updated: 2026/05/15 15:06:07 by gaducurt         ###   ########.fr        #
+#    Updated: 2026/05/19 15:30:21 by jpiquet          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,7 +42,8 @@ SRC =	main.cpp \
 		sources/command/TOPIC.cpp \
 		sources/command/WHO.cpp \
 		sources/command/PART.cpp \
-		sources/command/INVITE.cpp
+		sources/command/INVITE.cpp \
+		sources/command/QUIT.cpp
 		
 
 OBJ := $(addprefix $(OBJDIR), $(SRC:.cpp=.o))

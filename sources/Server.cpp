@@ -6,13 +6,11 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/15 12:42:23 by amerzone          #+#    #+#             */
-/*   Updated: 2026/05/15 16:27:09 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/19 18:42:18 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
-// #include "Client.hpp"
-// #include "function.hpp"
 
 volatile std::sig_atomic_t gSignalStatus = 0;
 
@@ -31,7 +29,21 @@ Server::Server( std::string name, u_int16_t port, std::string password )
 
 void	signalHandler(int signal)
 {
-	gSignalStatus = 1;
+	if (signal == SIGINT)
+		gSignalStatus = 1;
+}
+
+void	Server::disconnectClient( size_t & i )
+{
+	int fd = _fds[i].fd;
+ 
+	std::cout << _clients[fd]->getNickname() << " disconnected" << std::endl;
+ 
+	close(fd);
+	delete _clients[fd];
+	_clients.erase(fd);
+	_fds.erase(_fds.begin() + i);
+	i--;
 }
 
 void	Server::setSocketServ( void )
@@ -53,10 +65,10 @@ void	Server::setSocketServ( void )
 	setsockopt(_socketServ, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
 
 	if ((bind (_socketServ, (struct sockaddr *) &servaddr, sizeof(servaddr))) < 0)
-		std::cout << "Bind error" << std::endl;
+		throw	std::runtime_error("Bind() error");
 
 	if (listen(_socketServ, MAXCLIENTS) < 0)
-		std::cout << "Listen error" << std::endl;
+		throw	std::runtime_error("Listen() error");	
 
 	std::cout << "Waiting for a connection on port " << _port << std::endl;
 }
@@ -68,12 +80,14 @@ void	Server::runServer( void )
 	std::signal(SIGINT, signalHandler);
 	while (true)
 	{
-		if (gSignalStatus == 1)
-		{
-			throw std::exception();
-		}
+		
 		if (poll(_fds.data(), _fds.size(), -1) < 0)
 		{
+			if (gSignalStatus == 1)
+			{
+				std::cout << "Quit server..." << std::endl;
+				return ;
+			}
 			std::cout << "Error occured during poll()." << std::endl;
 			continue;
 		}
@@ -84,37 +98,35 @@ void	Server::runServer( void )
 				if (_fds[i].fd == _fds[0].fd)
 				{
 					addClientSocket();
+					continue ;
 				}
-				else
+
+				int bytes = recv(_fds[i].fd, buff, sizeof(buff), 0);
+				if (bytes <= 0)
 				{
-					int bytes = recv(_fds[i].fd, buff, sizeof(buff), 0);
-					_clients[_fds[i].fd]->_inBuff.append(buff, bytes);
-					if (bytes == 0)
+					disconnectClient(i);
+					continue;
+				}
+				
+				_clients[_fds[i].fd]->_inBuff.append(buff, bytes);
+
+				size_t pos;
+				while ((pos = _clients[_fds[i].fd]->_inBuff.find("\r\n")) != std::string::npos) 
+				{
+					std::string line = _clients[_fds[i].fd]->_inBuff.substr(0, pos);
+					_clients[_fds[i].fd]->_inBuff.erase(0, pos + 2);
+
+					std::cout << "Recu par " << _clients[_fds[i].fd]->getNickname() << ": " << line << std::endl;
+
+					parseCommand(line, _clients[_fds[i].fd]);
+					
+					if (_clients.find(_fds[i].fd) != _clients.end() && _clients[_fds[i].fd]->getDeleted() == true)
 					{
-						std::cout << "Client disconnected" << std::endl;
-						close(_fds[i].fd);
-						_fds.erase(_fds.begin() + i);
-						i--;
-					}
-					else if (bytes < 0)
-					{
-						std::cout << "recv error" << std::endl;
-						continue;
-					}
-					else
-					{
-						// std::cout << "Raw buff : " <<  buff << std::endl;
-						// std::cout << "inBuff Client : " <<  _clients[_fds[i].fd]->_inBuff << std::endl;
-						size_t pos;
-						while ((pos = _clients[_fds[i].fd]->_inBuff.find("\r\n")) != std::string::npos) 
-						{
-							std::string line = _clients[_fds[i].fd]->_inBuff.substr(0, pos);
-							_clients[_fds[i].fd]->_inBuff.erase(0, pos + 2);
-							std::cout << "Recu : "<< line << std::endl;
-							parseCommand(line, _clients[_fds[i].fd]);
-						}
+						disconnectClient(i);
+						break;
 					}
 				}
+				
 			}
 		}
 	}
@@ -135,6 +147,14 @@ void	Server::parseCommand( std::string const & line , Client* client )
 		if (!line.compare(0, 4, "USER") && (line[4] == ' ' || line.size() == 4))
 		{
 			client->setUserValid(USER(line, client));
+		}
+		if (!line.compare(0, 4, "PING") && (line[4] == ' ' || line.size() > 4))
+		{
+			PING(line, client);
+		}
+		if (!line.compare(0, 4, "QUIT") && (line[4] == ' ' || line.size() == 4))
+		{
+			QUIT(line, client);
 		}
 		if (client->getRegister() == true)
 		{
@@ -159,7 +179,9 @@ void	Server::parseCommand( std::string const & line , Client* client )
 				KICK(line, client);
 			}
 			if (!line.compare(0, 4, "MODE") && (line[4] == ' '  || line.size() == 5))
+			{
 				MODE(line, client);
+			}
 			if (!line.compare(0, 3, "WHO") && (line[3] == ' ' || line.size() == 3))
 			{
 				WHO(line, client);
@@ -167,10 +189,6 @@ void	Server::parseCommand( std::string const & line , Client* client )
 			if (!line.compare(0, 6, "INVITE") && (line[6] == ' ' || line.size() == 6))
 			{
 				INVITE(line, client);
-			}
-			if (!line.compare(0, 4, "PING") && (line[4] == ' ' || line.size() > 5))
-			{
-				PING(line, client);
 			}
 			if (!line.compare(0, 4, "MOTD") && (line[4] == ' ' || line.size() == 4))
 			{
@@ -184,7 +202,7 @@ void	Server::parseCommand( std::string const & line , Client* client )
 	}
 	catch(const std::exception& e)
 	{
-		std::cerr << e.what() << '\n';
+		std::cerr << e.what() << std::endl;
 	}
 	if ( client->getRegister() != true && client->canBeRegistered() == true)
 	{
@@ -245,24 +263,6 @@ Client*	Server::searchClient( std::string target )
 		}
 	}
 	return NULL;
-}
-
-void	Server::MOTD(Client* client)
-{
-	std::ifstream	motd("files/motd_3.txt");
-	std::string		buffer;
-
-	RPL_MOTDSTART(_name, client);
-	if (!motd.is_open())
-	{
-		ERR_NOMOTD(_name, client);
-		return ;
-	}
-	while (std::getline(motd, buffer, '\n'))
-	{
-		RPL_MOTD(_name, client, buffer);
-	}
-	RPL_ENDOFMOTD(_name, client);
 }
 
 Server::~Server( void )

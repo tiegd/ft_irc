@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 11:34:51 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/05/15 15:44:37 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/19 17:40:34 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -340,7 +340,7 @@ void Channel::setNbOp()
 
 void	Channel::broadcastToAll( std::string const& message, Client* sender )
 {
-	// (void)sender;
+	std::cout << sender->getNickname() << " send to all channel" << std::endl;
 	for (std::vector<Client*>::iterator it = _users.begin(); it != _users.end(); it++)
 	{
 		if ((*it)->getSocketClient() == sender->getSocketClient())

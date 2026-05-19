@@ -1,4 +1,5 @@
-- Probleme de RPL_NAME ne s'affiche pas dans le client.
-- Faire JOIN 0 (qui revient à faire PART sur tous les channels sur lequel le client est).
+- Probleme de RPL_NAME ne s'affiche pas dans le client. [v]
+- Faire JOIN 0 (qui revient à faire PART sur tous les channels sur lequel le client est). [v]
 
-Corriger PRIVMSG, il peut envoyer le meme message plusieur fois a la meme personne.
+Corriger PRIVMSG, il peut envoyer le meme message plusieur fois a la meme personne. [v]
+Corrigiger Notice probleme format de message.
