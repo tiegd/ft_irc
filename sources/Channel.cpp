@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 11:34:51 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/05/18 10:12:53 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/19 11:56:13 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,11 @@ unsigned int Channel::getNbMembers() const
 unsigned int Channel::getNbOp() const
 {
 	return (this->_nbOp);
+}
+
+unsigned int Channel::getTotClient() const
+{
+	return (this->_totClient);
 }
 
 bool Channel::getInvitOnly() const
@@ -229,6 +234,7 @@ void Channel::rmPassword(Client *op)
 
 void Channel::addUser(Client *target)
 {
+	
 	std::vector<Client*>::iterator it;
 	it = std::find(this->_users.begin(), this->_users.end(), target);
 	if (it == this->_users.end())
@@ -354,6 +360,11 @@ void Channel::setNbMembers()
 void Channel::setNbOp()
 {
 	this->_nbOp = this->_operator.size();
+}
+
+void Channel::setTotClient()
+{
+	this->_totClient = getNbMembers() + getNbOp();
 }
 
 void Channel::addBackInvite(Client *target)

@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/20 17:33:30 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/15 15:06:54 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/19 11:45:23 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ void    ERR_NEEDMOREPARAMS( std::string const& serverName, Client* client, std::
 // { JOIN }
 void    ERR_BADCHANMASK( std::string const& serverName, Client* client, std::string const& channel );
 void    ERR_BADCHANNELKEY( std::string const& serverName, Client* client, std::string const& channel );
+void    ERR_CHANNELISFULL( std::string const& serverName, Client* client, std::string const& channel );
 
 // { PRIVMSG }
 void    ERR_NORECIPIENT( std::string const& serverName, Client* client );

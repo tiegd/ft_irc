@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/21 17:00:04 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/05/18 09:54:41 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/19 11:39:42 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ class Channel
 		std::map<std::string, void (*)()>	_mode;
 		unsigned int						_nbMembers;
 		unsigned int						_nbOp;
+		unsigned int						_totClient;
 
 		char								_modeUsed; 
 		// The modes are stocked on the 5th bits.
@@ -60,6 +61,7 @@ class Channel
 		std::string							getModeArgs() const;
 		unsigned int						getNbMembers() const;
 		unsigned int						getNbOp() const;
+		unsigned int						getTotClient() const;
 		bool								getInvitOnly() const;
 		bool								getResTopic() const;
 		bool								getHasPassword() const;
@@ -90,6 +92,7 @@ class Channel
 		void	setUserLimit(u_int64_t nb, bool arg);
 		void	setNbMembers();
 		void	setNbOp();
+		void	setTotClient();
 		void	addBackInvite(Client *target);
 		void	rmInvite(Client *target);
 

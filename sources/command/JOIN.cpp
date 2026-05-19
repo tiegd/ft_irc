@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 11:13:50 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/18 10:07:29 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/19 12:02:56 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,9 +85,14 @@ void	Server::JOIN(std::string const& line, Client* client)
 					{
 						if (passwords[i].compare(_channels[nameChannel]->getPassword()) == 0) //si le password est correct
 						{
-							_channels[nameChannel]->addUser(client);
-							client->addChanJoined(_channels[nameChannel]);
-							sendJoinNotification(client, _channels[nameChannel]);
+							if (!_channels[nameChannel]->getHasLimit() || (_channels[nameChannel]->getHasLimit() && _channels[nameChannel]->getTotClient() < _channels[nameChannel]->getUserLimit()))
+							{
+								_channels[nameChannel]->addUser(client);
+								client->addChanJoined(_channels[nameChannel]);
+								sendJoinNotification(client, _channels[nameChannel]);
+							}
+							else
+								ERR_CHANNELISFULL(_name, client, nameChannel);
 						}
 					}
 					else //sinon ca veut dire qu'il manque un parametre password pour le channel donc renvoyer badchannelkey
@@ -95,11 +100,15 @@ void	Server::JOIN(std::string const& line, Client* client)
 				}
 				else //si il y a pas de password faire addUser
 				{
-					_channels[nameChannel]->addUser(client);
-					client->addChanJoined(_channels[nameChannel]);
-					sendJoinNotification(client, _channels[nameChannel]);
-					// _channels[nameChannel]->printUsers();
-					// client->printChanJoined();
+					if (!_channels[nameChannel]->getHasLimit() || (_channels[nameChannel]->getHasLimit() && _channels[nameChannel]->getTotClient() < _channels[nameChannel]->getUserLimit()))
+					{
+						_channels[nameChannel]->addUser(client);
+						client->addChanJoined(_channels[nameChannel]);
+						sendJoinNotification(client, _channels[nameChannel]);
+					}
+					else
+						ERR_CHANNELISFULL(_name, client, nameChannel);
+						
 				}
 				if (_channels[nameChannel]->isInvited(client))
 					_channels[nameChannel]->rmInvite(client);

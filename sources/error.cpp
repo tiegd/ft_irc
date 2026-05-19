@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/20 16:27:20 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/15 15:10:22 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/19 11:46:32 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,12 @@ void	ERR_BADCHANMASK(std::string const& serverName, Client* client, std::string 
 void	ERR_BADCHANNELKEY(std::string const& serverName, Client* client, std::string const& channel)
 {
 	std::string msgToClient = ":" + serverName + " 475 " + client->getNickname() + SPACE + channel + " :Cannot join channel (+k)\r\n";
+	sendError(client, msgToClient);
+}
+
+void    ERR_CHANNELISFULL( std::string const& serverName, Client* client, std::string const& channel )
+{
+	std::string msgToClient = ":" + serverName + " 471 " + client->getNickname() + SPACE + channel + " :Cannot join channel (+l)\r\n";
 	sendError(client, msgToClient);
 }
 
