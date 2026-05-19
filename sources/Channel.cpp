@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 11:34:51 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/05/19 14:00:06 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/19 14:49:48 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,12 @@
 #include <algorithm>
 #include "FunctionError.hpp"
 #include "sstream"
-// #include <cstdint>
 
 Channel::Channel()
 {
 }
 
-Channel::Channel(std::string channel_name, Client *op) : _name(channel_name), _nbMembers(1), _hasTopic(false), _modeUsed(0)
+Channel::Channel(std::string channel_name, Client *op) : _name(channel_name), _nbMembers(1), _modeUsed(0), _hasTopic(false)
 {
 	this->addOperator(op);
 }
@@ -30,9 +29,7 @@ Channel::~Channel()
 {
 }
 
-/*
-----------Getters----------
-*/
+/*----------Getters----------*/
 
 std::string Channel::getName() const
 {
@@ -49,21 +46,9 @@ std::vector<Client*> Channel::getUsers() const
 	return (this->_users);
 }
 
-void Channel::displayUsers() const
-{
-	for (int i = 0; i < this->_users.size(); i++)
-		std::cout << "users = " << this->_users[i]->getNickname() << std::endl;
-}
-
 std::vector<Client*> Channel::getOperators() const
 {
 	return (this->_operator);
-}
-
-void Channel::displayOps() const
-{
-	for (int i = 0; i < this->_operator.size(); i++)
-		std::cout << "operator = " << this->_operator[i]->getNickname() << std::endl;
 }
 
 std::string Channel::getTopic() const
@@ -194,42 +179,35 @@ bool		Channel::clientIsOnChannel( Client* client )
 	return false;
 }
 
-/*
-----------Setters----------
-*/
-
-void Channel::setName(std::string name)
-{
-	this->_name = name;
-}
+/*----------Setters----------*/
 
 void Channel::setPassword(Client *op, std::string password)
 {
 	std::vector<Client*>::iterator it;
-	it = std::find(this->_users.begin(), this->_users.end(), op);
-	if (it == this->_users.end())
+	it = std::find(this->_operator.begin(), this->_operator.end(), op);
+	if (it == this->_operator.end())
 	{
 		this->_password = password;
 		if (!this->getHasPassword())
 			setHasPassword(true);
 	}
 	else
-		return; // renvoyer une erreur.
+		return;
 }
 
 void Channel::rmPassword(Client *op)
 {
 	std::vector<Client*>::iterator it;
-	it = std::find(this->_users.begin(), this->_users.end(), op);
-	if (it == this->_users.end())
+	it = std::find(this->_operator.begin(), this->_operator.end(), op);
+	if (it == this->_operator.end())
 	{
 		if (this->getHasPassword())
 				this->setHasPassword(false);
 		else
-			return; // renvoyer une erreur.
+			return;
 	}
 	else
-		return; // renvoyer une erreur.
+		return;
 }
 
 void Channel::addUser(Client *target)
@@ -239,7 +217,6 @@ void Channel::addUser(Client *target)
 	it = std::find(this->_users.begin(), this->_users.end(), target);
 	if (it == this->_users.end())
 		this->_users.push_back(target);
-	// this->setNbMembers();
 	this->setTotClient();
 }
 
@@ -249,7 +226,6 @@ void Channel::rmUser(Client *target)
 	it = std::find(this->_users.begin(), this->_users.end(), target);
 		if (it != this->_users.end())
 			this->_users.erase(it);
-	// this->setNbMembers();
 	this->setTotClient();
 }
 
@@ -270,8 +246,6 @@ void Channel::addOperator(Client *target)
 	it = std::find(this->_users.begin(), this->_users.end(), target);
 	if (it != this->_users.end())
 		this->_users.erase(it);
-	// this->setNbOp();
-	// this->setNbMembers();
 	this->setTotClient();
 }
 
@@ -284,8 +258,6 @@ void Channel::rmOperator(Client *target) // Called by another operator with mode
 		this->_operator.erase(it);
 		this->_users.push_back(target);
 	}
-	// this->setNbOp();
-	// this->setNbMembers();
 	this->setTotClient();
 }
 
@@ -436,19 +408,8 @@ std::string	Channel::getStrAllOperatorsNames( void )
 	return allOps;
 }
 
-
-void Channel::printUsers() const
-{
-	std::cout << "Users : " << std::endl;
-	for (int i = 0; i < _users.size(); i++)
-		std::cout << _users[i]->getNickname() << std::endl;
-	std::cout << "Operators : " << std::endl;
-	for (int i = 0; i < _operator.size(); i++)
-		std::cout << _operator[i]->getNickname() << std::endl;
-}
-
-void Channel::printInvited() const
-{
-	for (int i = 0; i < _invited.size(); i++)
-		std::cout << _invited[i]->getNickname() << std::endl;
-}
+// void Channel::printInvited() const
+// {
+// 	for (int i = 0; i < _invited.size(); i++)
+// 		std::cout << _invited[i]->getNickname() << std::endl;
+// }

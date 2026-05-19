@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/21 17:00:04 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/05/19 11:39:42 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/19 14:49:54 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 
 #include "Server.hpp"
 #include <sys/types.h>
-// #include <vector>
 
 class Client;
 
@@ -28,34 +27,28 @@ class Channel
 		std::vector<Client*>				_operator;
 		std::vector<Client*>				_invited;
 		std::string							_topic;
-		std::map<std::string, void (*)()>	_mode;
 		unsigned int						_nbMembers;
 		unsigned int						_nbOp;
 		unsigned int						_totClient;
 
 		char								_modeUsed; 
-		// The modes are stocked on the 5th bits.
-		// Need to be checked with binary operator.
-		// 0000itkl
-		// bool								_invitOnly; //i
-		// bool								_restrictionTopic; //t
-		// bool								_hasPassword; //k
+		/*	The modes are stocked on the 5th bits.
+			Need to be checked with binary operator.
+			0000itkl */
 		bool								_hasTopic;
-		// bool								_hasLimit;
-		u_int64_t							_userLimit; //l
+		u_int64_t							_userLimit;
 
 		Channel();
+
 	public:
 		Channel(std::string channel_name, Client *op);
 		~Channel();
 
-		//getters
+		/* GETTER */
 		std::string							getName() const;
 		std::string							getPassword() const;
 		std::vector<Client*>				getUsers() const;
-		void								displayUsers() const;
 		std::vector<Client*>				getOperators() const;
-		void								displayOps() const;
 		std::string							getTopic() const;
 		std::string							getModeString() const;
 		std::string							getModeArgs() const;
@@ -73,10 +66,9 @@ class Channel
 		bool								isInvited(Client *target);
 		bool								clientIsOnChannel( Client* client );
 
-		//setters
+		/* SETTER */
 		void	addUser(Client *target); //add a new user whene a client use join
 		void	rmUser(Client *target);
-		void	setName(std::string name);
 		void	setPassword(Client *op, std::string password); //set the password if mode's parameter is +k
 		void	rmPassword(Client *op); //remove the password if mode's parameter is -k
 		void	kickUser(Client *target, Client *op); //Remove the client specified in parameter and call the destructor if _n_members == 0
@@ -101,8 +93,7 @@ class Channel
 		std::string	getStrAllUsersNames( void );
 		std::string	getStrAllOperatorsNames( void );
 
-		void		printUsers() const;
-		void 		printInvited() const;
+		// void 		printInvited() const;
 };
 
 #endif

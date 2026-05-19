@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   WHO.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/28 14:56:10 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/15 16:03:20 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/19 15:54:02 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ void	sendWhoFromChannel( Channel* channel, Client* client, std::string const& se
 {
 	
 	std::vector<Client*> opList = channel->getOperators();
-	for (int i = 0; i < opList.size(); ++i)
+	for (size_t i = 0; i < opList.size(); ++i)
 	{
 		if (opList[i] != client)
 		{
@@ -88,7 +88,7 @@ void	sendWhoFromChannel( Channel* channel, Client* client, std::string const& se
 	if (onlyOps == false)
 	{
 		std::vector<Client*> userList = channel->getUsers();
-		for (int i = 0; i < userList.size(); ++i)
+		for (size_t i = 0; i < userList.size(); ++i)
 		{
 			std::cout << "userlist\n";
 			if (userList[i] != client)

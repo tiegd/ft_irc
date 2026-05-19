@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/29 18:48:05 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/19 11:44:36 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/19 15:35:27 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	RPL_MOTDSTART( std::string const& serverName, Client* client );
 void	RPL_MOTD( std::string const& serverName, Client* client, std::string const& motdString );
 void	RPL_ENDOFMOTD( std::string const& serverName, Client* client );
 
-void	RPL_CHANNELKICK(std::string const& serverName, Client *op, Client* client, Channel* channel);
-void	RPL_CHANMSGKICK(std::string const& serverName, Client *op, Client* client, Channel* channel, std::string comment);
+void	RPL_CHANNELKICK(Client *op, Client* client, Channel* channel);
+void	RPL_CHANMSGKICK(Client *op, Client* client, Channel* channel, std::string comment);
 
 #endif
