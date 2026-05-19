@@ -6,17 +6,11 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 18:33:23 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/19 15:52:51 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/19 16:37:32 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
-// #include "Client.hpp"
-// #include "tools.hpp"
-// #include "error_IRC.hpp"
-// #include "FunctionError.hpp"
-// #include "Channel.hpp"
-#include <algorithm>
 
 void	sendPrivmsgToUser(Client* client, std::string const& target, SOCKET sockTarget, std::string const& message);
 void	sendPrivmsgToChannel(Channel* channel, Client* client, std::string const& message);

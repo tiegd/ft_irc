@@ -6,13 +6,11 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/15 12:42:23 by amerzone          #+#    #+#             */
-/*   Updated: 2026/05/19 14:48:48 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/19 16:22:18 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
-// #include "Client.hpp"
-// #include "function.hpp"
 
 volatile std::sig_atomic_t gSignalStatus = 0;
 
@@ -111,7 +109,7 @@ void	Server::runServer( void )
 						{
 							std::string line = _clients[_fds[i].fd]->_inBuff.substr(0, pos);
 							_clients[_fds[i].fd]->_inBuff.erase(0, pos + 2);
-							std::cout << "Recu : "<< line << std::endl;
+							std::cout << "Recived : "<< line << std::endl;
 							parseCommand(line, _clients[_fds[i].fd]);
 						}
 					}
@@ -268,8 +266,6 @@ void	Server::MOTD(Client* client)
 
 Server::~Server( void )
 {
-	std::cout << "Server destructor called !" << std::endl;
-
 	for (std::map<SOCKET, Client*>::iterator it = _clients.begin(); it != _clients.end(); ++it)
 	{
 		delete it->second;

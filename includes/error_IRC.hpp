@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/20 17:33:30 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/19 11:45:23 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/19 16:28:24 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,6 @@
 
 class Client;
 #include "Client.hpp"
-
-#include <string>
 
 void	sendError( Client *client, std::string const& msgToClient );
 

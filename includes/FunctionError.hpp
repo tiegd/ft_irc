@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 11:14:29 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/04/30 10:56:45 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/19 16:29:44 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 #define THROW_ERROR_HPP
 
 #include <exception>
-#include <string>
-#include <iostream>
 
 class	FunctionError : public std::exception
 {

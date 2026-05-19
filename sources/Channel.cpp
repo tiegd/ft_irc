@@ -6,14 +6,12 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 11:34:51 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/05/19 14:49:48 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/19 16:38:22 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Channel.hpp"
-#include <sys/types.h>
 #include <algorithm>
-#include "FunctionError.hpp"
 #include "sstream"
 
 Channel::Channel()
@@ -53,7 +51,6 @@ std::vector<Client*> Channel::getOperators() const
 
 std::string Channel::getTopic() const
 {
-	std::cout << getHasTopic() << std::endl;
 	return (this->_topic);
 }
 
@@ -161,15 +158,9 @@ bool Channel::isInvited(Client *target)
 	std::vector<Client*>::iterator it;
 	it = std::find(this->_invited.begin(), this->_invited.end(), target);
 	if (it != this->_invited.end())
-	{
-		std::cout << "true" << std::endl;
 		return (true);
-	}
 	else
-	{
-		std::cout << "false" << std::endl;
 		return (false);
-	}
 }
 
 bool		Channel::clientIsOnChannel( Client* client )
@@ -320,13 +311,11 @@ void Channel::setUserLimit(u_int64_t nb, bool arg)
 {
 	if (arg == true && nb >= this->getNbMembers())
 	{
-		std::cout << "set limit" << std::endl;
 		this->_userLimit = nb;
 		this->setHasLimit(true);
 	}
 	else if (arg == false || nb == 0)
 		this->setHasLimit(false);
-	std::cout << "limite = " << this->getHasLimit() << std::endl;
 }
 
 void Channel::setNbMembers()

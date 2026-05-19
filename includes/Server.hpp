@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/09 12:20:30 by amerzone          #+#    #+#             */
-/*   Updated: 2026/05/18 14:00:25 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/19 16:33:57 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,21 +16,16 @@
 /* GLOBAL */
 
 #include <iostream>
-#include <string>
 #include <vector>
 #include <map>
-#include <stdbool.h>
 #include <csignal>
 #include <fstream>
 
 /* SOCKET */
-#include <sys/socket.h>
-#include <sys/types.h>
 #include <netinet/in.h>
 #include <poll.h>
 #include <string.h>
 #include <stdlib.h>
-#include <unistd.h>
 #include <fcntl.h>
 
 #define	SOCKET int
@@ -49,13 +44,10 @@
 // #define SERVER_PORT 1800
 
 #include "Channel.hpp"
-#include "Client.hpp"
 #include "error_IRC.hpp"
 #include "tools.hpp"
 #include "rpl.hpp"
 
-// class Client;
-// class Channel;
 
 class Server
 {
@@ -67,14 +59,12 @@ class Server
 		SOCKET							_socketServ;
 
 		std::vector<struct pollfd>		_fds;
-		// std::string						_addressIP;
 
 		// /*Une liste d'operator, a voir si on creer une class operator ou on utilise client*/
 		std::map<SOCKET, Client*>		_clients;
 		std::map<std::string, Channel*>	_channels;
 		std::vector<std::string>		_nicknameAlreadyUsed;
 		
-		// u_int64_t						_numberClients;
 
 		Server( void );
 		Server( Server & copy );
@@ -112,7 +102,6 @@ class Server
 			SOCKET			searchClientSocket( std::string nicknameRecipient );
 			bool			channelExist( std::string channelName );
 
-		// void			WHO( std::string const& line, Client* client );
 		void			PING( std::string const& line, Client* client );
 		void			PONG( std::string params, Client* client );
 

@@ -3,16 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   parsingArguments.cpp                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/15 12:34:11 by amerzone          #+#    #+#             */
-/*   Updated: 2026/05/11 15:30:41 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/19 16:39:56 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "function.hpp"
-#include <algorithm>
-#include "tools.hpp"
 
 void	parseArg( int ac, char **av, u_int16_t & port, std::string & password)
 {

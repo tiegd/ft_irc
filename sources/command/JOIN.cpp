@@ -6,16 +6,11 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 11:13:50 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/19 14:08:34 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/19 16:34:59 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
-// #include "Client.hpp"
-// #include "tools.hpp"
-// #include "error_IRC.hpp"
-// #include "Channel.hpp"
-// #include "rpl.hpp"
 
 bool	nameChannelWellFormated( std::string nameChannel );
 
@@ -67,10 +62,7 @@ void	Server::JOIN(std::string const& line, Client* client)
 				sendJoinNotification(client, _channels[nameChannel]);
 			}
 			else
-			{
 				ERR_BADCHANMASK(_name, client, nameChannel);
-				std::cout << "Bad channel mask" << std::endl;
-			}
 		}
 		else // si il existe
 		{

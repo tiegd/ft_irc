@@ -6,14 +6,11 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/30 14:00:09 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/05/19 15:55:11 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/19 16:35:43 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
-// #include "Client.hpp"
-// #include "Channel.hpp"
-// #include "error_IRC.hpp"
 #include <algorithm>
 
 std::vector<std::string>	split( std::string & str, char c );
@@ -28,7 +25,6 @@ void Server::MODE(std::string const& line, Client* op)
 	// Envoyer dans l'ordes dans les differents methodes.
 	
 	std::string	temp(line);
-	// std::cout << temp << " : " << temp.size() << std::endl;
 	if (temp.size() <= 6) // check qu'il y ait bien une #channel après MODE
 	{
 		ERR_NEEDMOREPARAMS(_name, op, "MODE");

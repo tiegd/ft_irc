@@ -6,13 +6,12 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/16 17:03:42 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/19 14:46:44 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/19 16:38:47 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Client.hpp"
 #include <algorithm>
-#include <iostream>
 
 Client::Client( void ) {}
 

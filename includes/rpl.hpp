@@ -6,15 +6,13 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/29 18:48:05 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/19 15:35:27 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/19 16:30:31 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef RPL_HPP
 #define RPL_HPP
 
-// #include "Client.hpp"
-// #include "Channel.hpp"
 #include "Server.hpp"
 
 class Channel;

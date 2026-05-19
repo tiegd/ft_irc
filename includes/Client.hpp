@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/09 12:18:51 by amerzone          #+#    #+#             */
-/*   Updated: 2026/05/19 14:46:37 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/19 16:27:32 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,10 @@
 #define CLIENT_HPP
 
 #include "Server.hpp"
-#include "Channel.hpp"
-#include "FunctionError.hpp"
 
 class Channel;
 
 #define	SOCKET int
-// #include "Channel.hpp"
 
 class Client
 {

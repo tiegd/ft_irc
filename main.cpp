@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/15 12:32:06 by amerzone          #+#    #+#             */
-/*   Updated: 2026/05/13 11:30:05 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/19 16:41:10 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "function.hpp"
-#include "Server.hpp"
 
 int main( int ac, char **av )
 {

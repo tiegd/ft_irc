@@ -3,16 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   PING_PONG.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/28 16:15:59 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/14 14:43:50 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/19 16:37:11 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
-// #include "Client.hpp"
-// #include "FunctionError.hpp"
 
 void	Server::PING( std::string const& line, Client* client )
 {

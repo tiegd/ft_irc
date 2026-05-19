@@ -3,19 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   function.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/15 12:35:18 by amerzone          #+#    #+#             */
-/*   Updated: 2026/04/20 18:42:31 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/19 16:29:03 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FUNCTION_HPP
 #define FUNCTION_HPP
 
-#include <exception>
-#include <stdexcept>
-#include <iostream>
 #include "Server.hpp"
 
 void	parseArg( int ac, char **av, u_int16_t & port, std::string & password );

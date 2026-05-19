@@ -6,12 +6,11 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/20 16:27:20 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/19 11:46:32 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/19 16:39:00 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "error_IRC.hpp"
-// #include <string>
 
 /* FORMAT ERREUR : { :PREFIX CODE TARGET :message de l'erreur\r\n }
 - client: Client to whom the error is being sent.

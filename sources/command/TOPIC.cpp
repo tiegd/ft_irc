@@ -3,17 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   TOPIC.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/06 14:46:20 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/15 16:42:45 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/19 16:37:39 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
-// #include "Channel.hpp"
-// #include "rpl.hpp"
-// #include "error_IRC.hpp"
 
 void	sendTopicNotif(Channel* channel, Client* client, std::string const& newTopic);
 
