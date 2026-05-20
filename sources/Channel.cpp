@@ -6,34 +6,28 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 11:34:51 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/05/19 17:40:34 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/20 11:17:09 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Channel.hpp"
-#include <sys/types.h>
 #include <algorithm>
-#include "FunctionError.hpp"
 #include "sstream"
-// #include <cstdint>
 
 Channel::Channel()
 {
 }
 
-Channel::Channel(std::string channel_name, Client *op) : _name(channel_name), _nbMembers(1), _hasTopic(false), _modeUsed(0)
+Channel::Channel(std::string channel_name, Client *op) : _name(channel_name), _nbMembers(1), _modeUsed(0), _hasTopic(false)
 {
 	this->addOperator(op);
-	// Initialiser la map de modes.	
 }
 
 Channel::~Channel()
 {
 }
 
-/*
-----------Getters----------
-*/
+/*----------Getters----------*/
 
 std::string Channel::getName() const
 {
@@ -47,31 +41,16 @@ std::string Channel::getPassword() const
 
 std::vector<Client*> Channel::getUsers() const
 {
-	// this->displayUsers();
 	return (this->_users);
-}
-
-void Channel::displayUsers() const
-{
-	for (int i = 0; i < this->_users.size(); i++)
-		std::cout << "users = " << this->_users[i]->getNickname() << std::endl;
 }
 
 std::vector<Client*> Channel::getOperators() const
 {
-	// this->displayOps();
 	return (this->_operator);
-}
-
-void Channel::displayOps() const
-{
-	for (int i = 0; i < this->_operator.size(); i++)
-		std::cout << "operator = " << this->_operator[i]->getNickname() << std::endl;
 }
 
 std::string Channel::getTopic() const
 {
-	std::cout << getHasTopic() << std::endl;
 	return (this->_topic);
 }
 
@@ -119,6 +98,11 @@ unsigned int Channel::getNbOp() const
 	return (this->_nbOp);
 }
 
+unsigned int Channel::getTotClient() const
+{
+	return (this->_totClient);
+}
+
 bool Channel::getInvitOnly() const
 {
 	return (this->_modeUsed >> 4 & 1);
@@ -149,72 +133,6 @@ u_int64_t Channel::getUserLimit() const
 	return (this->_userLimit);
 }
 
-/*
-----------Setters----------
-*/
-
-void Channel::setName(std::string name)
-{
-	this->_name = name;
-}
-
-void Channel::setPassword(Client *op, std::string password)
-{
-	std::vector<Client*>::iterator it;
-	it = std::find(this->_users.begin(), this->_users.end(), op);
-	if (it == this->_users.end())
-	{
-		this->_password = password;
-		if (!this->getHasPassword())
-			setHasPassword(true);
-	}
-	else
-		return; // renvoyer une erreur.
-}
-
-void Channel::rmPassword(Client *op)
-{
-	std::vector<Client*>::iterator it;
-	it = std::find(this->_users.begin(), this->_users.end(), op);
-	if (it == this->_users.end())
-	{
-		if (this->getHasPassword())
-				this->setHasPassword(false);
-		else
-			return; // renvoyer une erreur.
-	}
-	else
-		return; // renvoyer une erreur.
-}
-
-void Channel::addUser(Client *target)
-{
-	std::vector<Client*>::iterator it;
-	it = std::find(this->_users.begin(), this->_users.end(), target);
-	if (it == this->_users.end())
-		this->_users.push_back(target);
-	this->setNbMembers();
-}
-
-void Channel::rmUser(Client *target)
-{
-	std::vector<Client*>::iterator it;
-	it = std::find(this->_users.begin(), this->_users.end(), target);
-		if (it != this->_users.end())
-			this->_users.erase(it);
-	this->setNbMembers();
-}
-
-void Channel::kickUser(Client *target, Client *op)
-{
-	if (this->isOperator(op))
-	{
-		this->rmOperator(target);
-		this->rmUser(target);
-		target->rmChanJoined(this);
-	}
-}
-
 bool Channel::isOperator(Client *op)
 {
 	std::vector<Client*>::iterator it;
@@ -235,6 +153,83 @@ bool Channel::isUser(Client *target)
 		return (false);
 }
 
+bool Channel::isInvited(Client *target)
+{
+	std::vector<Client*>::iterator it;
+	it = std::find(this->_invited.begin(), this->_invited.end(), target);
+	if (it != this->_invited.end())
+		return (true);
+	else
+		return (false);
+}
+
+bool		Channel::clientIsOnChannel( Client* client )
+{
+	if (isUser(client) == true || isOperator(client) == true)
+		return true;
+	return false;
+}
+
+/*----------Setters----------*/
+
+void Channel::setPassword(Client *op, std::string password)
+{
+	std::vector<Client*>::iterator it;
+	it = std::find(this->_operator.begin(), this->_operator.end(), op);
+	if (it == this->_operator.end())
+	{
+		this->_password = password;
+		if (!this->getHasPassword())
+			setHasPassword(true);
+	}
+	else
+		return;
+}
+
+void Channel::rmPassword(Client *op)
+{
+	std::vector<Client*>::iterator it;
+	it = std::find(this->_operator.begin(), this->_operator.end(), op);
+	if (it == this->_operator.end())
+	{
+		if (this->getHasPassword())
+				this->setHasPassword(false);
+		else
+			return;
+	}
+	else
+		return;
+}
+
+void Channel::addUser(Client *target)
+{
+	
+	std::vector<Client*>::iterator it;
+	it = std::find(this->_users.begin(), this->_users.end(), target);
+	if (it == this->_users.end())
+		this->_users.push_back(target);
+	this->setTotClient();
+}
+
+void Channel::rmUser(Client *target)
+{
+	std::vector<Client*>::iterator it;
+	it = std::find(this->_users.begin(), this->_users.end(), target);
+		if (it != this->_users.end())
+			this->_users.erase(it);
+	this->setTotClient();
+}
+
+void Channel::kickUser(Client *target, Client *op)
+{
+	if (this->isOperator(op))
+	{
+		this->rmOperator(target);
+		this->rmUser(target);
+		target->rmChanJoined(this);
+	}
+}
+
 void Channel::addOperator(Client *target)
 {
 	this->_operator.push_back(target);
@@ -242,8 +237,7 @@ void Channel::addOperator(Client *target)
 	it = std::find(this->_users.begin(), this->_users.end(), target);
 	if (it != this->_users.end())
 		this->_users.erase(it);
-	this->setNbOp();
-	this->setNbMembers();
+	this->setTotClient();
 }
 
 void Channel::rmOperator(Client *target) // Called by another operator with mode
@@ -255,14 +249,11 @@ void Channel::rmOperator(Client *target) // Called by another operator with mode
 		this->_operator.erase(it);
 		this->_users.push_back(target);
 	}
-	this->setNbOp();
-	this->setNbMembers();
+	this->setTotClient();
 }
 
 void Channel::setTopic(Client *op, std::string topic)
 {
-	// if (!parserTopic(topic))
-	// 	return ;
 	if (!this->getResTopic() || (this->getResTopic() && this->isOperator(op)))
 	{
 		this->_topic = topic;
@@ -320,7 +311,6 @@ void Channel::setUserLimit(u_int64_t nb, bool arg)
 {
 	if (arg == true && nb >= this->getNbMembers())
 	{
-		std::cout << "set limit" << std::endl;
 		this->_userLimit = nb;
 		this->setHasLimit(true);
 	}
@@ -336,6 +326,29 @@ void Channel::setNbMembers()
 void Channel::setNbOp()
 {
 	this->_nbOp = this->_operator.size();
+}
+
+void Channel::setTotClient()
+{
+	this->setNbMembers();
+	this->setNbOp();
+	this->_totClient = getNbMembers() + getNbOp();
+}
+
+void Channel::addBackInvite(Client *target)
+{
+	std::vector<Client*>::iterator it;
+	it = std::find(this->_invited.begin(), this->_invited.end(), target);
+	if (it == this->_invited.end())
+		this->_invited.push_back(target);
+}
+
+void Channel::rmInvite(Client *target)
+{
+	std::vector<Client*>::iterator it;
+	it = std::find(this->_invited.begin(), this->_invited.end(), target);
+		if (it != this->_invited.end())
+			this->_invited.erase(it);
 }
 
 void	Channel::broadcastToAll( std::string const& message, Client* sender )
@@ -384,19 +397,8 @@ std::string	Channel::getStrAllOperatorsNames( void )
 	return allOps;
 }
 
-bool		Channel::clientIsOnChannel( Client* client )
-{
-	if (isUser(client) == true || isOperator(client) == true)
-		return true;
-	return false;
-}
-
-void Channel::printUsers() const
-{
-	std::cout << "Users : " << std::endl;
-	for (int i = 0; i < _users.size(); i++)
-		std::cout << _users[i]->getNickname() << std::endl;
-	std::cout << "Operators : " << std::endl;
-	for (int i = 0; i < _operator.size(); i++)
-		std::cout << _operator[i]->getNickname() << std::endl;
-}
+// void Channel::printInvited() const
+// {
+// 	for (int i = 0; i < _invited.size(); i++)
+// 		std::cout << _invited[i]->getNickname() << std::endl;
+// }

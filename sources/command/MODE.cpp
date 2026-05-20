@@ -6,14 +6,11 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/30 14:00:09 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/05/15 15:26:30 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/19 16:35:43 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
-// #include "Client.hpp"
-// #include "Channel.hpp"
-// #include "error_IRC.hpp"
 #include <algorithm>
 
 std::vector<std::string>	split( std::string & str, char c );
@@ -28,7 +25,6 @@ void Server::MODE(std::string const& line, Client* op)
 	// Envoyer dans l'ordes dans les differents methodes.
 	
 	std::string	temp(line);
-	std::cout << temp << " : " << temp.size() << std::endl;
 	if (temp.size() <= 6) // check qu'il y ait bien une #channel après MODE
 	{
 		ERR_NEEDMOREPARAMS(_name, op, "MODE");
@@ -65,7 +61,7 @@ void Server::MODE(std::string const& line, Client* op)
 	if (!parseOptions(options, op))
 		return ;
 	splitArgs.erase(splitArgs.begin(), splitArgs.begin() + 2);
-	for (int i = 0; i < options.size(); i++)
+	for (size_t i = 0; i < options.size(); i++)
 	{
 		switch (options[i])
 		{
@@ -187,10 +183,10 @@ void Server::modeAddLimitUser(Client* op, Channel* channel, bool toDo, std::stri
 {
 	if (channel->isOperator(op))
 	{
-		u_int64_t	nb;
 		if (toDo)
 		{
-			for (int i = 0; i < limit.size(); i++)
+			u_int64_t	nb;
+			for (size_t i = 0; i < limit.size(); i++)
 			{
 				if (!std::isdigit(limit[i]))
 				{
@@ -201,8 +197,8 @@ void Server::modeAddLimitUser(Client* op, Channel* channel, bool toDo, std::stri
 			nb = std::atoi(limit.c_str());
 			if (limit[0] != '0' && limit.size() == 1 && nb == 0)
 				return ;
+			channel->setUserLimit(nb, toDo);
 		}
-		channel->setUserLimit(nb, toDo);
 	}
 	else
 		ERR_CHANOPRIVSNEEDED(_name, op, channel->getName());
@@ -218,9 +214,14 @@ void Server::modeRmLimitUser(Client* op, Channel* channel, bool toDo)
 
 bool Server::parseOptions(std::string options, Client *client)
 {
-	for (int i = 0; i < options.size(); i++)
+	std::string 			str = "oitkl";
+	std::string::size_type	n;
+	for (size_t i = 0; i < options.size(); i++)
 	{
-		if (options[i] != 'i' && options[i] != 't' && options[i] != 'k' && options[i] != 'o' && options[i] != 'l')
+		if (std::count(options.begin(), options.end(), options[i]) > 1)
+			return (false);
+		n = str.find(options[i]);
+		if (n == std::string::npos)
 		{
 			ERR_UMODEUNKNOWNFLAG(_name, client);
 			return (false);
@@ -231,7 +232,7 @@ bool Server::parseOptions(std::string options, Client *client)
 
 bool Server::parseChannelPassword(Client* op, Channel* channel, std::string password)
 {
-	for (int i = 0; i < password.size(); i++)
+	for (size_t i = 0; i < password.size(); i++)
 	{
 		if (password[i] < 33 || password[i] > 126)
 		{

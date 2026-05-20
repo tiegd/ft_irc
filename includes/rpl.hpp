@@ -6,15 +6,13 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/29 18:48:05 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/15 15:08:45 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/19 16:30:31 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef RPL_HPP
 #define RPL_HPP
 
-// #include "Client.hpp"
-// #include "Channel.hpp"
 #include "Server.hpp"
 
 class Channel;
@@ -40,7 +38,7 @@ void	RPL_MOTDSTART( std::string const& serverName, Client* client );
 void	RPL_MOTD( std::string const& serverName, Client* client, std::string const& motdString );
 void	RPL_ENDOFMOTD( std::string const& serverName, Client* client );
 
-void	RPL_CHANNELKICK(std::string const& serverName, Client *op, Client* client, Channel* channel);
-void	RPL_CHANMSGKICK(std::string const& serverName, Client *op, Client* client, Channel* channel, std::string comment);
+void	RPL_CHANNELKICK(Client *op, Client* client, Channel* channel);
+void	RPL_CHANMSGKICK(Client *op, Client* client, Channel* channel, std::string comment);
 
 #endif

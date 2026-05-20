@@ -6,16 +6,15 @@
 #    By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/04/15 14:12:34 by amerzone          #+#    #+#              #
-#    Updated: 2026/05/19 15:30:21 by jpiquet          ###   ########.fr        #
+#    Updated: 2026/05/20 11:16:38 by jpiquet          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = InternationalRaclureDeCroute
+NAME = ircserver
 
 CXX = c++
 
-#FLAGS = -Wall -Wextra -Werror -MMD -std=c++98 -g3
-FLAGS = -MMD -std=c++98 -g3
+FLAGS = -Wall -Wextra -Werror -MMD -std=c++98 -g3
 
 INC = includes
 

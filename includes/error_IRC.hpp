@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/20 17:33:30 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/20 11:14:18 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/20 11:16:49 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,6 @@
 
 class Client;
 #include "Client.hpp"
-
-#include <string>
 
 void	sendError( Client *client, std::string const& msgToClient );
 
@@ -33,6 +31,7 @@ void    ERR_NEEDMOREPARAMS( std::string const& serverName, Client* client, std::
 // { JOIN }
 void    ERR_BADCHANMASK( std::string const& serverName, Client* client, std::string const& channel );
 void    ERR_BADCHANNELKEY( std::string const& serverName, Client* client, std::string const& channel );
+void    ERR_CHANNELISFULL( std::string const& serverName, Client* client, std::string const& channel );
 
 // { PRIVMSG }
 void    ERR_NORECIPIENT( std::string const& serverName, Client* client );

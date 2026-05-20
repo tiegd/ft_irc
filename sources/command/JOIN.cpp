@@ -3,19 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   JOIN.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 11:13:50 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/15 16:27:19 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/19 16:34:59 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
-// #include "Client.hpp"
-// #include "tools.hpp"
-// #include "error_IRC.hpp"
-// #include "Channel.hpp"
-// #include "rpl.hpp"
 
 bool	nameChannelWellFormated( std::string nameChannel );
 
@@ -57,7 +52,7 @@ void	Server::JOIN(std::string const& line, Client* client)
 		}
 		if (_channels.size() == 0 || !_channels[nameChannel]) // regarde si le channel n'existe pas
 		{
-			//si il existe pas checker que le nom u channel a le bon format
+			//si il existe pas checker que le nom du channel a le bon format
 			if (nameChannelWellFormated(nameChannel) == true) // faire la fonction
 			{
 				// créer le channel
@@ -67,15 +62,12 @@ void	Server::JOIN(std::string const& line, Client* client)
 				sendJoinNotification(client, _channels[nameChannel]);
 			}
 			else
-			{
 				ERR_BADCHANMASK(_name, client, nameChannel);
-				std::cout << "Bad channel mask" << std::endl;
-			}
 		}
 		else // si il existe
 		{
 			//checker si c'est en mode invite-only
-			if (_channels[nameChannel]->getInvitOnly() == false)
+			if (_channels[nameChannel]->getInvitOnly() == false || (_channels[nameChannel]->getInvitOnly() && _channels[nameChannel]->isInvited(client)))
 			{
 				// checker si il a un password
 				if (_channels[nameChannel]->getHasPassword())
@@ -85,24 +77,34 @@ void	Server::JOIN(std::string const& line, Client* client)
 					{
 						if (passwords[i].compare(_channels[nameChannel]->getPassword()) == 0) //si le password est correct
 						{
-							_channels[nameChannel]->addUser(client);
-							client->addChanJoined(_channels[nameChannel]);
-							sendJoinNotification(client, _channels[nameChannel]);
+							if (!_channels[nameChannel]->getHasLimit() || (_channels[nameChannel]->getHasLimit() && _channels[nameChannel]->getTotClient() < _channels[nameChannel]->getUserLimit()))
+							{
+								_channels[nameChannel]->addUser(client);
+								client->addChanJoined(_channels[nameChannel]);
+								sendJoinNotification(client, _channels[nameChannel]);
+								if (_channels[nameChannel]->isInvited(client))
+									_channels[nameChannel]->rmInvite(client);
+							}
+							else
+								ERR_CHANNELISFULL(_name, client, nameChannel);
 						}
 					}
 					else //sinon ca veut dire qu'il manque un parametre password pour le channel donc renvoyer badchannelkey
-					{
-						
 						ERR_BADCHANNELKEY(_name, client, nameChannel);
-					}
 				}
 				else //si il y a pas de password faire addUser
 				{
-					_channels[nameChannel]->addUser(client);
-					client->addChanJoined(_channels[nameChannel]);
-					sendJoinNotification(client, _channels[nameChannel]);
-					// _channels[nameChannel]->printUsers();
-					// client->printChanJoined();
+					if (!_channels[nameChannel]->getHasLimit() || (_channels[nameChannel]->getHasLimit() && _channels[nameChannel]->getTotClient() < _channels[nameChannel]->getUserLimit()))
+					{
+						_channels[nameChannel]->addUser(client);
+						client->addChanJoined(_channels[nameChannel]);
+						sendJoinNotification(client, _channels[nameChannel]);
+						if (_channels[nameChannel]->isInvited(client))
+							_channels[nameChannel]->rmInvite(client);
+					}
+					else
+						ERR_CHANNELISFULL(_name, client, nameChannel);
+						
 				}
 			}
 			else // renvoyer une erreur car le mode invite only est activé

@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/09 12:18:51 by amerzone          #+#    #+#             */
-/*   Updated: 2026/05/19 16:26:44 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/20 11:16:43 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,10 @@
 #define CLIENT_HPP
 
 #include "Server.hpp"
-#include "Channel.hpp"
-#include "FunctionError.hpp"
 
 class Channel;
 
 #define	SOCKET int
-// #include "Channel.hpp"
 
 class Client
 {
@@ -84,7 +81,7 @@ class Client
 		void	quitChannels( void );
 
 		/* TESTS */
-		void	printChanJoined() const;
+		// void	printChanJoined() const;
 };
 
 #endif

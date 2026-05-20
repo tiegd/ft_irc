@@ -6,13 +6,12 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/16 17:03:42 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/19 17:42:40 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/20 11:17:21 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Client.hpp"
 #include <algorithm>
-#include <iostream>
 
 Client::Client( void ) {}
 
@@ -87,13 +86,12 @@ bool		Client::canBeRegistered() const
 
 /* TESTS */
 
-void		Client::printChanJoined() const
-{
-	std::cout << getNickname() << "._chanJoined = " << std::endl;
-	for (int i = 0; i < _chanJoined.size(); i++)
-		std::cout << _chanJoined[i] << std::endl;
-	std::cout << std::endl;
-}
+// void		Client::printChanJoined() const
+// {
+// 	for (int i = 0; i < _chanJoined.size(); i++)
+// 		std::cout << _chanJoined[i] << std::endl;
+// 	std::cout << std::endl;
+// }
 
 void		Client::quitChannels()
 {

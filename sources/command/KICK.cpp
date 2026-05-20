@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/30 10:59:44 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/05/15 15:45:40 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/19 16:35:18 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void Server::KICK(std::string const& line, Client* op)
 		ERR_NOSUCHCHANNEL(_name, op, channelTarget);
 		return;
 	}
-	for (int i = 0; i < clientToKick.size(); i++)
+	for (size_t i = 0; i < clientToKick.size(); i++)
 	{
 		bool									kicked = false;
 		std::map<SOCKET, Client *>::iterator	it;
@@ -61,17 +61,15 @@ void Server::KICK(std::string const& line, Client* op)
 						ERR_USERNOTINCHANNEL(_name, op, _channels[channelTarget]->getName());
 						return;
 					}
-					it->second->printChanJoined();
 					_channels[channelTarget]->kickUser(it->second, op);
 					kicked = true;
 					if (splitArgs.size() >= 3)
 					{
 						comment = parseComment(splitArgs);
-						RPL_CHANMSGKICK(_name, op, it->second, _channels[channelTarget], comment); // reply avec le comment
+						RPL_CHANMSGKICK(op, it->second, _channels[channelTarget], comment); // reply avec le comment
 					}
 					else
-						RPL_CHANNELKICK(_name, op, it->second, _channels[channelTarget]);
-					it->second->printChanJoined();
+						RPL_CHANNELKICK(op, it->second, _channels[channelTarget]);
 				}
 				else
 					ERR_CHANOPRIVSNEEDED(_name, op, _channels[channelTarget]->getName());
@@ -86,7 +84,7 @@ std::string	Server::parseComment(std::vector<std::string> args)
 {
 	std::string	str = args[2];
 
-	for (int i = 3; i < args.size(); i++)
+	for (size_t i = 3; i < args.size(); i++)
 		str += " " + args[i];
 	return (str);
 }

@@ -6,21 +6,15 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 18:33:23 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/19 15:49:30 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/20 11:18:41 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
-// #include "Client.hpp"
-// #include "tools.hpp"
-// #include "error_IRC.hpp"
-// #include "FunctionError.hpp"
-// #include "Channel.hpp"
-#include <algorithm>
 
 void	sendPrivmsgToUser(Client* client, std::string const& target, SOCKET sockTarget, std::string const& message);
 void	sendPrivmsgToChannel(Channel* channel, Client* client, std::string const& message);
-size_t	sameRecipientMultipleTimes(std::vector<std::string> nicknames);
+int		sameRecipientMultipleTimes(std::vector<std::string> nicknames);
 
 /*
 PRIVMSG <receiver>{,<receiver>} <:text to be sent>
@@ -39,7 +33,7 @@ void	Server::PRIVMSG( std::string const& line, Client* client)
 	std::string					strMessage = splitArgs[1];
 
 	std::vector<std::string>	recipient = split(splitArgs[0], ',');
-	size_t i = sameRecipientMultipleTimes(recipient);
+	int i = sameRecipientMultipleTimes(recipient);
 	if (i != -1)
 	{
 		ERR_TOOMANYTARGETS(_name, client, recipient[i]);
@@ -134,7 +128,7 @@ void	sendPrivmsgToChannel(Channel* channel, Client* client, std::string const& m
 }
 
 // Return the index of the recipient that occure multiple times or -1 if not found.
-size_t	sameRecipientMultipleTimes(std::vector<std::string> nicknames)
+int	sameRecipientMultipleTimes(std::vector<std::string> nicknames)
 {
 	std::string	temp;
 
@@ -143,7 +137,7 @@ size_t	sameRecipientMultipleTimes(std::vector<std::string> nicknames)
 		for (size_t i = y + 1; i < nicknames.size(); ++i)
 		{
 			if (nicknames[y] == nicknames[i])
-				return y;
+				return (int)y;
 		}
 	}
 	return -1;

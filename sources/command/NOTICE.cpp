@@ -6,17 +6,11 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 14:21:16 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/19 14:15:23 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/20 11:18:16 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
-// #include "Client.hpp"
-// #include "tools.hpp"
-// #include "error_IRC.hpp"
-// #include "FunctionError.hpp"
-// #include "Channel.hpp"
-#include <algorithm>
 
 void	sendNoticeToUser(Client* client, std::string const& target, SOCKET sockTarget, std::string const& message);
 void	sendNoticeToChannel(Channel* channel, std::string const& target, Client* client, std::string const& message);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   WHO.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/28 14:56:10 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/15 16:03:20 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/19 16:14:21 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ void	sendWhoFromChannel( Channel* channel, Client* client, std::string const& se
 
 void	Server::WHO( std::string const& line, Client* client )
 {
-	std::cout << line.size() << std::endl;
 	if (line.size() == 3 || (line[3] == ' ' && line.size() == 4))
 	{
 		for (std::map<SOCKET, Client*>::iterator it = _clients.begin(); it != _clients.end(); ++it)
@@ -77,20 +76,16 @@ void	sendWhoFromChannel( Channel* channel, Client* client, std::string const& se
 {
 	
 	std::vector<Client*> opList = channel->getOperators();
-	for (int i = 0; i < opList.size(); ++i)
+	for (size_t i = 0; i < opList.size(); ++i)
 	{
 		if (opList[i] != client)
-		{
-			std::cout << "ENTER IN RPL\n";
 			RPL_WHOREPLY(servName, client, opList[i], channel->getName());
-		}
 	}
 	if (onlyOps == false)
 	{
 		std::vector<Client*> userList = channel->getUsers();
-		for (int i = 0; i < userList.size(); ++i)
+		for (size_t i = 0; i < userList.size(); ++i)
 		{
-			std::cout << "userlist\n";
 			if (userList[i] != client)
 				RPL_WHOREPLY(servName, client, userList[i], channel->getName());
 		}

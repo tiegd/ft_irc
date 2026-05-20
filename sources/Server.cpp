@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/15 12:42:23 by amerzone          #+#    #+#             */
-/*   Updated: 2026/05/20 11:14:01 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/20 11:18:06 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -271,8 +271,6 @@ Client*	Server::searchClient( std::string target )
 
 Server::~Server( void )
 {
-	std::cout << "Server destructor called !" << std::endl;
-
 	for (std::map<SOCKET, Client*>::iterator it = _clients.begin(); it != _clients.end(); ++it)
 	{
 		delete it->second;

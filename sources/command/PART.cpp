@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/08 16:33:44 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/19 15:28:38 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/20 11:18:33 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ void	Server::PART(std::string const& line, Client* client)
 	std::string	temp(line);
 	temp.erase(0, 5);
 
-	std::cout << temp <<std::endl;
 	std::vector<std::string>	splitArgs = splitStr(temp, " :");
 	std::vector<std::string>	nameChannels = split(splitArgs[0], ',');
 	std::string					message = splitArgs[1];
