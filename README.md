@@ -193,7 +193,7 @@ Server --- S12
 
 ## Instruction
 
-### Run
+### Run IRC Server
 
 ```bash
 make
@@ -202,6 +202,8 @@ make
 ```bash
 ./ft_irc <port> <password>
 ```
+
+### Run a client
 
 Open a client like NetCat or Hexchat and connect it.
 
