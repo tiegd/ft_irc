@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/15 12:32:06 by amerzone          #+#    #+#             */
-/*   Updated: 2026/05/19 16:41:10 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/20 15:34:21 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ int main( int ac, char **av )
 		std::cerr << e.what() << '\n';
 		exit(1);
 	}
-	// std::cout << " PORT : " << port << " PWD : " << pwd << std::endl;
 	try
 	{
 		Server	serv("Intelligent_Rapid_Cacaboudin", port, pwd);

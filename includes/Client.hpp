@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/09 12:18:51 by amerzone          #+#    #+#             */
-/*   Updated: 2026/05/20 11:16:47 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/20 15:26:40 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,9 +79,6 @@ class Client
 		void	broadcastToMyChannels( std::string notification );
 		bool	canBeRegistered( void ) const;
 		void	quitChannels( void );
-
-		/* TESTS */
-		// void	printChanJoined() const;
 };
 
 #endif

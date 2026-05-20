@@ -203,6 +203,14 @@ make
 ./ft_irc <port> <password>
 ```
 
+Open a client like NetCat or Hexchat and connect it.
+
+For NetCat :
+
+```bash
+nc -C <host> <port>
+```
+
 ### Commandes
 
 #### KICK
@@ -261,6 +269,7 @@ k : /mode <channel> {[+|-]k} <password>
 
 - https://ubuntu.com/tutorials/irc-server#1-overview
 - https://datatracker.ietf.org/doc/html/rfc1459
+- https://datatracker.ietf.org/doc/html/rfc2812
 - https://mathieu-lemoine.developpez.com/tutoriels/irc/protocole/?page=page-2
 - https://broux.developpez.com/articles/c/sockets/
 - https://en.wikipedia.org/wiki/IRC

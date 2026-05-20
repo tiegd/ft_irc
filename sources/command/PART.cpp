@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/08 16:33:44 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/20 11:18:39 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/20 14:52:11 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,14 +41,15 @@ void	Server::PART(std::string const& line, Client* client)
 			ERR_NOTONCHANNEL(_name, client, nameChannels[i]);
 			continue;
 		}
-		if (_channels[nameChannels[i]]->isUser(client))
-		{
-			_channels[nameChannels[i]]->rmUser(client);
-		}
 		if (_channels[nameChannels[i]]->isOperator(client))
 		{
 			_channels[nameChannels[i]]->rmOperator(client);
 		}
+		if (_channels[nameChannels[i]]->isUser(client))
+		{
+			_channels[nameChannels[i]]->rmUser(client);
+		}
+		
 		sendPartMsg(client, client->getFullName(), _channels[nameChannels[i]], message);
 		if (_channels[nameChannels[i]]->getNbMembers() == 0 && _channels[nameChannels[i]]->getNbOp() == 0)
 		{

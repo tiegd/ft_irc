@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/09 12:20:30 by amerzone          #+#    #+#             */
-/*   Updated: 2026/05/20 11:17:07 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/20 15:34:01 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,6 @@
 
 /* {MY HEADERS} */
 #include "FunctionError.hpp"
-
-// #define SERVER_PORT 1800
 
 #include "Channel.hpp"
 #include "error_IRC.hpp"

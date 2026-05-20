@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/11 17:33:07 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/19 16:34:17 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/20 15:30:55 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ void	Server::INVITE(std::string const& line, Client* client)
 	if (line.size() <= 7)
 	{
 		ERR_NEEDMOREPARAMS(_name, client, "INVITE");
-		// std::cout << "Not enough parameters" << std::endl;
 		return ;
 	}
 
@@ -32,18 +31,15 @@ void	Server::INVITE(std::string const& line, Client* client)
 	std::vector<std::string>	splitParam = split(temp, SPACE);
 	std::string					target = splitParam[0];
 	std::string					channel = splitParam[1];
-	// std::cout << "Channel extract : " << channel << std::endl;
 
 	if (target.empty() == true || channel.empty() == true)
 	{
 		ERR_NEEDMOREPARAMS(_name, client, "INVITE");
-		// std::cout << "Not enough parameters" << std::endl;
 		return ;
 	}
 	if (nicknameExist(target) == false)
 	{
 		ERR_NOSUCHNICK(_name, client, target);
-		// std::cout << "Nickname doesn't exist" << std::endl;
 		return ;
 	}
 	if (_channels[channel])
@@ -67,7 +63,6 @@ void	Server::INVITE(std::string const& line, Client* client)
 			}
 		}
 	}
-	// std::cout << channel << std::endl;
 	_channels[channel]->addBackInvite(searchClient(target));
 	sendInviteToUser(client, searchClient(target), channel);
 	RPL_INVITING(_name, client, target, channel);

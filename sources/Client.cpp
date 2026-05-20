@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/16 17:03:42 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/20 11:17:24 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/20 15:32:43 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 Client::Client( void ) {}
 
 Client::Client( SOCKET sockClient ) : _clientSocket(sockClient), _nickname("*"), _username("*"),
-									_registered(false), _passValid(0), _nickValid(0), _userValid(0), _deleted(false) {}
+									_registered(false), _deleted(false), _passValid(0), _nickValid(0), _userValid(0) {}
 
 /* { SETTER } */
 void		Client::setNickname( std::string const & newNickname )	{ _nickname = newNickname; }
@@ -83,15 +83,6 @@ bool		Client::canBeRegistered() const
 	else
 		return false;
 }
-
-/* TESTS */
-
-// void		Client::printChanJoined() const
-// {
-// 	for (int i = 0; i < _chanJoined.size(); i++)
-// 		std::cout << _chanJoined[i] << std::endl;
-// 	std::cout << std::endl;
-// }
 
 void		Client::quitChannels()
 {
