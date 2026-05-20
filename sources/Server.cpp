@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/15 12:42:23 by amerzone          #+#    #+#             */
-/*   Updated: 2026/05/19 18:42:18 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/20 11:14:01 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void	Server::setSocketServ( void )
 	if (listen(_socketServ, MAXCLIENTS) < 0)
 		throw	std::runtime_error("Listen() error");	
 
-	std::cout << "Waiting for a connection on port " << _port << std::endl;
+	std::cout << "Waiting for a connection on port " << _port << "..." << std::endl;
 }
 
 void	Server::runServer( void )
@@ -198,6 +198,10 @@ void	Server::parseCommand( std::string const & line , Client* client )
 			{
 				NOTICE(line, client);
 			}
+		}
+		else
+		{
+			ERR_UNKNOWNCOMMAND(_name, client, line);
 		}
 	}
 	catch(const std::exception& e)

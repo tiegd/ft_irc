@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error_IRC.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/20 17:33:30 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/15 15:06:54 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/20 11:14:18 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,5 +55,7 @@ void	ERR_INVALIDMODEPARAM(std::string const& serverName, Client* client, std::st
 void	ERR_USERNOTINCHANNEL(std::string const& serverName, Client* client, std::string channel);
 void	ERR_UMODEUNKNOWNFLAG( std::string const& serverName, Client* client );
 void	ERR_NOMOTD( std::string const& serverName, Client* client );
+
+void    ERR_UNKNOWNCOMMAND(std::string const & serverName, Client* client, std::string const & command);
 
 #endif

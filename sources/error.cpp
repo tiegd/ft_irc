@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/20 16:27:20 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/15 15:10:22 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/20 11:12:16 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,6 +148,7 @@ void	ERR_USERNOTINCHANNEL(std::string const& serverName, Client* client, std::st
 // 	std::string msgToClient = ":" + serverName + " 481 " + client->getNickname() + " ::Permission Denied- You're not an IRC operator\r\n";
 // 	sendError(client, msgToClient);
 // }
+
 void	ERR_USERONCHANNEL(std::string const& serverName, Client* client, std::string const& target, std::string const& channelName)
 {
 	std::string msgToClient = ":" + serverName + " 443 " + client->getNickname() + SPACE + target + SPACE + channelName + " :Is already on channel\r\n";
@@ -163,5 +164,11 @@ void	ERR_TOOMANYTARGETS(std::string const& serverName, Client* client, std::stri
 void	ERR_NOMOTD( std::string const& serverName, Client* client )
 {
 	std::string msgToClient = ":" + serverName + " 422 " + client->getNickname() + " :MOTD File is missing\r\n";
+	sendError(client, msgToClient);
+}
+
+void    ERR_UNKNOWNCOMMAND(std::string const & serverName, Client* client, std::string const & command)
+{
+	std::string msgToClient = ":" + serverName + " 421 " + client->getNickname() + " " + command + " :Unknown command\r\n";
 	sendError(client, msgToClient);
 }
