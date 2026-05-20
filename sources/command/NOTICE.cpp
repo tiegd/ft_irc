@@ -6,14 +6,14 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 14:21:16 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/19 16:36:25 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/20 11:18:29 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 
 void	sendNoticeToUser(Client* client, std::string const& target, SOCKET sockTarget, std::string const& message);
-void	sendNoticeToChannel(Channel* channel, Client* client, std::string const& message);
+void	sendNoticeToChannel(Channel* channel, std::string const& target, Client* client, std::string const& message);
 
 void	Server::NOTICE( std::string const& line, Client* client)
 {
@@ -23,7 +23,7 @@ void	Server::NOTICE( std::string const& line, Client* client)
 		throw std::invalid_argument("Channel or nickname missing to send msg");
 	}
 	std::string	temp(line);
-	temp.erase(0, 8);
+	temp.erase(0, 7);
 	
 	std::vector<std::string>	splitArgs = split(temp, SPACE);
 	std::string					strMessage = splitArgs[1];
@@ -32,6 +32,7 @@ void	Server::NOTICE( std::string const& line, Client* client)
 
 	if (strMessage.size() > 1 && strMessage[0] == ':')
 	{
+		strMessage.erase(0, 1);
 		for(std::vector<std::string>::iterator it = recipient.begin(); it != recipient.end(); it++)
 		{
 			sendNotice(client, *it, strMessage);
@@ -52,12 +53,18 @@ void	Server::sendNotice( Client *client, std::string recipient, std::string mess
 {
 	if (recipient[0] == '#')
 	{
-		sendNoticeToChannel(_channels[recipient], client, message); // fonction qui envoit un message a tous le channel.
+		if (channelExist(recipient) == true)
+			sendNoticeToChannel(_channels[recipient], recipient, client, message); // fonction qui envoit un message a tous le channel.
+		else
+			throw std::invalid_argument("Socket for channel given can't be found");
 	}
 	else
 	{
 		SOCKET	sockRecipient = searchClientSocket(recipient);
-		std::cout << "HALLO !" << std::endl;
+		if (sockRecipient == -1)
+		{
+			throw std::invalid_argument("Socket for nickname given can't be found");
+		}
 		sendNoticeToUser(client, recipient, sockRecipient, message);
 	}
 }
@@ -67,15 +74,15 @@ void	Server::sendNotice( Client *client, std::string recipient, std::string mess
 */
 void	sendNoticeToUser(Client* client, std::string const& target, SOCKET sockTarget, std::string const& message)
 {
-	std::string fullMsg = ":" + client->getFullName() + " PRIVMSG " + target + " :" + message + "\r\n";
+	std::string fullMsg = ":" + client->getFullName() + " NOTICE " + target + " :" + message + "\r\n";
 	std::cout << fullMsg << std::endl;
 	if (send(sockTarget, fullMsg.c_str(), fullMsg.size(), 0) < 0)
-			throw FunctionError();
+			std::cerr << "send() error" << std::endl;
 }
 
-void	sendNoticeToChannel(Channel* channel, Client* client, std::string const& message)
+void	sendNoticeToChannel(Channel* channel, std::string const& target, Client* client, std::string const& message)
 {
-	std::string fullMsg = ":" + client->getFullName() + " PRIVMSG " + channel->getName() + " :" + message + "\r\n";
+	std::string fullMsg = ":" + client->getFullName() + " NOTICE " + target + " :" + message + "\r\n";
 	channel->broadcastToAll(fullMsg, client);
 }
 

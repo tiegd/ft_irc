@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/16 17:03:42 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/19 16:38:47 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/20 11:17:24 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 Client::Client( void ) {}
 
 Client::Client( SOCKET sockClient ) : _clientSocket(sockClient), _nickname("*"), _username("*"),
-									_registered(false), _passValid(0), _nickValid(0), _userValid(0) {}
+									_registered(false), _passValid(0), _nickValid(0), _userValid(0), _deleted(false) {}
 
 /* { SETTER } */
 void		Client::setNickname( std::string const & newNickname )	{ _nickname = newNickname; }
@@ -28,6 +28,8 @@ void		Client::setRealname( std::string const & realname )		{ _realname = realnam
 void		Client::setPassValid( int val )							{ _passValid = val; }
 void		Client::setNickValid( int val )							{ _nickValid = val; }
 void		Client::setUserValid( int val )							{ _userValid = val; }
+void		Client::setDeleted( bool val )							{ _deleted = val; }
+
 
 /* { GETTER } */
 SOCKET		Client::getSocketClient( void ) const					{ return _clientSocket; }
@@ -36,6 +38,7 @@ bool		Client::getRegister( void ) const						{ return _registered; }
 std::string	Client::getUsername( void ) const						{ return _username; }
 std::string	Client::getHostname( void ) const						{ return _hostname; }
 std::string	Client::getRealname( void ) const						{ return _realname; }
+bool		Client::getDeleted( void ) const						{ return _deleted; }
 
 std::string	Client::getFullName( void ) const // ":nick!user@host"
 {
@@ -89,5 +92,15 @@ bool		Client::canBeRegistered() const
 // 		std::cout << _chanJoined[i] << std::endl;
 // 	std::cout << std::endl;
 // }
+
+void		Client::quitChannels()
+{
+	std::vector<Channel*>::iterator it;
+	for (it = _chanJoined.begin(); it != _chanJoined.end(); ++it)
+	{
+		(*it)->rmOperator(this);
+		(*it)->rmUser(this);
+	}
+}
 
 Client::~Client( void ) {}

@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/09 12:20:30 by amerzone          #+#    #+#             */
-/*   Updated: 2026/05/19 16:33:57 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/20 11:17:07 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,9 +79,9 @@ class Server
 		void			runServer( void );
 		void			addClientSocket( void );
 		bool			nicknameExist( std::string target );
+		void			disconnectClient( size_t & i );
 		Client*			searchClient( std::string target );
 
-		
 		// { PARSING }
 		void			parseCommand( std::string const & line, Client* client );
 
@@ -114,19 +114,19 @@ class Server
 		void			KICK(std::string const& line, Client* op);
 			std::string		parseComment(std::vector<std::string> args);
 		void 			MODE(std::string const& line, Client* op);
-			void			modeInviteOnly(Client* op, Channel* channel, bool toDo);
-			void			modeRestrictionTopic(Client* op, Channel* channel, bool toDo);
-			void			modePassword(Client* op, Channel* channel, bool toDo, std::string password);
-			void			modeOpPrivilege(Client* op, Channel* channel, bool toDo, std::string user);
-			void			modeAddLimitUser(Client* op, Channel* channel, bool toDo, std::string limit);
-			void			modeRmLimitUser(Client* op, Channel* channel, bool toDo);
-			bool			parseOptions(std::string options, Client *client);
-			bool			parseChannelPassword(Client* op, Channel* channel, std::string password);
-		void			INVITE(std::string const& line, Client* client);
+			void			modeInviteOnly( Client* op, Channel* channel, bool toDo );
+			void			modeRestrictionTopic( Client* op, Channel* channel, bool toDo );
+			void			modePassword( Client* op, Channel* channel, bool toDo, std::string password );
+			void			modeOpPrivilege( Client* op, Channel* channel, bool toDo, std::string user );
+			void			modeAddLimitUser( Client* op, Channel* channel, bool toDo, std::string limit );
+			void			modeRmLimitUser( Client* op, Channel* channel, bool toDo );
+			bool			parseOptions( std::string options, Client *client );
+			bool			parseChannelPassword( Client* op, Channel* channel, std::string password );
+		void			INVITE( std::string const& line, Client* client );
 
-		void				MOTD(Client* client);
+		void			MOTD( Client* client );
 
-
+		void			QUIT( std::string const& line, Client* client );
 		
 			// bool	validNickname( std::string const & line);
 			// bool	nicknameIsAvailable( std::string const & line );

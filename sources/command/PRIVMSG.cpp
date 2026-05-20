@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 18:33:23 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/19 16:37:32 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/20 11:18:45 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ void	sendPrivmsgToUser(Client* client, std::string const& target, SOCKET sockTar
 {
 	std::string fullMsg = ":" + client->getFullName() + " PRIVMSG " + target + " :" + message + "\r\n";
 	if (send(sockTarget, fullMsg.c_str(), fullMsg.size(), 0) < 0)
-			throw FunctionError();
+			std::cerr << "send() error" << std::endl;
 }
 
 void	sendPrivmsgToChannel(Channel* channel, Client* client, std::string const& message)

@@ -6,7 +6,7 @@
 #    By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/04/15 14:12:34 by amerzone          #+#    #+#              #
-#    Updated: 2026/05/20 11:13:38 by gaducurt         ###   ########.fr        #
+#    Updated: 2026/05/20 11:16:39 by gaducurt         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,7 +41,8 @@ SRC =	main.cpp \
 		sources/command/TOPIC.cpp \
 		sources/command/WHO.cpp \
 		sources/command/PART.cpp \
-		sources/command/INVITE.cpp
+		sources/command/INVITE.cpp \
+		sources/command/QUIT.cpp
 		
 
 OBJ := $(addprefix $(OBJDIR), $(SRC:.cpp=.o))

@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/09 12:18:51 by amerzone          #+#    #+#             */
-/*   Updated: 2026/05/19 16:27:32 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/20 11:16:47 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ class Client
 		std::string						_realname;
 
 		bool							_registered;
+		bool							_deleted;
+
 		std::vector<Channel*>			_chanJoined;
 
 		int								_passValid;
@@ -58,6 +60,7 @@ class Client
 		bool		getRegister( void ) const;
 		std::string	getFullName( void ) const;
 		std::string	getRealname( void ) const;
+		bool		getDeleted( void ) const;
 
 		/* SETTER */
 		void	setNickname( std::string const & newNickname );
@@ -65,6 +68,7 @@ class Client
 		void	setHostname( std::string const & newNickname );
 		void	setRealname( std::string const & realname );
 		void	setRegister( bool val );
+		void	setDeleted( bool val );
 
 		void	setPassValid( int val );
 		void	setNickValid( int val );
@@ -74,6 +78,7 @@ class Client
 		void	rmChanJoined( Channel* newChannel );
 		void	broadcastToMyChannels( std::string notification );
 		bool	canBeRegistered( void ) const;
+		void	quitChannels( void );
 
 		/* TESTS */
 		// void	printChanJoined() const;
