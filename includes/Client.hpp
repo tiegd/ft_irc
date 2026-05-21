@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/09 12:18:51 by amerzone          #+#    #+#             */
-/*   Updated: 2026/05/20 15:26:40 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/21 09:24:00 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,9 @@ class Client
 {
 	private:
 		SOCKET							_clientSocket;
-		/*Le nickname doit etre unique a tout le server et comporter uniquement 9 char*/
+		/*The nickname must be unique across the entire server and consist of exactly 9 characters.*/
 		std::string						_nickname;
-		/*Username ne peut pas etre modifier mais n'est pas forcement unique*/
+		/*The username cannot be changed, but it is not necessarily unique*/
 		std::string						_username;
 		std::string						_hostname;
 		std::string						_realname;

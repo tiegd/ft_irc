@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/30 14:00:09 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/05/20 11:50:44 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/21 10:53:11 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,15 +17,13 @@ std::vector<std::string>	split( std::string & str, char c );
 
 void Server::MODE(std::string const& line, Client* op)
 {
-	// /mode seul => affiche les modes activés sur le channel
+	/*	/mode #channel (without parameters) => displays the modes enabled on the channel
 
-	// Faire un parsing comme dans join car il peut y avoir plusieurs options
-	// en meme temps et les parametres doivent etres dans l'ordre.
-	// Split la string en un vector d'options et un vector de parametres.
-	// Envoyer dans l'ordes dans les differents methodes.
+		The modes are stocked in a string, the parameters are stocked in a vector.
+	*/
 	
 	std::string	temp(line);
-	if (temp.size() <= 6) // check qu'il y ait bien une #channel après MODE
+	if (temp.size() <= 6)
 	{
 		ERR_NEEDMOREPARAMS(_name, op, "MODE");
 		return ;
@@ -34,12 +32,12 @@ void Server::MODE(std::string const& line, Client* op)
 
 	std::vector<std::string>	splitArgs = split(temp, SPACE);
 	std::string					channelTarget = splitArgs[0];
-	if (!_channels[channelTarget]) // check l'existance du #channel
+	if (!_channels[channelTarget])
 	{
 		ERR_NOSUCHCHANNEL(_name, op, channelTarget);
 		return ;	
 	}
-	if (splitArgs.size() == 1) // s'il n'y a aucun parametre après #channel
+	if (splitArgs.size() == 1)
 	{
 		RPL_CHANNELMODEIS(_name, op, _channels[channelTarget]);
 		return ;

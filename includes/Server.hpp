@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/09 12:20:30 by amerzone          #+#    #+#             */
-/*   Updated: 2026/05/20 15:34:01 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/21 09:25:04 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ class Server
 
 		std::vector<struct pollfd>		_fds;
 
-		// /*Une liste d'operator, a voir si on creer une class operator ou on utilise client*/
 		std::map<SOCKET, Client*>		_clients;
 		std::map<std::string, Channel*>	_channels;
 		std::vector<std::string>		_nicknameAlreadyUsed;
@@ -125,29 +124,6 @@ class Server
 		void			MOTD( Client* client );
 
 		void			QUIT( std::string const& line, Client* client );
-		
-			// bool	validNickname( std::string const & line);
-			// bool	nicknameIsAvailable( std::string const & line );
-			// bool	noNicknameGiven( std::string const & line);
-	/* Fonction necessaire
-
-	{ PARSING }
-	 - Parsing et stockages des arguments (Port, password)
-	 - Parsing des requetes du client, tokenisation.
-
-	{ CLIENT }
-	- Accepter la demande d'un client + le creer.
-	- Checker si il a le bon password.
-	- Checker si son nickname n'existe pas deja.
-	- Envoyer un message prive venant d'un client vers un autre.
-
-	{ CHANNEL }
-	- Creer un channel si il existe pas.
-	- Faire rejoindre le client si il existe deja.
-	- Checker si le channel est en invite-only.
-	- LIST : permet de connaitre tous les channels disponnible sur le server. (optionnel)
-	- PART : quitter le channel actuel. (optionnel)
-	*/
 };
 
 #endif

@@ -244,7 +244,7 @@ If the channel can be settable by everyone (mode -t), a user can change or set t
 
 #### MODE
 
-An operator can changer some parameters on a channel.
+An operator can change some parameters on a channel.
 
 ```bash
 /mode <channel> {[+|-]|o|i|t|l|k} [<limit>] [<user>][<ban mask>]

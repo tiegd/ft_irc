@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/30 10:59:44 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/05/20 14:16:51 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/21 10:45:39 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void Server::KICK(std::string const& line, Client* op)
 					if (splitArgs.size() >= 3)
 					{
 						comment = parseComment(splitArgs);
-						RPL_CHANMSGKICK(op, it->second, _channels[channelTarget], comment); // reply avec le comment
+						RPL_CHANMSGKICK(op, it->second, _channels[channelTarget], comment);
 					}
 					else
 						RPL_CHANNELKICK(op, it->second, _channels[channelTarget]);
