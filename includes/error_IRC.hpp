@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/20 17:33:30 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/20 11:16:49 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/20 13:57:56 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ void	ERR_NONICKNAMEGIVEN( std::string const& serverName, Client* client );
 void	ERR_ERRONEUSNICKNAME( std::string const& serverName, Client* client );
 void	ERR_NICKNAMEINUSE( std::string const& serverName, Client* client );
 void	ERR_ALREADYREGISTRED( std::string const& serverName, Client* client );
+void	ERR_NOTREGISTERED( std::string const& serverName, Client* client );
 
 // { PASS }
 void    ERR_PASSWDMISMATCH( std::string const& serverName, Client* client );

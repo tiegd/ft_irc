@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/21 17:00:04 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/05/19 16:23:03 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/21 11:36:03 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,13 @@ class Channel
 		u_int64_t							_userLimit;
 
 		Channel();
+		Channel( Channel const& src );
+		Channel & operator=(Channel const& rightSide);
 
 	public:
 		Channel(std::string channel_name, Client *op);
 		~Channel();
 
-		/* GETTER */
 		std::string							getName() const;
 		std::string							getPassword() const;
 		std::vector<Client*>				getUsers() const;
@@ -66,11 +67,11 @@ class Channel
 		bool								clientIsOnChannel( Client* client );
 
 		/* SETTER */
-		void	addUser(Client *target); //add a new user whene a client use join
+		void	addUser(Client *target);
 		void	rmUser(Client *target);
-		void	setPassword(Client *op, std::string password); //set the password if mode's parameter is +k
-		void	rmPassword(Client *op); //remove the password if mode's parameter is -k
-		void	kickUser(Client *target, Client *op); //Remove the client specified in parameter and call the destructor if _n_members == 0
+		void	setPassword(Client *op, std::string password);
+		void	rmPassword(Client *op);
+		void	kickUser(Client *target, Client *op);
 		void	addOperator(Client *target);
 		void	rmOperator(Client *target);
 		void	setTopic(Client *op, std::string topic);
@@ -91,8 +92,6 @@ class Channel
 
 		std::string	getStrAllUsersNames( void );
 		std::string	getStrAllOperatorsNames( void );
-
-		// void 		printInvited() const;
 };
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 14:21:16 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/20 11:18:16 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/20 14:27:19 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,14 @@ void	Server::NOTICE( std::string const& line, Client* client)
 	std::string	temp(line);
 	temp.erase(0, 7);
 	
-	std::vector<std::string>	splitArgs = split(temp, SPACE);
+	std::vector<std::string>	splitArgs = splitStr(temp, " :");
+
+	if (splitArgs.size() < 2)
+	{
+		ERR_NOTEXTTOSEND(_name, client);
+		throw std::invalid_argument("Missing :<text to send>");
+	}
+
 	std::string					strMessage = splitArgs[1];
 
 	std::vector<std::string>	recipient = split(splitArgs[0], ',');

@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/15 12:42:23 by amerzone          #+#    #+#             */
-/*   Updated: 2026/05/20 11:18:06 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/21 14:07:05 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ void	Server::setSocketServ( void )
 
 void	Server::runServer( void )
 {
-	char	buff[512];
+	char	buff[MAXLINE];
 
 	std::signal(SIGINT, signalHandler);
 	while (true)
@@ -91,8 +91,19 @@ void	Server::runServer( void )
 			std::cout << "Error occured during poll()." << std::endl;
 			continue;
 		}
+
 		for (size_t i = 0; i < _fds.size(); i++)
 		{
+			if (_fds[i].revents & (POLLHUP | POLLERR))
+			{
+				if (_fds[i].fd == _fds[0].fd)
+				{
+					std::cout << "Error on server socket." << std::endl;
+					return ;
+				}
+				disconnectClient(i);
+				continue;
+			}
 			if (_fds[i].revents & POLLIN)
 			{
 				if (_fds[i].fd == _fds[0].fd)
@@ -107,11 +118,18 @@ void	Server::runServer( void )
 					disconnectClient(i);
 					continue;
 				}
-				
+				if (_clients[_fds[i].fd]->_inBuff.size() > MAXLINE)
+				{
+					std::cout << "Client " << _clients[_fds[i].fd]->getNickname() << " exceeded buffer limit, clear." << std::endl;
+					_clients[_fds[i].fd]->_inBuff.clear();
+					// if (_clients[_fds[i].fd]->)
+					// disconnectClient(i);
+					continue;
+				}
 				_clients[_fds[i].fd]->_inBuff.append(buff, bytes);
 
 				size_t pos;
-				while ((pos = _clients[_fds[i].fd]->_inBuff.find("\r\n")) != std::string::npos) 
+				while ((pos = _clients[_fds[i].fd]->_inBuff.find("\r\n")) != std::string::npos)
 				{
 					std::string line = _clients[_fds[i].fd]->_inBuff.substr(0, pos);
 					_clients[_fds[i].fd]->_inBuff.erase(0, pos + 2);
@@ -119,7 +137,7 @@ void	Server::runServer( void )
 					std::cout << "Recu par " << _clients[_fds[i].fd]->getNickname() << ": " << line << std::endl;
 
 					parseCommand(line, _clients[_fds[i].fd]);
-					
+
 					if (_clients.find(_fds[i].fd) != _clients.end() && _clients[_fds[i].fd]->getDeleted() == true)
 					{
 						disconnectClient(i);
@@ -134,74 +152,94 @@ void	Server::runServer( void )
 
 void	Server::parseCommand( std::string const & line , Client* client )
 {
+	std::string	upCmd = toUpperCommand(line);
 	try
 	{
-		if (!line.compare(0, 4, "PASS") && (line[4] == ' ' || line.size() == 4))
+		if (!upCmd.compare(0, 4, "PASS") && (upCmd[4] == ' ' || upCmd.size() == 4))
 		{
 			client->setPassValid(PASS(line, client));
 		}
-		if (!line.compare(0, 4, "NICK") && (line[4] == ' ' || line.size() == 4))
+		else if (!upCmd.compare(0, 4, "NICK") && (upCmd[4] == ' ' || upCmd.size() == 4))
 		{
 			client->setNickValid(NICK(line, client));
 		}
-		if (!line.compare(0, 4, "USER") && (line[4] == ' ' || line.size() == 4))
+		else if (!upCmd.compare(0, 4, "USER") && (upCmd[4] == ' ' || upCmd.size() == 4))
 		{
 			client->setUserValid(USER(line, client));
 		}
-		if (!line.compare(0, 4, "PING") && (line[4] == ' ' || line.size() > 4))
+		else if (!upCmd.compare(0, 4, "PING") && (upCmd[4] == ' ' || upCmd.size() > 4))
 		{
 			PING(line, client);
 		}
-		if (!line.compare(0, 4, "QUIT") && (line[4] == ' ' || line.size() == 4))
+		else if (!upCmd.compare(0, 4, "QUIT") && (upCmd[4] == ' ' || upCmd.size() == 4))
 		{
 			QUIT(line, client);
 		}
+		else if (client->getRegister() == false)
+		{
+			ERR_NOTREGISTERED(_name, client);
+		}
 		if (client->getRegister() == true)
 		{
-			if (!line.compare(0, 4, "JOIN") && (line[4] == ' ' || line.size() == 4))
+			bool	commandFound = false;
+
+			if (!upCmd.compare(0, 4, "JOIN") && (upCmd[4] == ' ' || upCmd.size() == 4))
 			{
 				JOIN(line, client);
+				commandFound = true;
 			}
-			if (!line.compare(0, 4, "PART") && (line[4] == ' ' || line.size() == 4))
+			if (!upCmd.compare(0, 4, "PART") && (upCmd[4] == ' ' || upCmd.size() == 4))
 			{
 				PART(line, client);
+				commandFound = true;
 			}
-			if (!line.compare(0, 7, "PRIVMSG") && (line[7] == ' ' || line.size() == 7))
+			if (!upCmd.compare(0, 7, "PRIVMSG") && (upCmd[7] == ' ' || upCmd.size() == 7))
 			{
 				PRIVMSG(line, client);
+				commandFound = true;
 			}
-			if (!line.compare(0, 5, "TOPIC") && (line[5] == ' ' || line.size() == 5))
+			if (!upCmd.compare(0, 5, "TOPIC") && (upCmd[5] == ' ' || upCmd.size() == 5))
 			{
 				TOPIC(line, client);
+				commandFound = true;
 			}
-			if (!line.compare(0, 4, "KICK") && (line[4] == ' ' || line.size() == 5))
+			if (!upCmd.compare(0, 4, "KICK") && (upCmd[4] == ' ' || upCmd.size() == 5))
 			{
 				KICK(line, client);
+				commandFound = true;
 			}
-			if (!line.compare(0, 4, "MODE") && (line[4] == ' '  || line.size() == 5))
+			if (!upCmd.compare(0, 4, "MODE") && (upCmd[4] == ' '  || upCmd.size() == 5))
 			{
 				MODE(line, client);
+				commandFound = true;
 			}
-			if (!line.compare(0, 3, "WHO") && (line[3] == ' ' || line.size() == 3))
+			if (!upCmd.compare(0, 3, "WHO") && (upCmd[3] == ' ' || upCmd.size() == 3))
 			{
 				WHO(line, client);
+				commandFound = true;
 			}
-			if (!line.compare(0, 6, "INVITE") && (line[6] == ' ' || line.size() == 6))
+			if (!upCmd.compare(0, 6, "INVITE") && (upCmd[6] == ' ' || upCmd.size() == 6))
 			{
 				INVITE(line, client);
+				commandFound = true;
 			}
-			if (!line.compare(0, 4, "MOTD") && (line[4] == ' ' || line.size() == 4))
+			if (!upCmd.compare(0, 4, "MOTD") && (upCmd[4] == ' ' || upCmd.size() == 4))
 			{
 				MOTD(client);
+				commandFound = true;
 			}
-			if (!line.compare(0, 6, "NOTICE") && (line[6] == ' ' || line.size() == 6))
+			if (!upCmd.compare(0, 6, "NOTICE") && (upCmd[6] == ' ' || upCmd.size() == 6))
 			{
 				NOTICE(line, client);
+				commandFound = true;
 			}
-		}
-		else
-		{
-			ERR_UNKNOWNCOMMAND(_name, client, line);
+			if (!commandFound && upCmd.compare(0, 4, "PASS") != 0 && upCmd.compare(0, 4, "NICK") != 0
+			&& upCmd.compare(0, 4, "USER") != 0 && upCmd.compare(0, 4, "PING") != 0
+			&& upCmd.compare(0, 4, "QUIT") != 0)
+			{
+				std::string cmd = upCmd.substr(0, upCmd.find(' '));
+				ERR_UNKNOWNCOMMAND(_name, client, cmd);
+			}
 		}
 	}
 	catch(const std::exception& e)
@@ -228,10 +266,7 @@ void	Server::addClientSocket( void )
 
 	client = accept(_socketServ, (struct sockaddr *) &client_addr, &addr_len);
 	if (client < 0)
-	{
-		std::cout << "Error occured during accept()" << std::endl;
-		throw ;
-	}
+		throw std::runtime_error("accept() failed");
 	int flags = fcntl(client, F_GETFL);
 	fcntl(client, F_SETFL, flags | O_NONBLOCK);
 	t_fd.fd = client;

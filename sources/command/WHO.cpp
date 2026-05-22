@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   WHO.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/28 14:56:10 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/19 16:14:21 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/21 10:41:21 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ void	Server::WHO( std::string const& line, Client* client )
 		RPL_ENDOFWHO(_name, client, "*");
 		return ;
 	}
+
 	std::string temp(line);
 	temp.erase(0, 4);
 
@@ -44,6 +45,8 @@ void	Server::WHO( std::string const& line, Client* client )
 			RPL_ENDOFWHO(_name, client, mask);
 			return ;
 		}
+		else
+			throw std::invalid_argument("Channel doesn't exist");
 	}
 	if (mask.compare("*") == 0 || mask.compare("0") == 0)
 	{

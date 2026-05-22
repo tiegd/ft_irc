@@ -3,18 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   USER.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/21 09:44:33 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/19 16:37:50 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/21 11:32:53 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 /*
 Format : USER <username> <hostname> <servername> :<realname>
-Il faut qu'il y ait les 4 parametres sinon : ERR_NEEDMOREPARAMS
-Pas que le client soit deja enregistré (que nick et user est dejà été recu): ERR_ALREADYREGISTRED
 */
 int	Server::USER( std::string const & line, Client* client )
 {

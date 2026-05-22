@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rpl.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/29 18:48:05 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/19 16:30:31 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/21 11:54:49 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 
 #include "Server.hpp"
 
-class Channel;
-class Client;
+// class Channel;
+// class Client;
 
 void	sendRpl( Client *client, std::string const& msgToClient );
 

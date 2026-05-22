@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/19 18:03:39 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/19 18:04:41 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/20 14:42:04 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	Server::MOTD(Client* client)
 	if (!motd.is_open())
 	{
 		ERR_NOMOTD(_name, client);
-		return ;
+		throw std::invalid_argument("motd file is missing");
 	}
 	while (std::getline(motd, buffer, '\n'))
 	{

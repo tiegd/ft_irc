@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   MODE.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/30 14:00:09 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/05/19 16:35:43 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/20 14:41:30 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void Server::MODE(std::string const& line, Client* op)
 	if (!_channels[channelTarget]) // check l'existance du #channel
 	{
 		ERR_NOSUCHCHANNEL(_name, op, channelTarget);
-		return ;	
+		return ;
 	}
 	if (splitArgs.size() == 1) // s'il n'y a aucun parametre après #channel
 	{

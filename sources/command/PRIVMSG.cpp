@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 18:33:23 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/20 11:18:41 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/21 10:47:21 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,15 @@ void	Server::PRIVMSG( std::string const& line, Client* client)
 	}
 	std::string	temp(line);
 	temp.erase(0, 8);
-	
+
 	std::vector<std::string>	splitArgs = splitStr(temp, " :");
+
+	if (splitArgs.size() < 2)
+	{
+		ERR_NOTEXTTOSEND(_name, client);
+		throw std::invalid_argument("Missing :<text to send>");
+	}
+
 	std::string					strMessage = splitArgs[1];
 
 	std::vector<std::string>	recipient = split(splitArgs[0], ',');
@@ -62,11 +69,11 @@ void	Server::sendMessage( Client *client, std::string recipient, std::string mes
 {
 	if (recipient[0] == '#')
 	{
-		if (channelExist(recipient) == true) // si on trouve le channel
+		if (channelExist(recipient) == true)
 		{
-			sendPrivmsgToChannel(_channels[recipient], client, message); // fonction qui envoit un message a tous le channel.
+			sendPrivmsgToChannel(_channels[recipient], client, message);
 		}
-		else // sinon revoyer une erreur
+		else
 		{
 			ERR_NOSUCHNICK(_name, client, recipient);
 			throw std::invalid_argument("Socket for channel given can't be found");
@@ -85,7 +92,9 @@ void	Server::sendMessage( Client *client, std::string recipient, std::string mes
 	}
 }
 
-/* Return the SOCKET associated to std::string nicknameRecipient or -1 if it's not found*/
+/*
+	Return the SOCKET associated to std::string nicknameRecipient or -1 if it's not found
+*/
 SOCKET	Server::searchClientSocket( std::string nicknameRecipient )
 {
 	for (std::map<SOCKET, Client*>::iterator it = _clients.begin(); it != _clients.end(); it++)
@@ -127,7 +136,9 @@ void	sendPrivmsgToChannel(Channel* channel, Client* client, std::string const& m
 	channel->broadcastToAll(fullMsg, client);
 }
 
-// Return the index of the recipient that occure multiple times or -1 if not found.
+/*
+	Return the index of the recipient that occure multiple times or -1 if not found.
+*/
 int	sameRecipientMultipleTimes(std::vector<std::string> nicknames)
 {
 	std::string	temp;

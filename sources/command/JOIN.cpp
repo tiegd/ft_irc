@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   JOIN.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 11:13:50 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/19 16:34:59 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/20 14:41:17 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	Server::JOIN(std::string const& line, Client* client)
 	if (line.size() <= 5)
 	{
 		ERR_NEEDMOREPARAMS(_name, client, "JOIN");
-		throw std::invalid_argument("Not enough parameters");		
+		throw std::invalid_argument("Not enough parameters");
 	}
 
 	std::string	temp(line);
@@ -62,7 +62,10 @@ void	Server::JOIN(std::string const& line, Client* client)
 				sendJoinNotification(client, _channels[nameChannel]);
 			}
 			else
+			{
 				ERR_BADCHANMASK(_name, client, nameChannel);
+				throw std::invalid_argument("Bad channel name");
+			}
 		}
 		else // si il existe
 		{
@@ -86,11 +89,17 @@ void	Server::JOIN(std::string const& line, Client* client)
 									_channels[nameChannel]->rmInvite(client);
 							}
 							else
+							{
 								ERR_CHANNELISFULL(_name, client, nameChannel);
+								throw std::invalid_argument("Channel is full");
+							}
 						}
 					}
 					else //sinon ca veut dire qu'il manque un parametre password pour le channel donc renvoyer badchannelkey
+					{
 						ERR_BADCHANNELKEY(_name, client, nameChannel);
+						throw std::invalid_argument("Missing password");
+					}
 				}
 				else //si il y a pas de password faire addUser
 				{
@@ -103,12 +112,17 @@ void	Server::JOIN(std::string const& line, Client* client)
 							_channels[nameChannel]->rmInvite(client);
 					}
 					else
+					{
 						ERR_CHANNELISFULL(_name, client, nameChannel);
-						
+						throw std::invalid_argument("Channel is full");
+					}
 				}
 			}
 			else // renvoyer une erreur car le mode invite only est activé
+			{
 				ERR_INVITEONLYCHAN(_name, client, nameChannel);
+				throw std::invalid_argument("Invite-only mode is activated");
+			}
 		}
 	}
 }

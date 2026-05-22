@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/09 12:18:51 by amerzone          #+#    #+#             */
-/*   Updated: 2026/05/20 11:16:43 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/21 11:34:59 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ class Client
 		int								_userValid;
 
 		Client( Client const& src );
-		// Client & operator=(Client const& rightSide);
+		Client & operator=(Client const& rightSide);
 		
 	public:
 

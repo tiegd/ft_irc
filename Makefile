@@ -6,7 +6,7 @@
 #    By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/04/15 14:12:34 by amerzone          #+#    #+#              #
-#    Updated: 2026/05/20 11:16:38 by jpiquet          ###   ########.fr        #
+#    Updated: 2026/05/21 11:55:01 by jpiquet          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,8 +24,6 @@ SRC =	main.cpp \
 		sources/Client.cpp \
 		sources/Server.cpp \
 		sources/Channel.cpp \
-		sources/FunctionError.cpp \
-		sources/parsingArguments.cpp \
 		sources/tools.cpp \
 		sources/rpl.cpp \
 		sources/error.cpp \
@@ -42,7 +40,8 @@ SRC =	main.cpp \
 		sources/command/WHO.cpp \
 		sources/command/PART.cpp \
 		sources/command/INVITE.cpp \
-		sources/command/QUIT.cpp
+		sources/command/QUIT.cpp \
+		sources/command/MODT.cpp
 		
 
 OBJ := $(addprefix $(OBJDIR), $(SRC:.cpp=.o))

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   KICK.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/30 10:59:44 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/05/19 16:35:18 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/20 14:47:29 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,9 @@
 
 std::vector<std::string>	split( std::string & str, char c );
 
+// KICK <channel> <user> *( "," <user> ) [<:comment>]
 void Server::KICK(std::string const& line, Client* op)
 {
-	// Client send : KICK <channel> <user> *( "," <user> ) [<:comment>]
-
 	std::string temp(line);
 	temp.erase(0, 5);
 	
@@ -26,7 +25,7 @@ void Server::KICK(std::string const& line, Client* op)
 	if (splitArgs.size() < 2)
 	{
 		ERR_NEEDMOREPARAMS(_name, op, "KICK");
-		return ;
+		throw std::invalid_argument("More parameter needed");
 	}
 	
 	std::string				 	channelTarget = splitArgs[0];
@@ -42,7 +41,7 @@ void Server::KICK(std::string const& line, Client* op)
 	if (it == _channels.end())
 	{
 		ERR_NOSUCHCHANNEL(_name, op, channelTarget);
-		return;
+		throw std::invalid_argument("Channel can't be found");
 	}
 	for (size_t i = 0; i < clientToKick.size(); i++)
 	{
@@ -59,7 +58,7 @@ void Server::KICK(std::string const& line, Client* op)
 					if (!_channels[channelTarget]->isOperator(it->second) && !_channels[channelTarget]->isUser(it->second))
 					{
 						ERR_USERNOTINCHANNEL(_name, op, _channels[channelTarget]->getName());
-						return;
+						throw std::invalid_argument("Client not on that channel");
 					}
 					_channels[channelTarget]->kickUser(it->second, op);
 					kicked = true;
@@ -72,11 +71,17 @@ void Server::KICK(std::string const& line, Client* op)
 						RPL_CHANNELKICK(op, it->second, _channels[channelTarget]);
 				}
 				else
+				{
 					ERR_CHANOPRIVSNEEDED(_name, op, _channels[channelTarget]->getName());
+					throw std::invalid_argument("Client is not channel operator");
+				}
 			}
 		}
 		if (it == _clients.end() && !kicked)
+		{
 			ERR_USERNOTINCHANNEL(_name, op, _channels[channelTarget]->getName());
+			throw std::invalid_argument("Client not on that channel");
+		}
 	}
 }
 

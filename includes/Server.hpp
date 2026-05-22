@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/09 12:20:30 by amerzone          #+#    #+#             */
-/*   Updated: 2026/05/20 11:17:03 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/21 11:34:26 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,6 @@
 #define	INVALID_CHAR ": *?@!"
 
 /* {MY HEADERS} */
-#include "FunctionError.hpp"
-
-// #define SERVER_PORT 1800
-
 #include "Channel.hpp"
 #include "error_IRC.hpp"
 #include "tools.hpp"
@@ -55,12 +51,8 @@ class Server
 		std::string						_name;
 		u_int16_t						_port;
 		std::string						_password;
-
 		SOCKET							_socketServ;
-
 		std::vector<struct pollfd>		_fds;
-
-		// /*Une liste d'operator, a voir si on creer une class operator ou on utilise client*/
 		std::map<SOCKET, Client*>		_clients;
 		std::map<std::string, Channel*>	_channels;
 		std::vector<std::string>		_nicknameAlreadyUsed;
@@ -74,7 +66,6 @@ class Server
 		Server( std::string name, u_int16_t port, std::string password );
 		~Server( void );
 
-		/* SETTER */
 		void			setSocketServ( void );
 		void			runServer( void );
 		void			addClientSocket( void );
@@ -82,10 +73,8 @@ class Server
 		void			disconnectClient( size_t & i );
 		Client*			searchClient( std::string target );
 
-		// { PARSING }
 		void			parseCommand( std::string const & line, Client* client );
 
-		// { COMMAND }
 		int			PASS( std::string const & line, Client* client );
 
 		int			NICK( std::string const & line, Client* client );
@@ -127,29 +116,6 @@ class Server
 		void			MOTD( Client* client );
 
 		void			QUIT( std::string const& line, Client* client );
-		
-			// bool	validNickname( std::string const & line);
-			// bool	nicknameIsAvailable( std::string const & line );
-			// bool	noNicknameGiven( std::string const & line);
-	/* Fonction necessaire
-
-	{ PARSING }
-	 - Parsing et stockages des arguments (Port, password)
-	 - Parsing des requetes du client, tokenisation.
-
-	{ CLIENT }
-	- Accepter la demande d'un client + le creer.
-	- Checker si il a le bon password.
-	- Checker si son nickname n'existe pas deja.
-	- Envoyer un message prive venant d'un client vers un autre.
-
-	{ CHANNEL }
-	- Creer un channel si il existe pas.
-	- Faire rejoindre le client si il existe deja.
-	- Checker si le channel est en invite-only.
-	- LIST : permet de connaitre tous les channels disponnible sur le server. (optionnel)
-	- PART : quitter le channel actuel. (optionnel)
-	*/
 };
 
 #endif

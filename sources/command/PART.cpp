@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/08 16:33:44 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/20 11:18:33 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/20 14:50:09 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,12 @@ void	Server::PART(std::string const& line, Client* client)
 
 	std::vector<std::string>	splitArgs = splitStr(temp, " :");
 	std::vector<std::string>	nameChannels = split(splitArgs[0], ',');
-	std::string					message = splitArgs[1];
+	std::string					message;
+
+	if (splitArgs.size() < 2 || splitArgs[1].empty())
+		message = ":Leaving";
+	else
+		message = splitArgs[1];
 
 	for (size_t i = 0; i < nameChannels.size(); ++i)
 	{
@@ -39,20 +44,21 @@ void	Server::PART(std::string const& line, Client* client)
 		if (!_channels[nameChannels[i]]->clientIsOnChannel(client))
 		{
 			ERR_NOTONCHANNEL(_name, client, nameChannels[i]);
-			continue;
-		}
-		if (_channels[nameChannels[i]]->isUser(client))
-		{
-			_channels[nameChannels[i]]->rmUser(client);
+			continue ;
 		}
 		if (_channels[nameChannels[i]]->isOperator(client))
 		{
 			_channels[nameChannels[i]]->rmOperator(client);
 		}
+		if (_channels[nameChannels[i]]->isUser(client))
+		{
+			_channels[nameChannels[i]]->rmUser(client);
+		}
 		sendPartMsg(client, client->getFullName(), _channels[nameChannels[i]], message);
 		if (_channels[nameChannels[i]]->getNbMembers() == 0 && _channels[nameChannels[i]]->getNbOp() == 0)
 		{
 			delete _channels[nameChannels[i]];
+			_channels.erase(nameChannels[i]);
 		}
 	}
 }

@@ -6,17 +6,17 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/20 16:27:20 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/20 11:17:28 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/21 11:32:08 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "error_IRC.hpp"
 
-/* FORMAT ERREUR : { :PREFIX CODE TARGET :message de l'erreur\r\n }
-- client: Client to whom the error is being sent.
-- prefix: Name of the server
-- codeError: Error code to be processed by the client
-- messageError: Message of the error.
+/* FORMAT ERROR : { :PREFIX CODE TARGET :message error\r\n }
+- Prefix: Name of the server
+- CodeError: Error code to be processed by the client
+- Target: Client to whom the error is being sent.
+- Message error.
 */
 void	sendError( Client *client, std::string const& msgToClient )
 {
@@ -45,6 +45,12 @@ void	ERR_NICKNAMEINUSE(std::string const& serverName, Client* client)
 void	ERR_ALREADYREGISTRED(std::string const& serverName, Client* client)
 {
 	std::string msgToClient = ":" + serverName + " 462 " + client->getNickname() + " :You may not reregister\r\n";
+	sendError(client, msgToClient);
+}
+
+void	ERR_NOTREGISTERED( std::string const& serverName, Client* client )
+{
+	std::string msgToClient = ":" + serverName + " 451 " + client->getNickname() + " :You have not registered\r\n";
 	sendError(client, msgToClient);
 }
 
@@ -147,12 +153,6 @@ void	ERR_USERNOTINCHANNEL(std::string const& serverName, Client* client, std::st
 	std::string msgToClient = ":" + serverName + " 441 " + client->getNickname() + " " + channel +  " :They aren't on that channel\r\n";
 	sendError(client, msgToClient);
 }
-
-// void	ERR_NOPRIVILEGES(std::string const& serverName, Client* client)
-// {
-// 	std::string msgToClient = ":" + serverName + " 481 " + client->getNickname() + " ::Permission Denied- You're not an IRC operator\r\n";
-// 	sendError(client, msgToClient);
-// }
 
 void	ERR_USERONCHANNEL(std::string const& serverName, Client* client, std::string const& target, std::string const& channelName)
 {
