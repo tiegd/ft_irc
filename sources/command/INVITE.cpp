@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/11 17:33:07 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/27 11:04:52 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/27 13:56:53 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ void	Server::INVITE(std::string const& line, Client* client)
 	}
 	std::string					target = splitParam[0];
 	std::string					channel = splitParam[1];
-
 	if (target.empty() == true || channel.empty() == true)
 	{
 		ERR_NEEDMOREPARAMS(_name, client, "INVITE");

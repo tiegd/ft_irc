@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 11:34:51 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/05/27 08:41:19 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/27 15:24:43 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -272,25 +272,25 @@ void Channel::rmTopic(Client *op)
 
 void Channel::setInvitOnly(bool arg)
 {
-	if (arg)
+	if (arg && !getInvitOnly())
 		this->_modeUsed += 1 << 4;
-	else
+	else if (!arg && getInvitOnly())
 		this->_modeUsed -= 1 << 4;
 }
 
 void Channel::setHasRestrictionTopic(bool arg)
 {
-	if (arg)
+	if (arg && !getResTopic())
 		this->_modeUsed += 1 << 3;
-	else
+	else if (!arg && getResTopic())
 		this->_modeUsed -= 1 << 3;
 }
 
 void Channel::setHasPassword(bool arg)
 {
-	if (arg)
+	if (arg && !getHasPassword())
 		this->_modeUsed += 1 << 2;
-	else
+	else if (!arg && getHasPassword())
 		this->_modeUsed -= 1 << 2;
 }
 
@@ -301,9 +301,9 @@ void Channel::setHasTopic(bool arg)
 
 void Channel::setHasLimit(bool arg)
 {
-	if (arg)
+	if (arg && !getHasLimit())
 		this->_modeUsed += 1;
-	else
+	else if (!arg && getHasLimit())
 		this->_modeUsed -= 1;
 }
 
@@ -395,4 +395,18 @@ std::string	Channel::getStrAllOperatorsNames( void )
 		allOps += '@' + _operator[i]->getNickname() + " ";
 	}
 	return allOps;
+}
+
+void Channel::nameRplToAll(std::string serverName)
+{
+	for (size_t	i = 0; i < _users.size(); i++)
+	{
+		RPL_NAMREPLY(serverName, this->_users[i], this);
+		RPL_ENDOFNAMES(serverName, this->_users[i], this->_name);
+	}
+	for (size_t	i = 0; i < _operator.size(); i++)
+	{
+		RPL_NAMREPLY(serverName, this->_operator[i], this);
+		RPL_ENDOFNAMES(serverName, this->_operator[i], this->_name);
+	}
 }

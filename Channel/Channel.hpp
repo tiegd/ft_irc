@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/21 17:00:04 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/05/27 08:41:32 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/27 14:15:22 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,8 @@ class Channel
 		void	addBackInvite(Client *target);
 		void	rmInvite(Client *target);
 
-		void		broadcastToAll( std::string const& message, Client* sender );
+		void	broadcastToAll( std::string const& message, Client* sender );
+		void	nameRplToAll(std::string serverName);	
 
 		std::string	getStrAllUsersNames( void );
 		std::string	getStrAllOperatorsNames( void );

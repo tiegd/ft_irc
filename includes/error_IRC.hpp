@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/20 17:33:30 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/27 11:00:27 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/27 15:01:18 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ void	ERR_CHANOPRIVSNEEDED( std::string const& serverName, Client* client, std::s
 void	ERR_NOSUCHCHANNEL(std::string const& serverName, Client* client, std::string channel);
 
 // {MODE}
-void	ERR_NOPRIVILEGES(std::string const& serverName, Client* client);
 void	ERR_INVALIDMODEPARAM(std::string const& serverName, Client* client, std::string const& channel, char mode, std::string limit, std::string str);
 void	ERR_USERNOTINCHANNEL(std::string const& serverName, Client* client, std::string channel);
 void	ERR_UMODEUNKNOWNFLAG( std::string const& serverName, Client* client );

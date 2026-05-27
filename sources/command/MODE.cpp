@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/30 14:00:09 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/05/27 08:45:02 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/27 14:49:19 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,9 +167,15 @@ void Server::modeOpPrivilege(Client* op, Channel* channel, bool toDo, std::strin
 					return;
 				}
 				if (toDo)
+				{
 					channel->addOperator(it->second);
+					channel->nameRplToAll(_name);
+				}
 				else if (!toDo)
+				{
 					channel->rmOperator(it->second);
+					channel->nameRplToAll(_name);
+				}
 			}
 		}
 	}
@@ -192,7 +198,7 @@ void Server::modeAddLimitUser(Client* op, Channel* channel, bool toDo, std::stri
 					return ;
 				}
 			}
-			nb = std::atoi(limit.c_str());
+			nb = std::strtoll(limit.c_str(), NULL, 10);
 			if (limit[0] != '0' && limit.size() == 1 && nb == 0)
 				return ;
 			channel->setUserLimit(nb, toDo);
@@ -240,3 +246,5 @@ bool Server::parseChannelPassword(Client* op, Channel* channel, std::string pass
 	}
 	return (true);
 }
+
+
