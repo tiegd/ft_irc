@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 14:21:16 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/20 14:27:19 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/27 09:42:13 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,17 @@ void	Server::sendNotice( Client *client, std::string recipient, std::string mess
 	if (recipient[0] == '#')
 	{
 		if (channelExist(recipient) == true)
-			sendNoticeToChannel(_channels[recipient], recipient, client, message); // fonction qui envoit un message a tous le channel.
+		{
+			if (_channels[recipient]->clientIsOnChannel(client))
+			{
+				sendNoticeToChannel(_channels[recipient], recipient, client, message);
+			}
+			else
+			{
+				ERR_CANNOTSENDTOCHAN(_name, client, recipient);
+				throw std::invalid_argument("Client is not on channel");
+			}
+		}
 		else
 			throw std::invalid_argument("Socket for channel given can't be found");
 	}

@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 18:33:23 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/21 10:47:21 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/26 17:20:47 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,15 @@ void	Server::sendMessage( Client *client, std::string recipient, std::string mes
 	{
 		if (channelExist(recipient) == true)
 		{
-			sendPrivmsgToChannel(_channels[recipient], client, message);
+			if (_channels[recipient]->clientIsOnChannel(client))
+			{
+				sendPrivmsgToChannel(_channels[recipient], client, message);
+			}
+			else
+			{
+				ERR_CANNOTSENDTOCHAN(_name, client, recipient);
+				throw std::invalid_argument("Client is not on channel");
+			}
 		}
 		else
 		{

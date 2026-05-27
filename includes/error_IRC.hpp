@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/20 17:33:30 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/20 13:57:56 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/26 17:20:18 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ void    ERR_NOSUCHCHAN( std::string const& serverName, Client* client, std::stri
 void	ERR_USERONCHANNEL( std::string const& serverName, Client* client, std::string const& target, std::string const& channelName );
 void    ERR_INVITEONLYCHAN( std::string const& serverName, Client* client, std::string const& channel );
 void	ERR_TOOMANYTARGETS ( std::string const& serverName, Client* client, std::string const& target ); // "<target> :Duplicate recipients.
+void	ERR_CANNOTSENDTOCHAN(std::string const& serverName, Client* client, std::string const& channelName);
 
 // {TOPIC}
 void	ERR_NOTONCHANNEL( std::string const& serverName, Client* client, std::string const& channel );

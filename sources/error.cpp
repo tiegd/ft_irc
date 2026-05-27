@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/20 16:27:20 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/21 11:32:08 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/26 17:21:32 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,19 +138,19 @@ void	ERR_UMODEUNKNOWNFLAG(std::string const& serverName, Client* client)
 
 void	ERR_INVALIDMODEPARAM(std::string const& serverName, Client* client, std::string const& channel, char mode, std::string params, std::string str)
 {
-	std::string msgToClient = ":" + serverName + " 696 " + client->getNickname() + " " + channel + " " + mode + " " + params + " :" + str + "\r\n";
+	std::string msgToClient = ":" + serverName + " 696 " + client->getNickname() + SPACE + channel + SPACE + mode + SPACE + params + " :" + str + "\r\n";
 	sendError(client, msgToClient);
 }
 
 void	ERR_NOSUCHCHANNEL(std::string const& serverName, Client* client, std::string channel)
 {
-	std::string msgToClient = ":" + serverName + " 403 " + client->getNickname() + " " + channel +  " :No such channel\r\n";
+	std::string msgToClient = ":" + serverName + " 403 " + client->getNickname() + SPACE + channel +  " :No such channel\r\n";
 	sendError(client, msgToClient);
 }
 
 void	ERR_USERNOTINCHANNEL(std::string const& serverName, Client* client, std::string channel)
 {
-	std::string msgToClient = ":" + serverName + " 441 " + client->getNickname() + " " + channel +  " :They aren't on that channel\r\n";
+	std::string msgToClient = ":" + serverName + " 441 " + client->getNickname() + SPACE + channel +  " :They aren't on that channel\r\n";
 	sendError(client, msgToClient);
 }
 
@@ -174,6 +174,12 @@ void	ERR_NOMOTD( std::string const& serverName, Client* client )
 
 void    ERR_UNKNOWNCOMMAND(std::string const & serverName, Client* client, std::string const & command)
 {
-	std::string msgToClient = ":" + serverName + " 421 " + client->getNickname() + " " + command + " :Unknown command\r\n";
+	std::string msgToClient = ":" + serverName + " 421 " + client->getNickname() + SPACE + command + " :Unknown command\r\n";
+	sendError(client, msgToClient);
+}
+
+void	ERR_CANNOTSENDTOCHAN(std::string const& serverName, Client* client, std::string const& channelName)
+{
+	std::string msgToClient = ":" + serverName + " 404 " + client->getNickname() + SPACE + channelName + " :Cannot send to channel\r\n";
 	sendError(client, msgToClient);
 }
