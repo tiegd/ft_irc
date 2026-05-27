@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/16 17:03:42 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/27 08:41:39 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/27 17:15:21 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,13 +84,18 @@ bool		Client::canBeRegistered() const
 		return false;
 }
 
-void		Client::quitChannels()
+void		Client::quitChannels(std::map<std::string, Channel*> & channels)
 {
 	std::vector<Channel*>::iterator it;
 	for (it = _chanJoined.begin(); it != _chanJoined.end(); ++it)
 	{
 		(*it)->rmOperator(this);
 		(*it)->rmUser(this);
+		if ((*it)->getTotClient() == 0)
+		{
+			delete channels[(*it)->getName()];
+			channels.erase((*it)->getName());
+		}
 	}
 }
 
