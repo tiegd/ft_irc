@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/16 17:03:42 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/20 11:24:01 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/27 08:41:39 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,15 +83,6 @@ bool		Client::canBeRegistered() const
 	else
 		return false;
 }
-
-/* TESTS */
-
-// void		Client::printChanJoined() const
-// {
-// 	for (int i = 0; i < _chanJoined.size(); i++)
-// 		std::cout << _chanJoined[i] << std::endl;
-// 	std::cout << std::endl;
-// }
 
 void		Client::quitChannels()
 {

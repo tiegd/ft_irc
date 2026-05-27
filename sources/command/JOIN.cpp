@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   JOIN.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 11:13:50 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/20 14:41:17 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/27 08:44:40 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,9 @@ void	Server::JOIN(std::string const& line, Client* client)
 	std::string	temp(line);
 	temp.erase(0, 5);
 
-	//Diviser la string en <channel> / <password>
+	//Split the string in <channel> / <password>
 	std::vector<std::string>	splitArgs = split(temp, SPACE);
 
-	/*Checker si le params est 0 dans ce cas faire PART a tous les channels du client*/
 	std::string					strChannel = splitArgs[0];
 	std::vector<std::string>	channels = split(strChannel, ',');
 	std::string					strPassword;
@@ -41,8 +40,7 @@ void	Server::JOIN(std::string const& line, Client* client)
 		passwords = split(strPassword, ',');
 	}
 
-	// std::map<std::string, Channel*>::iterator	it_end = _channels.end();
-	for(size_t i = 0; i < channels.size(); i++) // boucle pour iteré sur tous les channels.
+	for(size_t i = 0; i < channels.size(); i++)
 	{
 		std::string nameChannel(channels[i]);
 		if (nameChannel[0] != '#')
@@ -50,12 +48,10 @@ void	Server::JOIN(std::string const& line, Client* client)
 			ERR_BADCHANMASK(_name, client, nameChannel);
 			throw std::invalid_argument("# is missing for the channel name");
 		}
-		if (_channels.size() == 0 || !_channels[nameChannel]) // regarde si le channel n'existe pas
+		if (_channels.size() == 0 || !_channels[nameChannel])
 		{
-			//si il existe pas checker que le nom du channel a le bon format
-			if (nameChannelWellFormated(nameChannel) == true) // faire la fonction
+			if (nameChannelWellFormated(nameChannel) == true)
 			{
-				// créer le channel
 				Channel*	newChannel = new Channel(nameChannel, client);
 				_channels[nameChannel] = newChannel;
 				client->addChanJoined(_channels[nameChannel]);
@@ -67,18 +63,15 @@ void	Server::JOIN(std::string const& line, Client* client)
 				throw std::invalid_argument("Bad channel name");
 			}
 		}
-		else // si il existe
+		else
 		{
-			//checker si c'est en mode invite-only
 			if (_channels[nameChannel]->getInvitOnly() == false || (_channels[nameChannel]->getInvitOnly() && _channels[nameChannel]->isInvited(client)))
 			{
-				// checker si il a un password
 				if (_channels[nameChannel]->getHasPassword())
 				{
-					// si il en a un verifier si c'est le bon.
-					if  (!passwords.empty()  && i < passwords.size()) // si l'index du vector de passwords est plus petit on compare
+					if  (!passwords.empty()  && i < passwords.size())
 					{
-						if (passwords[i].compare(_channels[nameChannel]->getPassword()) == 0) //si le password est correct
+						if (passwords[i].compare(_channels[nameChannel]->getPassword()) == 0)
 						{
 							if (!_channels[nameChannel]->getHasLimit() || (_channels[nameChannel]->getHasLimit() && _channels[nameChannel]->getTotClient() < _channels[nameChannel]->getUserLimit()))
 							{
@@ -95,13 +88,13 @@ void	Server::JOIN(std::string const& line, Client* client)
 							}
 						}
 					}
-					else //sinon ca veut dire qu'il manque un parametre password pour le channel donc renvoyer badchannelkey
+					else
 					{
 						ERR_BADCHANNELKEY(_name, client, nameChannel);
 						throw std::invalid_argument("Missing password");
 					}
 				}
-				else //si il y a pas de password faire addUser
+				else
 				{
 					if (!_channels[nameChannel]->getHasLimit() || (_channels[nameChannel]->getHasLimit() && _channels[nameChannel]->getTotClient() < _channels[nameChannel]->getUserLimit()))
 					{
@@ -118,7 +111,7 @@ void	Server::JOIN(std::string const& line, Client* client)
 					}
 				}
 			}
-			else // renvoyer une erreur car le mode invite only est activé
+			else
 			{
 				ERR_INVITEONLYCHAN(_name, client, nameChannel);
 				throw std::invalid_argument("Invite-only mode is activated");

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/09 12:18:51 by amerzone          #+#    #+#             */
-/*   Updated: 2026/05/21 11:34:59 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/27 08:41:51 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,9 @@ class Client
 {
 	private:
 		SOCKET							_clientSocket;
-		/*Le nickname doit etre unique a tout le server et comporter uniquement 9 char*/
+		/*The nickname must be unique across the entire server and consist of exactly 9 characters.*/
 		std::string						_nickname;
-		/*Username ne peut pas etre modifier mais n'est pas forcement unique*/
+		/*The username cannot be changed, but it is not necessarily unique*/
 		std::string						_username;
 		std::string						_hostname;
 		std::string						_realname;
@@ -79,9 +79,6 @@ class Client
 		void	broadcastToMyChannels( std::string notification );
 		bool	canBeRegistered( void ) const;
 		void	quitChannels( void );
-
-		/* TESTS */
-		// void	printChanJoined() const;
 };
 
 #endif

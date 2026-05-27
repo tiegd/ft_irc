@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 11:34:51 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/05/20 11:17:09 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/27 08:41:19 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,7 +176,7 @@ void Channel::setPassword(Client *op, std::string password)
 {
 	std::vector<Client*>::iterator it;
 	it = std::find(this->_operator.begin(), this->_operator.end(), op);
-	if (it == this->_operator.end())
+	if (it != this->_operator.end())
 	{
 		this->_password = password;
 		if (!this->getHasPassword())
@@ -396,9 +396,3 @@ std::string	Channel::getStrAllOperatorsNames( void )
 	}
 	return allOps;
 }
-
-// void Channel::printInvited() const
-// {
-// 	for (int i = 0; i < _invited.size(); i++)
-// 		std::cout << _invited[i]->getNickname() << std::endl;
-// }

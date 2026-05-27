@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   PART.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/08 16:33:44 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/20 14:50:09 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/27 08:49:12 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	Server::PART(std::string const& line, Client* client)
 		if (!_channels[nameChannels[i]]->clientIsOnChannel(client))
 		{
 			ERR_NOTONCHANNEL(_name, client, nameChannels[i]);
-			continue ;
+			continue;
 		}
 		if (_channels[nameChannels[i]]->isOperator(client))
 		{

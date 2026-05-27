@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+         #
+#    By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/04/15 14:12:34 by amerzone          #+#    #+#              #
-#    Updated: 2026/05/21 11:55:01 by jpiquet          ###   ########.fr        #
+#    Updated: 2026/05/27 08:50:29 by gaducurt         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,14 +16,19 @@ CXX = c++
 
 FLAGS = -Wall -Wextra -Werror -MMD -std=c++98 -g3
 
-INC = includes
+INC =	includes \
+		Channel \
+		Client \
+		Server
+
+INCLUDES = $(addprefix -I , $(INC))
 
 OBJDIR = obj/
 
 SRC =	main.cpp \
-		sources/Client.cpp \
-		sources/Server.cpp \
-		sources/Channel.cpp \
+		Client/Client.cpp \
+		Server/Server.cpp \
+		Channel/Channel.cpp \
 		sources/tools.cpp \
 		sources/rpl.cpp \
 		sources/error.cpp \
@@ -40,8 +45,8 @@ SRC =	main.cpp \
 		sources/command/WHO.cpp \
 		sources/command/PART.cpp \
 		sources/command/INVITE.cpp \
-		sources/command/QUIT.cpp \
-		sources/command/MODT.cpp
+		sources/command/MODT.cpp \
+		sources/command/QUIT.cpp
 		
 
 OBJ := $(addprefix $(OBJDIR), $(SRC:.cpp=.o))
@@ -50,11 +55,11 @@ DEPS = $(OBJ:.o=.d)
 all : $(NAME)
 
 $(NAME) : $(OBJ)
-	$(CXX) $(FLAGS) -I $(INC) -o $(NAME) $(OBJ)
+	$(CXX) $(FLAGS) $(INCLUDES) -o $(NAME) $(OBJ)
 
 $(OBJDIR)%.o : %.cpp | $(OBJDIR)
 	@mkdir -p $(dir $@)
-	$(CXX) $(FLAGS) -I $(INC) -o $@ -c $<
+	$(CXX) $(FLAGS) $(INCLUDES) -o $@ -c $<
 
 $(OBJDIR):
 	@mkdir -p $(OBJDIR)
