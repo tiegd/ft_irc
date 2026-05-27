@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/06 16:22:12 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/27 15:08:03 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/27 17:00:08 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,14 +117,18 @@ void    RPL_CHANNELMODEIS(std::string const& serverName, Client* client, Channel
 	sendRpl(client, msgToClient);
 }
 
-void	RPL_CHANNELKICK(Client *op, Client* client, Channel* channel)
+void	RPL_CHANNELKICK(std::string const& serverName, Client *op, Client* client, Channel* channel)
 {
 	std::string msgToClient = ":" + op->getFullName() + " KICK " + channel->getName() + " " + client->getNickname() + "\r\n";
+	RPL_NAMREPLY(serverName, op, channel);
+	RPL_ENDOFNAMES(serverName, op, channel->getName());
 	sendRpl(client, msgToClient);
 }
 
-void	RPL_CHANMSGKICK(Client *op, Client* client, Channel* channel, std::string comment)
+void	RPL_CHANMSGKICK(std::string const& serverName, Client *op, Client* client, Channel* channel, std::string comment)
 {
 	std::string msgToClient = ":" + op->getFullName() + " KICK " + channel->getName() + " " + client->getNickname() + " " + comment + "\r\n";
+	RPL_NAMREPLY(serverName, op, channel);
+	RPL_ENDOFNAMES(serverName, op, channel->getName());
 	sendRpl(client, msgToClient);
 }

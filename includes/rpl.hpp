@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rpl.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/29 18:48:05 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/21 11:54:49 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/27 17:00:25 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	RPL_MOTDSTART( std::string const& serverName, Client* client );
 void	RPL_MOTD( std::string const& serverName, Client* client, std::string const& motdString );
 void	RPL_ENDOFMOTD( std::string const& serverName, Client* client );
 
-void	RPL_CHANNELKICK(Client *op, Client* client, Channel* channel);
-void	RPL_CHANMSGKICK(Client *op, Client* client, Channel* channel, std::string comment);
+void	RPL_CHANNELKICK(std::string const& serverName, Client *op, Client* client, Channel* channel);
+void	RPL_CHANMSGKICK(std::string const& serverName, Client *op, Client* client, Channel* channel, std::string comment);
 
 #endif

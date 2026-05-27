@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 11:34:51 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/05/27 15:29:20 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/27 16:53:33 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -309,7 +309,7 @@ void Channel::setHasLimit(bool arg)
 
 void Channel::setUserLimit(u_int64_t nb, bool arg)
 {
-	if (arg == true && nb >= this->getNbMembers())
+	if (arg == true && nb >= this->getTotClient())
 	{
 		this->_userLimit = nb;
 		this->setHasLimit(true);
