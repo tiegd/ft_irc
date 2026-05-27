@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/09 12:18:51 by amerzone          #+#    #+#             */
-/*   Updated: 2026/05/21 09:24:00 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/27 08:41:51 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ class Client
 		int								_userValid;
 
 		Client( Client const& src );
-		// Client & operator=(Client const& rightSide);
+		Client & operator=(Client const& rightSide);
 		
 	public:
 

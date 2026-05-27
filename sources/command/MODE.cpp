@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/30 14:00:09 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/05/21 10:53:11 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/27 08:45:02 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void Server::MODE(std::string const& line, Client* op)
 	if (!_channels[channelTarget])
 	{
 		ERR_NOSUCHCHANNEL(_name, op, channelTarget);
-		return ;	
+		return ;
 	}
 	if (splitArgs.size() == 1)
 	{

@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/08 16:33:44 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/20 14:52:11 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/27 08:49:12 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,12 @@ void	Server::PART(std::string const& line, Client* client)
 
 	std::vector<std::string>	splitArgs = splitStr(temp, " :");
 	std::vector<std::string>	nameChannels = split(splitArgs[0], ',');
-	std::string					message = splitArgs[1];
+	std::string					message;
+
+	if (splitArgs.size() < 2 || splitArgs[1].empty())
+		message = ":Leaving";
+	else
+		message = splitArgs[1];
 
 	for (size_t i = 0; i < nameChannels.size(); ++i)
 	{
@@ -49,11 +54,11 @@ void	Server::PART(std::string const& line, Client* client)
 		{
 			_channels[nameChannels[i]]->rmUser(client);
 		}
-		
 		sendPartMsg(client, client->getFullName(), _channels[nameChannels[i]], message);
 		if (_channels[nameChannels[i]]->getNbMembers() == 0 && _channels[nameChannels[i]]->getNbOp() == 0)
 		{
 			delete _channels[nameChannels[i]];
+			_channels.erase(nameChannels[i]);
 		}
 	}
 }

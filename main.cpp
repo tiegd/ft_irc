@@ -6,11 +6,13 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/15 12:32:06 by amerzone          #+#    #+#             */
-/*   Updated: 2026/05/20 15:34:21 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/27 08:40:19 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "function.hpp"
+#include "Server.hpp"
+
+void	parseArg( int ac, char **av, u_int16_t & port, std::string & password );
 
 int main( int ac, char **av )
 {
@@ -23,18 +25,42 @@ int main( int ac, char **av )
 	}
 	catch(const std::exception& e)
 	{
-		std::cerr << e.what() << '\n';
+		std::cerr << e.what() << std::endl;
 		exit(1);
 	}
 	try
 	{
-		Server	serv("Intelligent_Rapid_Cacaboudin", port, pwd);
+		Server	serv("IRC", port, pwd);
 		serv.runServer();
 	}
 	catch(const std::exception& e)
 	{
-		std::cout << e.what() << std::endl;
+		std::cerr << e.what() << std::endl;
 	}
 
 	return (0);
+}
+
+void	parseArg( int ac, char **av, u_int16_t & port, std::string & password)
+{
+	if (ac != 3)
+		throw std::invalid_argument("Bad number of arguments.");
+
+	char*	end_ptr;
+	long tport = std::strtol(av[1], &end_ptr, 10);
+	if (*end_ptr != '\0')
+		throw std::invalid_argument("Port must contain only numbers.");
+	if ( tport < 1024 || tport > 49151)
+		throw std::invalid_argument("Port must be between 1024 & 49151 included.");
+	port = static_cast<u_int16_t>(tport);
+
+	password = av[2];
+	if (password.size() < 1 || password.size() > 50)
+		throw std::invalid_argument("Password must contain between 1 & 50 characters");
+
+	for (std::string::const_iterator it = password.begin(); it != password.end(); ++it)
+	{
+		if (isPrintable(*it) == false)
+			throw std::invalid_argument("Password must contain only printable characters.");
+	}
 }

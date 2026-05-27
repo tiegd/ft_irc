@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/09 12:20:30 by amerzone          #+#    #+#             */
-/*   Updated: 2026/05/21 09:25:04 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/27 08:43:15 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,6 @@
 #define	INVALID_CHAR ": *?@!"
 
 /* {MY HEADERS} */
-#include "FunctionError.hpp"
-
 #include "Channel.hpp"
 #include "error_IRC.hpp"
 #include "tools.hpp"
@@ -53,11 +51,8 @@ class Server
 		std::string						_name;
 		u_int16_t						_port;
 		std::string						_password;
-
 		SOCKET							_socketServ;
-
 		std::vector<struct pollfd>		_fds;
-
 		std::map<SOCKET, Client*>		_clients;
 		std::map<std::string, Channel*>	_channels;
 		std::vector<std::string>		_nicknameAlreadyUsed;
@@ -71,7 +66,6 @@ class Server
 		Server( std::string name, u_int16_t port, std::string password );
 		~Server( void );
 
-		/* SETTER */
 		void			setSocketServ( void );
 		void			runServer( void );
 		void			addClientSocket( void );
@@ -79,10 +73,8 @@ class Server
 		void			disconnectClient( size_t & i );
 		Client*			searchClient( std::string target );
 
-		// { PARSING }
 		void			parseCommand( std::string const & line, Client* client );
 
-		// { COMMAND }
 		int			PASS( std::string const & line, Client* client );
 
 		int			NICK( std::string const & line, Client* client );

@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 11:13:50 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/21 10:45:26 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/27 08:44:40 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	Server::JOIN(std::string const& line, Client* client)
 	if (line.size() <= 5)
 	{
 		ERR_NEEDMOREPARAMS(_name, client, "JOIN");
-		throw std::invalid_argument("Not enough parameters");		
+		throw std::invalid_argument("Not enough parameters");
 	}
 
 	std::string	temp(line);
@@ -58,7 +58,10 @@ void	Server::JOIN(std::string const& line, Client* client)
 				sendJoinNotification(client, _channels[nameChannel]);
 			}
 			else
+			{
 				ERR_BADCHANMASK(_name, client, nameChannel);
+				throw std::invalid_argument("Bad channel name");
+			}
 		}
 		else
 		{
@@ -79,11 +82,17 @@ void	Server::JOIN(std::string const& line, Client* client)
 									_channels[nameChannel]->rmInvite(client);
 							}
 							else
+							{
 								ERR_CHANNELISFULL(_name, client, nameChannel);
+								throw std::invalid_argument("Channel is full");
+							}
 						}
 					}
 					else
+					{
 						ERR_BADCHANNELKEY(_name, client, nameChannel);
+						throw std::invalid_argument("Missing password");
+					}
 				}
 				else
 				{
@@ -96,12 +105,17 @@ void	Server::JOIN(std::string const& line, Client* client)
 							_channels[nameChannel]->rmInvite(client);
 					}
 					else
+					{
 						ERR_CHANNELISFULL(_name, client, nameChannel);
-						
+						throw std::invalid_argument("Channel is full");
+					}
 				}
 			}
 			else
+			{
 				ERR_INVITEONLYCHAN(_name, client, nameChannel);
+				throw std::invalid_argument("Invite-only mode is activated");
+			}
 		}
 	}
 }
