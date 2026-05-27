@@ -6,7 +6,7 @@
 #    By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/04/15 14:12:34 by amerzone          #+#    #+#              #
-#    Updated: 2026/05/27 08:41:08 by gaducurt         ###   ########.fr        #
+#    Updated: 2026/05/27 08:50:29 by gaducurt         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,8 +29,6 @@ SRC =	main.cpp \
 		Client/Client.cpp \
 		Server/Server.cpp \
 		Channel/Channel.cpp \
-		sources/FunctionError.cpp \
-		sources/parsingArguments.cpp \
 		sources/tools.cpp \
 		sources/rpl.cpp \
 		sources/error.cpp \
