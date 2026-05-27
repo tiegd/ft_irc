@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 11:34:51 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/05/27 08:41:19 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/27 10:27:53 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -353,7 +353,6 @@ void Channel::rmInvite(Client *target)
 
 void	Channel::broadcastToAll( std::string const& message, Client* sender )
 {
-	std::cout << sender->getNickname() << " send to all channel" << std::endl;
 	for (std::vector<Client*>::iterator it = _users.begin(); it != _users.end(); it++)
 	{
 		if ((*it)->getSocketClient() == sender->getSocketClient())

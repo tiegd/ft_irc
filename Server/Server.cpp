@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/15 12:42:23 by amerzone          #+#    #+#             */
-/*   Updated: 2026/05/27 08:42:16 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/27 10:39:48 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,8 +123,6 @@ void	Server::runServer( void )
 				{
 					std::cout << "Client " << _clients[_fds[i].fd]->getNickname() << " exceeded buffer limit, clear." << std::endl;
 					_clients[_fds[i].fd]->_inBuff.clear();
-					// if (_clients[_fds[i].fd]->)
-					// disconnectClient(i);
 					continue;
 				}
 				_clients[_fds[i].fd]->_inBuff.append(buff, bytes);
@@ -247,7 +245,7 @@ void	Server::parseCommand( std::string const & line , Client* client )
 	{
 		std::cerr << e.what() << std::endl;
 	}
-	if ( client->getRegister() != true && client->canBeRegistered() == true)
+	if (client->getRegister() != true && client->canBeRegistered() == true)
 	{
 		client->setRegister(true);
 		RPL_WELCOME(_name, client);
@@ -307,8 +305,13 @@ Client*	Server::searchClient( std::string target )
 
 Server::~Server( void )
 {
+	for (size_t i = 0; i < _fds.size(); ++i)
+	{
+		close(_fds[i].fd);
+	}
 	for (std::map<SOCKET, Client*>::iterator it = _clients.begin(); it != _clients.end(); ++it)
 	{
+		close(it->first);
 		delete it->second;
 	}
 	for (std::map<std::string, Channel*>::iterator it = _channels.begin(); it != _channels.end(); ++it)

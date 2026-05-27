@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   PART.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/08 16:33:44 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/27 08:49:12 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/27 11:12:12 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ void	Server::PART(std::string const& line, Client* client)
 		{
 			_channels[nameChannels[i]]->rmUser(client);
 		}
+		client->rmChanJoined(_channels[nameChannels[i]]);
 		sendPartMsg(client, client->getFullName(), _channels[nameChannels[i]], message);
 		if (_channels[nameChannels[i]]->getNbMembers() == 0 && _channels[nameChannels[i]]->getNbOp() == 0)
 		{
