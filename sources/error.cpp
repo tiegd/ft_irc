@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/20 16:27:20 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/27 10:15:13 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/27 11:00:13 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,12 +102,6 @@ void	ERR_NOTEXTTOSEND(std::string const& serverName, Client* client)
 void	ERR_NOSUCHNICK(std::string const& serverName, Client* client, std::string const& nick)
 {
 	std::string msgToClient = ":" + serverName + " 401 " + client->getNickname() + SPACE + nick + " :No such nick/channel\r\n";
-	sendError(client, msgToClient);
-}
-
-void	ERR_NOSUCHCHAN(std::string const& serverName, Client* client, std::string const& channel)
-{
-	std::string msgToClient = ":" + serverName + " 403 " + client->getNickname() + SPACE + channel + " :No such channel\r\n";
 	sendError(client, msgToClient);
 }
 

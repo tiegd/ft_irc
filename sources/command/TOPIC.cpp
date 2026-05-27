@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   TOPIC.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/06 14:46:20 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/21 10:43:19 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/27 11:00:46 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	Server::TOPIC(std::string line, Client* client)
 
 	if (!_channels[channelName])
 	{
-		ERR_NOSUCHCHAN(_name, client, channelName);
+		ERR_NOSUCHCHANNEL(_name, client, channelName);
 		throw std::invalid_argument("User cannot access topic if channel doesn't exists");
 	}
 

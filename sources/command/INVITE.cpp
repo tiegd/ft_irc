@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/11 17:33:07 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/27 08:44:03 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/27 11:04:52 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,11 @@ void	Server::INVITE(std::string const& line, Client* client)
 	{
 		ERR_NEEDMOREPARAMS(_name, client, "INVITE");
 		throw std::invalid_argument("Not enough parameters");
+	}
+	if (!channelExist(channel))
+	{
+		ERR_NOSUCHCHANNEL(_name, client, channel);
+		throw std::invalid_argument("No such channel");
 	}
 	if (nicknameExist(target) == false)
 	{

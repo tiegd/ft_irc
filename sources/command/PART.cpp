@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/08 16:33:44 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/27 08:49:12 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/27 11:00:37 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	Server::PART(std::string const& line, Client* client)
 	{
 		if (!_channels[nameChannels[i]])
 		{
-			ERR_NOSUCHCHAN(_name, client, nameChannels[i]);
+			ERR_NOSUCHCHANNEL(_name, client, nameChannels[i]);
 			continue ;
 		}
 		if (!_channels[nameChannels[i]]->clientIsOnChannel(client))
