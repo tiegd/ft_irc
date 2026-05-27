@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   JOIN.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 11:13:50 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/27 08:44:40 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/27 14:57:36 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,11 @@ void	Server::JOIN(std::string const& line, Client* client)
 								ERR_CHANNELISFULL(_name, client, nameChannel);
 								throw std::invalid_argument("Channel is full");
 							}
+						}
+						else
+						{
+							ERR_BADCHANNELKEY(_name, client, nameChannel);
+							throw std::invalid_argument("Missing password");
 						}
 					}
 					else
