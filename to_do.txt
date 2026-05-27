@@ -1,1 +1,0 @@
-- Mettre en place un système si le client envoie trop de donné qui dépasse 512 octet 10 fois d'affilé dans ce cas le deconnecté. 
