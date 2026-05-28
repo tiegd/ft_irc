@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   QUIT.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/19 15:29:23 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/28 08:01:10 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/28 15:27:50 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 void	Server::QUIT( std::string const& line, Client* client )
 {
-	std::cout << "Line received de QUIT : " << line << std::endl;
 	size_t		pos = line.find(':');
 	std::string	message;
 	if (pos == line.npos)
