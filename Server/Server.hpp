@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/09 12:20:30 by amerzone          #+#    #+#             */
-/*   Updated: 2026/05/27 14:11:52 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/28 14:47:52 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@
 
 #define	SOCKET int
 #define MAXLINE	512
-#define MAXCLIENTS 10
 
 #define SPACE ' '
 

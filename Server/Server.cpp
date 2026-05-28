@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/15 12:42:23 by amerzone          #+#    #+#             */
-/*   Updated: 2026/05/28 14:24:46 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/28 14:54:26 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,8 @@ void	Server::setSocketServ( void )
 	if ((bind (_socketServ, (struct sockaddr *) &servaddr, sizeof(servaddr))) < 0)
 		throw	std::runtime_error("Bind() error");
 
-	if (listen(_socketServ, MAXCLIENTS) < 0)
-		throw	std::runtime_error("Listen() error");	
+	if (listen(_socketServ, 10) < 0)
+		throw	std::runtime_error("Listen() error");
 
 	std::cout << "Waiting for a connection on port " << _port << "..." << std::endl;
 }
@@ -78,7 +78,6 @@ void	Server::runServer( void )
 	std::signal(SIGINT, signalHandler);
 	while (true)
 	{
-		
 		if (poll(_fds.data(), _fds.size(), -1) < 0)
 		{
 			if (gSignalStatus == 1)
@@ -95,9 +94,7 @@ void	Server::runServer( void )
 			if (_fds[i].revents & (POLLHUP | POLLERR))
 			{
 				if (_fds[i].fd == _fds[0].fd)
-				{
 					throw	std::runtime_error("Error on server socket occurred");
-				}
 				disconnectClient(i);
 				continue;
 			}
