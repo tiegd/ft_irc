@@ -6,35 +6,47 @@
 #    By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/04/15 14:12:34 by amerzone          #+#    #+#              #
-#    Updated: 2026/05/06 14:27:01 by gaducurt         ###   ########.fr        #
+#    Updated: 2026/05/27 08:50:29 by gaducurt         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = 1
+NAME = ircserver
 
 CXX = c++
 
-#FLAGS = -Wall -Wextra -Werror -MMD -std=c++98 -g3
-FLAGS = -MMD -std=c++98 -g3
+FLAGS = -Wall -Wextra -Werror -MMD -std=c++98 -g3
 
-INC = includes
+INC =	includes \
+		Channel \
+		Client \
+		Server
+
+INCLUDES = $(addprefix -I , $(INC))
 
 OBJDIR = obj/
 
 SRC =	main.cpp \
-		sources/Client.cpp \
-		sources/Server.cpp \
-		sources/Channel.cpp \
-		sources/error.cpp \
-		sources/FunctionError.cpp \
-		sources/parsingArguments.cpp \
+		Client/Client.cpp \
+		Server/Server.cpp \
+		Channel/Channel.cpp \
 		sources/tools.cpp \
+		sources/rpl.cpp \
+		sources/error.cpp \
 		sources/command/NICK.cpp \
 		sources/command/PASS.cpp \
 		sources/command/USER.cpp \
 		sources/command/JOIN.cpp \
+		sources/command/KICK.cpp \
+		sources/command/MODE.cpp \
 		sources/command/NOTICE.cpp \
-		sources/command/PRIVMSG.cpp
+		sources/command/PING_PONG.cpp \
+		sources/command/PRIVMSG.cpp \
+		sources/command/TOPIC.cpp \
+		sources/command/WHO.cpp \
+		sources/command/PART.cpp \
+		sources/command/INVITE.cpp \
+		sources/command/MODT.cpp \
+		sources/command/QUIT.cpp
 		
 
 OBJ := $(addprefix $(OBJDIR), $(SRC:.cpp=.o))
@@ -43,11 +55,11 @@ DEPS = $(OBJ:.o=.d)
 all : $(NAME)
 
 $(NAME) : $(OBJ)
-	$(CXX) $(FLAGS) -I $(INC) -o $(NAME) $(OBJ)
+	$(CXX) $(FLAGS) $(INCLUDES) -o $(NAME) $(OBJ)
 
 $(OBJDIR)%.o : %.cpp | $(OBJDIR)
 	@mkdir -p $(dir $@)
-	$(CXX) $(FLAGS) -I $(INC) -o $@ -c $<
+	$(CXX) $(FLAGS) $(INCLUDES) -o $@ -c $<
 
 $(OBJDIR):
 	@mkdir -p $(OBJDIR)

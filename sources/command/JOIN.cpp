@@ -3,53 +3,42 @@
 /*                                                        :::      ::::::::   */
 /*   JOIN.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 11:13:50 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/07 10:33:04 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/27 16:48:15 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
-#include "Client.hpp"
-#include "tools.hpp"
-#include "error_IRC.hpp"
-#include "Channel.hpp"
-#include "rpl.hpp"
 
 bool	nameChannelWellFormated( std::string nameChannel );
 
-// std::string line = "JOIN #newchannel, #otherchannel password";
 // JOIN <channel>{,<channel>} [<key>{,<key>}]
 void	Server::JOIN(std::string const& line, Client* client)
 {
-	/* CHECK
-	- Verifier qu'il y a assez de parametre.(au moins 1)
-	- Verifier si le channel existe deja ou pas.
-	- Si il existe checker si il a un mot de passe, checker si il est mode invite only, et checker si c'est le bon mot de pass si il y en a un.
-	- Creer le channel.
-	- Verifier que le nom du channel a le bon format.(commance par #, 200 char max et pas de SPACE, pas de ',' et pas de (G^))
-	- Checker si il y a une ',' apres le nom du channel ou le password car on peut rejoindre plusieur channels en meme temps.
-	
-	- Split pour chaque "," si il y en a une, ensuite parser chaque string et faire les verifs.
-	*/
 	if (line.size() <= 5)
 	{
 		ERR_NEEDMOREPARAMS(_name, client, "JOIN");
-		throw std::invalid_argument("Not enough parameters");		
+		throw std::invalid_argument("Not enough parameters");
 	}
 
 	std::string	temp(line);
 	temp.erase(0, 5);
 
 	std::vector<std::string>	splitArgs = split(temp, SPACE);
+
 	std::string					strChannel = splitArgs[0];
-	std::string					strPassword = splitArgs[1];
-
 	std::vector<std::string>	channels = split(strChannel, ',');
-	std::vector<std::string>	passwords = split(strPassword, ',');
+	std::string					strPassword;
+	std::vector<std::string>	passwords;
 
-	std::map<std::string, Channel*>::iterator	it_end = _channels.end();
+	if (splitArgs.size() > 1)
+	{
+		strPassword = splitArgs[1];
+		passwords = split(strPassword, ',');
+	}
+
 	for(size_t i = 0; i < channels.size(); i++)
 	{
 		std::string nameChannel(channels[i]);
@@ -58,46 +47,78 @@ void	Server::JOIN(std::string const& line, Client* client)
 			ERR_BADCHANMASK(_name, client, nameChannel);
 			throw std::invalid_argument("# is missing for the channel name");
 		}
-		if (it_end == _channels.find(nameChannel)) // regarde si le channel n'existe pas
+		if (_channels.size() == 0 || !_channels[nameChannel])
 		{
-			//si il existe pas checker que le nom u channel a le bon format
-			if (nameChannelWellFormated(nameChannel) == true) // faire la fonction
+			if (nameChannelWellFormated(nameChannel) == true)
 			{
-				// créer le channel
 				Channel*	newChannel = new Channel(nameChannel, client);
 				_channels[nameChannel] = newChannel;
+				client->addChanJoined(_channels[nameChannel]);
 				sendJoinNotification(client, _channels[nameChannel]);
 			}
-		}
-		else // si il existe
-		{
-			//checker si c'est en mode invite-only
-			if (_channels[nameChannel]->getInvitOnly() == true)
+			else
 			{
-				// checker si il a un password
-				if (_channels[nameChannel]->getHasPassword()) //mettre getHasPassword()
+				ERR_BADCHANMASK(_name, client, nameChannel);
+				throw std::invalid_argument("Bad channel name");
+			}
+		}
+		else
+		{
+			if (_channels[nameChannel]->getInvitOnly() == false || (_channels[nameChannel]->getInvitOnly() && _channels[nameChannel]->isInvited(client)))
+			{
+				if (_channels[nameChannel]->getHasPassword())
 				{
-					// si il en a un verifier si c'est le bon.
-					if  (i < passwords.size()) // si l'index du vector de passwords est plus petit on compare
+					if  (!passwords.empty()  && i < passwords.size())
 					{
-						if (passwords[i].compare(_channels[nameChannel]->getPassword()) == 0) //si le password est correct
+						if (passwords[i].compare(_channels[nameChannel]->getPassword()) == 0)
 						{
-							_channels[nameChannel]->addUser(client);
-							sendJoinNotification(client, _channels[nameChannel]);
+							if (!_channels[nameChannel]->getHasLimit() || (_channels[nameChannel]->getHasLimit() && _channels[nameChannel]->getTotClient() < _channels[nameChannel]->getUserLimit()))
+							{
+								_channels[nameChannel]->addUser(client);
+								client->addChanJoined(_channels[nameChannel]);
+								sendJoinNotification(client, _channels[nameChannel]);
+								if (_channels[nameChannel]->isInvited(client))
+									_channels[nameChannel]->rmInvite(client);
+							}
+							else
+							{
+								ERR_CHANNELISFULL(_name, client, nameChannel);
+								throw std::invalid_argument("Channel is full");
+							}
+						}
+						else
+						{
+							ERR_BADCHANNELKEY(_name, client, nameChannel);
+							throw std::invalid_argument("Missing password");
 						}
 					}
-					else //sinon ca veut dire qu'il manque un parametre password pour le channel donc renvoyer badchannelkey
+					else
+					{
 						ERR_BADCHANNELKEY(_name, client, nameChannel);
+						throw std::invalid_argument("Missing password");
+					}
 				}
-				else //si il y a pas de password faire addUser
+				else
 				{
-					_channels[nameChannel]->addUser(client);
-					sendJoinNotification(client, _channels[nameChannel]);
+					if (!_channels[nameChannel]->getHasLimit() || (_channels[nameChannel]->getHasLimit() && _channels[nameChannel]->getTotClient() < _channels[nameChannel]->getUserLimit()))
+					{
+						_channels[nameChannel]->addUser(client);
+						client->addChanJoined(_channels[nameChannel]);
+						sendJoinNotification(client, _channels[nameChannel]);
+						if (_channels[nameChannel]->isInvited(client))
+							_channels[nameChannel]->rmInvite(client);
+					}
+					else
+					{
+						ERR_CHANNELISFULL(_name, client, nameChannel);
+						throw std::invalid_argument("Channel is full");
+					}
 				}
 			}
-			else // renvoyer une erreur car le mode invite only est activé
+			else
 			{
 				ERR_INVITEONLYCHAN(_name, client, nameChannel);
+				throw std::invalid_argument("Invite-only mode is activated");
 			}
 		}
 	}
@@ -105,21 +126,19 @@ void	Server::JOIN(std::string const& line, Client* client)
 
 void	Server::sendJoinNotification(Client *client, Channel* channel)
 {
-	// Envoyer la notif a tous le channel.
-	std::string	channelMsg = ":" + client->getNickname() + " JOIN " + channel->getName();
-	channel->broadcastToAll(channelMsg);
+	std::string	channelMsg = ":" + client->getFullName() + " JOIN " + channel->getName() + "\r\n";
 
-	// // Channel TOPIC:
+	sendRpl(client, channelMsg);
+	channel->broadcastToAll(channelMsg, client);
+
+	RPL_NAMREPLY(_name, client, channel);
+	RPL_ENDOFNAMES(_name, client, channel->getName());
+
 	if (channel->getHasTopic() == true)
-	{
 		RPL_TOPIC(_name, client, channel->getName(), channel->getTopic());
-	}
 	else
 		RPL_NOTOPIC(_name, client, channel->getName());
 
-	//NAMES REPLY :
-	RPL_NAMREPLY(_name, client, channel);
-	RPL_ENDOFNAMES(_name, client, channel->getName());
 }
 
 bool	nameChannelWellFormated( std::string nameChannel )

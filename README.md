@@ -193,7 +193,7 @@ Server --- S12
 
 ## Instruction
 
-### Run
+### Run IRC Server
 
 ```bash
 make
@@ -201,6 +201,16 @@ make
 
 ```bash
 ./ft_irc <port> <password>
+```
+
+### Run a client
+
+Open a client like NetCat or Hexchat and connect it.
+
+For NetCat :
+
+```bash
+nc -C <host> <port>
 ```
 
 ### Commandes
@@ -234,7 +244,7 @@ If the channel can be settable by everyone (mode -t), a user can change or set t
 
 #### MODE
 
-An operator can changer some parameters on a channel.
+An operator can change some parameters on a channel.
 
 ```bash
 /mode <channel> {[+|-]|o|i|t|l|k} [<limit>] [<user>][<ban mask>]
@@ -254,14 +264,14 @@ l : /mode <channel> {+l} <limit>
     /mode <channel> {-l}
 
 #set a channel key (password) :
-k : /mode <channel> {+k} <password>
-    /mode <channel> {-k}
+k : /mode <channel> {[+|-]k} <password>
 ```
 
 ## Ressources
 
 - https://ubuntu.com/tutorials/irc-server#1-overview
 - https://datatracker.ietf.org/doc/html/rfc1459
+- https://datatracker.ietf.org/doc/html/rfc2812
 - https://mathieu-lemoine.developpez.com/tutoriels/irc/protocole/?page=page-2
 - https://broux.developpez.com/articles/c/sockets/
 - https://en.wikipedia.org/wiki/IRC

@@ -3,26 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   TOPIC.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/06 14:46:20 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/06 18:27:36 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/27 11:00:46 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
-#include "Channel.hpp"
-#include "rpl.hpp"
-#include "error_IRC.hpp"
+
+void	sendTopicNotif(Channel* channel, Client* client, std::string const& newTopic);
 
 /*
-	- +t : que les operateur peuvent modifier le topic du channel;
-	- -t : tous le monde peut modifier le topic.
-	- TOPIC + <channel> = afficher le topic du channel.
-	- TOPIC + <channel> + [:le nom du topic] = changer le topic du channel.
-	- Si le [:nom du topic] est une string vide, supprimer le topic.
+	- +t : only operators can change the channel topic;
+	- -t : everyone can change the channel topic.
+	- TOPIC + <channel> = display the channel topic.
+	- TOPIC + <channel> + [:topic name] = change the channel topic.
+	- If the [:topic name] is an empty string, remove the topic.
 */
-
 void	Server::TOPIC(std::string line, Client* client)
 {
 
@@ -36,23 +34,31 @@ void	Server::TOPIC(std::string line, Client* client)
 	{
 		topic = temp.substr(endOfChannelName + 1);
 	}
+
+	if (!_channels[channelName])
+	{
+		ERR_NOSUCHCHANNEL(_name, client, channelName);
+		throw std::invalid_argument("User cannot access topic if channel doesn't exists");
+	}
+
 	if (_channels[channelName]->clientIsOnChannel(client) == false)
 	{
 		ERR_NOTONCHANNEL(_name, client, channelName);
 		throw std::invalid_argument("User cannot access topic if his not in channel");
 	}
-	if (endOfChannelName == std::string::npos) // Ca veut dire qu'il n'y  pas de topic en parametre donc afficher le topic du channel(RPL TOPIC)
+	
+	if (endOfChannelName == std::string::npos) 
 	{
 		if(_channels[channelName]->getHasTopic() == true)
 			RPL_TOPIC(_name, client, channelName,_channels[channelName]->getTopic());
 		else
 			RPL_NOTOPIC(_name, client, channelName);
 	}
-	else //il y a un topic en parametre
+	else
 	{
-		if (_channels[channelName]->getResTopic()) // checker si le mode +t est activé 
+		if (_channels[channelName]->getResTopic()) 
 		{
-			if (_channels[channelName]->clientIsOperator(client) == false) // checker si le client est pas un operator & renvoyer erreur en fonction
+			if (_channels[channelName]->isOperator(client) == false) 
 			{
 				ERR_CHANOPRIVSNEEDED(_name, client, channelName);
 				throw std::invalid_argument("Channel mode is +t && user is not operator");
@@ -60,13 +66,13 @@ void	Server::TOPIC(std::string line, Client* client)
 		}
 		if (topic.size() == 1)
 		{
-			_channels[channelName]->rmTopic();
+			_channels[channelName]->rmTopic(client);
 			sendTopicNotif(_channels[channelName], client, topic);
 		}
 		else
 		{
 			topic.erase(0, 1);
-			_channels[channelName]->setTopic(topic);
+			_channels[channelName]->setTopic(client, topic);
 			_channels[channelName]->setHasTopic(true);
 			sendTopicNotif(_channels[channelName], client, topic);
 		}
@@ -77,5 +83,5 @@ void	Server::TOPIC(std::string line, Client* client)
 void	sendTopicNotif(Channel* channel, Client* client, std::string const& newTopic)
 {
 	std::string fullMsg = ":" + client->getFullName() + " TOPIC " + channel->getName() + " :" + newTopic + "\r\n";
-	channel->broadcastToAll(fullMsg);
+	channel->broadcastToAll(fullMsg, client);
 }
