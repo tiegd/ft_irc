@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/16 17:03:42 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/28 14:34:50 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/28 15:04:47 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,8 +91,7 @@ void		Client::quitChannels(std::map<std::string, Channel*> & channels)
 	{
 		(*it)->rmOperator(this);
 		(*it)->rmUser(this);
-		std::cout << "CHANNEL " << (*it)->getName() <<  " TOTAL CLIENT: " << (*it)->getTotClient() << std::endl;
-		if ((*it)->getNbMembers() == 0 && (*it)->getNbOp() == 0) //(*it)->getTotClient() == 0)
+		if ((*it)->getNbMembers() == 0 && (*it)->getNbOp() == 0)
 		{
 			if (channels[(*it)->getName()])
 			{

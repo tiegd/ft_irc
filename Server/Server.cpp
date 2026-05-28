@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/15 12:42:23 by amerzone          #+#    #+#             */
-/*   Updated: 2026/05/28 14:24:46 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/28 15:05:16 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,11 +128,7 @@ void	Server::runServer( void )
 				{
 					std::string line = _clients[_fds[i].fd]->inBuff.substr(0, pos);
 					_clients[_fds[i].fd]->inBuff.erase(0, pos + 2);
-
-					std::cout << "Recu par " << _clients[_fds[i].fd]->getNickname() << ": " << line << std::endl;
-
 					parseCommand(line, _clients[_fds[i].fd]);
-
 					if (_clients.find(_fds[i].fd) != _clients.end() && _clients[_fds[i].fd]->getDeleted() == true)
 					{
 						disconnectClient(i);
