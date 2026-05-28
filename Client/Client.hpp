@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/09 12:18:51 by amerzone          #+#    #+#             */
-/*   Updated: 2026/05/28 08:01:02 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/28 14:35:00 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,8 @@ class Client
 		Client( SOCKET sockClient );
 		~Client( void );
 
-		std::string						_inBuff;
-		
+		std::string						inBuff;
+
 		void	sendNotif( std::string notification );
 		
 		/* GETTER */

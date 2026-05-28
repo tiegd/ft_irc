@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 11:13:50 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/27 16:48:15 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/28 14:17:08 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	Server::JOIN(std::string const& line, Client* client)
 	for(size_t i = 0; i < channels.size(); i++)
 	{
 		std::string nameChannel(channels[i]);
-		if (nameChannel[0] != '#')
+		if (nameChannel[0] != '#' || nameChannel.compare("#") == 0)
 		{
 			ERR_BADCHANMASK(_name, client, nameChannel);
 			throw std::invalid_argument("# is missing for the channel name");

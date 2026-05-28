@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/16 17:03:42 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/28 08:00:53 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/28 14:34:50 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,10 +91,15 @@ void		Client::quitChannels(std::map<std::string, Channel*> & channels)
 	{
 		(*it)->rmOperator(this);
 		(*it)->rmUser(this);
-		if ((*it)->getTotClient() == 0)
+		std::cout << "CHANNEL " << (*it)->getName() <<  " TOTAL CLIENT: " << (*it)->getTotClient() << std::endl;
+		if ((*it)->getNbMembers() == 0 && (*it)->getNbOp() == 0) //(*it)->getTotClient() == 0)
 		{
-			delete channels[(*it)->getName()];
-			channels.erase((*it)->getName());
+			if (channels[(*it)->getName()])
+			{
+				std::string nameChannel = (*it)->getName();
+				delete channels[nameChannel];
+				channels.erase(nameChannel);
+			}
 		}
 	}
 }
