@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/06 16:22:12 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/27 17:00:08 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/28 15:06:27 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ void	RPL_WELCOME(std::string const& serverName, Client* client)
 
 void	RPL_YOURHOST(std::string const& serverName, Client* client)
 {
-	std::string msgToClient = ":" + serverName + " 002 " + client->getNickname() + " :" + "Your host is " + serverName + ", running version PROUT.2\r\n";
+	std::string msgToClient = ":" + serverName + " 002 " + client->getNickname() + " :" + "Your host is " + serverName + ", running version 1.0\r\n";
 	sendRpl(client, msgToClient);
 }
 
@@ -89,7 +89,7 @@ void	RPL_CREATED(std::string const& serverName, Client* client)
 
 void	RPL_MYINFO(std::string const& serverName, Client* client)
 {
-	std::string msgToClient = ":" + serverName + " 004 " + client->getNickname() + SPACE + serverName + " PROUT.2 " + "" + " oitlk\r\n"; 
+	std::string msgToClient = ":" + serverName + " 004 " + client->getNickname() + SPACE + serverName + " 1.0 " + "" + " oitlk\r\n"; 
 	sendRpl(client, msgToClient);
 }
 
