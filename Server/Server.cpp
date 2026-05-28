@@ -6,12 +6,11 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/15 12:42:23 by amerzone          #+#    #+#             */
-/*   Updated: 2026/05/27 10:39:48 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/28 14:24:46 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
-#include <algorithm>
 
 volatile std::sig_atomic_t gSignalStatus = 0;
 
@@ -52,9 +51,7 @@ void	Server::setSocketServ( void )
 	struct sockaddr_in	servaddr;
 	
 	if ((_socketServ = socket(AF_INET, SOCK_STREAM, 0)) < 0)
-	{
-		std::cout << "Socket error" << std::endl;
-	}
+		throw	std::runtime_error("Socket() error");
 	int flags = fcntl(_socketServ, F_GETFL);
 	fcntl(_socketServ, F_SETFL, flags | O_NONBLOCK);
 	bzero(&servaddr, sizeof(servaddr));
@@ -89,7 +86,7 @@ void	Server::runServer( void )
 				std::cout << "Quit server..." << std::endl;
 				return ;
 			}
-			std::cout << "Error occured during poll()." << std::endl;
+			std::cerr << "Error occured during poll()" << std::endl;
 			continue;
 		}
 
@@ -99,8 +96,7 @@ void	Server::runServer( void )
 			{
 				if (_fds[i].fd == _fds[0].fd)
 				{
-					std::cout << "Error on server socket." << std::endl;
-					return ;
+					throw	std::runtime_error("Error on server socket occurred");
 				}
 				disconnectClient(i);
 				continue;
@@ -119,19 +115,19 @@ void	Server::runServer( void )
 					disconnectClient(i);
 					continue;
 				}
-				if (_clients[_fds[i].fd]->_inBuff.size() > MAXLINE)
+				if (_clients[_fds[i].fd]->inBuff.size() > MAXLINE)
 				{
-					std::cout << "Client " << _clients[_fds[i].fd]->getNickname() << " exceeded buffer limit, clear." << std::endl;
-					_clients[_fds[i].fd]->_inBuff.clear();
+					std::cout << "Client " << _clients[_fds[i].fd]->getNickname() << " exceeded buffer limit, clear" << std::endl;
+					_clients[_fds[i].fd]->inBuff.clear();
 					continue;
 				}
-				_clients[_fds[i].fd]->_inBuff.append(buff, bytes);
+				_clients[_fds[i].fd]->inBuff.append(buff, bytes);
 
 				size_t pos;
-				while ((pos = _clients[_fds[i].fd]->_inBuff.find("\r\n")) != std::string::npos)
+				while ((pos = _clients[_fds[i].fd]->inBuff.find("\r\n")) != std::string::npos)
 				{
-					std::string line = _clients[_fds[i].fd]->_inBuff.substr(0, pos);
-					_clients[_fds[i].fd]->_inBuff.erase(0, pos + 2);
+					std::string line = _clients[_fds[i].fd]->inBuff.substr(0, pos);
+					_clients[_fds[i].fd]->inBuff.erase(0, pos + 2);
 
 					std::cout << "Recu par " << _clients[_fds[i].fd]->getNickname() << ": " << line << std::endl;
 
@@ -265,7 +261,10 @@ void	Server::addClientSocket( void )
 
 	client = accept(_socketServ, (struct sockaddr *) &client_addr, &addr_len);
 	if (client < 0)
-		throw std::runtime_error("accept() failed");
+	{
+		std::cerr << "accept() failed" << std::endl;
+		return ;
+	}
 	int flags = fcntl(client, F_GETFL);
 	fcntl(client, F_SETFL, flags | O_NONBLOCK);
 	t_fd.fd = client;

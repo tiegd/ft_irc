@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 11:34:51 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/05/27 10:27:53 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/05/28 11:47:37 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ Channel::Channel(std::string channel_name, Client *op) : _name(channel_name), _n
 
 Channel::~Channel()
 {
+	std::cout << "Destructor called : " << _name << std::endl;
 }
 
 /*----------Getters----------*/
