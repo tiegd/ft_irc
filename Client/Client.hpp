@@ -6,7 +6,7 @@
 /*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/09 12:18:51 by amerzone          #+#    #+#             */
-/*   Updated: 2026/05/27 17:14:54 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/05/28 08:01:02 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ class Client
 		void	rmChanJoined( Channel* newChannel );
 		void	broadcastToMyChannels( std::string notification );
 		bool	canBeRegistered( void ) const;
-		void	quitChannels( void );
+		void	quitChannels( std::map<std::string, Channel*> & channels );
 };
 
 #endif
