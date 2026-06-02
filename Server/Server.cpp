@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/15 12:42:23 by amerzone          #+#    #+#             */
-/*   Updated: 2026/05/28 15:19:31 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/06/02 14:27:57 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ void	Server::disconnectClient( size_t & i )
  
 	std::cout << _clients[fd]->getNickname() << " disconnected" << std::endl;
  
+	_clients[fd]->quitChannels(_channels);
 	close(fd);
 	delete _clients[fd];
 	_clients.erase(fd);
