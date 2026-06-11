@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 11:34:51 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/05/28 15:27:29 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/06/11 16:34:27 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -230,7 +230,8 @@ void Channel::kickUser(Client *target, Client *op)
 
 void Channel::addOperator(Client *target)
 {
-	this->_operator.push_back(target);
+	if (!this->isOperator(target))
+		this->_operator.push_back(target);
 	std::vector<Client*>::iterator it;
 	it = std::find(this->_users.begin(), this->_users.end(), target);
 	if (it != this->_users.end())
