@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/15 12:42:23 by amerzone          #+#    #+#             */
-/*   Updated: 2026/06/02 14:27:57 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/06/11 16:52:51 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,7 @@ void	Server::setSocketServ( void )
 	
 	if ((_socketServ = socket(AF_INET, SOCK_STREAM, 0)) < 0)
 		throw	std::runtime_error("Socket() error");
-	int flags = fcntl(_socketServ, F_GETFL);
-	fcntl(_socketServ, F_SETFL, flags | O_NONBLOCK);
+	fcntl(_socketServ, F_SETFL,O_NONBLOCK);
 	bzero(&servaddr, sizeof(servaddr));
 	servaddr.sin_family			= AF_INET;
 	servaddr.sin_addr.s_addr	= htonl(INADDR_ANY);
@@ -259,8 +258,7 @@ void	Server::addClientSocket( void )
 		std::cerr << "accept() failed" << std::endl;
 		return ;
 	}
-	int flags = fcntl(client, F_GETFL);
-	fcntl(client, F_SETFL, flags | O_NONBLOCK);
+	fcntl(client, F_SETFL, O_NONBLOCK);
 	t_fd.fd = client;
 	t_fd.events = POLLIN;
 	t_fd.revents = 0;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   QUIT.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
+/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/19 15:29:23 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/28 15:27:50 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/06/11 16:56:22 by gaducurt         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,5 @@ void	Server::QUIT( std::string const& line, Client* client )
 
 	std::string	fullMsg = ":" + client->getFullName() + " QUIT " + ":" + message + "\r\n";
 	client->broadcastToMyChannels(fullMsg);
-	client->quitChannels(_channels);
 	client->setDeleted(true);
 }
