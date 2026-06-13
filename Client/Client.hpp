@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/09 12:18:51 by amerzone          #+#    #+#             */
-/*   Updated: 2026/05/28 14:35:00 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/06/13 12:08:07 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ class Client
 		~Client( void );
 
 		std::string						inBuff;
+		std::string						outBuff;
 
 		void	sendNotif( std::string notification );
 		

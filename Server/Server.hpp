@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/09 12:20:30 by amerzone          #+#    #+#             */
-/*   Updated: 2026/05/28 14:47:52 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/06/13 12:45:12 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,17 +70,18 @@ class Server
 		void			addClientSocket( void );
 		bool			nicknameExist( std::string target );
 		void			disconnectClient( size_t & i );
+		// void			queueResponse(Client* client, std::string const& msg);
 		Client*			searchClient( std::string target );
 
-		void			parseCommand( std::string const & line, Client* client );
+		void			parseCommand( std::string const& line, Client* client );
 
-		int			PASS( std::string const & line, Client* client );
+		int			PASS( std::string const& line, Client* client );
 
-		int			NICK( std::string const & line, Client* client );
+		int			NICK( std::string const& line, Client* client );
 
-		int			USER( std::string const & line, Client* client );
+		int			USER( std::string const& line, Client* client );
 
-		void			JOIN( std::string const & line, Client* client );
+		void			JOIN( std::string const& line, Client* client );
 			void			sendJoinNotification( Client *client, Channel* Channel );
 		
 		void			PRIVMSG( std::string const& line, Client* client );

@@ -3,19 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   rpl.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/06 16:22:12 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/28 15:06:27 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/06/13 12:16:38 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rpl.hpp"
 
-void	sendRpl( Client *client, std::string const& msgToClient )
+void	sendRpl( Client* client, std::string const& msgToClient )
 {
-	if (send(client->getSocketClient(), msgToClient.c_str(), msgToClient.size(), 0) < 0)
-		std::cout << "send() error" << std::endl;
+	// if (send(client->getSocketClient(), msgToClient.c_str(), msgToClient.size(), 0) < 0)
+	// 	std::cout << "send() error" << std::endl;
+	client->outBuff += msgToClient;
 }
 
 void	RPL_NOTOPIC(std::string serverName, Client* client, std::string const& channel)

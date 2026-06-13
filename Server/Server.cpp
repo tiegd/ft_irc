@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/15 12:42:23 by amerzone          #+#    #+#             */
-/*   Updated: 2026/06/11 16:52:51 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/06/13 13:05:16 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,17 @@ void	Server::runServer( void )
 	std::signal(SIGINT, signalHandler);
 	while (true)
 	{
+		for (size_t i = 0; i < _fds.size(); i++)
+		{
+			_fds[i].events = POLLIN;
+			int fd = _fds[i].fd;
+
+			if (_clients.find(fd) != _clients.end() &&  !_clients[fd]->outBuff.empty())
+			{
+				_fds[i].events |= POLLOUT;
+			}
+		}
+
 		if (poll(_fds.data(), _fds.size(), -1) < 0)
 		{
 			if (gSignalStatus == 1)
@@ -109,6 +120,7 @@ void	Server::runServer( void )
 				int bytes = recv(_fds[i].fd, buff, sizeof(buff), 0);
 				if (bytes <= 0)
 				{
+					QUIT("", _clients[_fds[i].fd]);
 					disconnectClient(i);
 					continue;
 				}
@@ -132,7 +144,31 @@ void	Server::runServer( void )
 						break;
 					}
 				}
-				
+			}
+			if (_fds[i].revents & POLLOUT)
+			{
+				int fd = _fds[i].fd;
+				if (_clients.find(fd) == _clients.end())
+					continue;
+
+				Client* client = _clients[fd];
+				if (client->outBuff.empty())
+					continue;
+
+				ssize_t sent = send(fd, client->outBuff.c_str(), client->outBuff.size(), 0);
+				if (sent < 0)
+				{
+					QUIT("", _clients[fd]);
+					disconnectClient(i);
+					continue;
+				}
+				if (sent == 0)
+					continue;
+
+				if (static_cast<size_t>(sent) < client->outBuff.size())
+					client->outBuff = client->outBuff.substr(sent);
+				else
+					client->outBuff.clear();
 			}
 		}
 	}

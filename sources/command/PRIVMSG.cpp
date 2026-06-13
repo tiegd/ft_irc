@@ -6,13 +6,13 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 18:33:23 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/27 10:15:35 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/06/13 13:05:42 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 
-void	sendPrivmsgToUser(Client* client, std::string const& target, SOCKET sockTarget, std::string const& message);
+void	sendPrivmsgToUser(Client* client, Client* target, std::string const& message);
 void	sendPrivmsgToChannel(Channel* channel, Client* client, std::string const& message);
 int		sameRecipientMultipleTimes(std::vector<std::string> nicknames);
 
@@ -96,7 +96,9 @@ void	Server::sendMessage( Client *client, std::string recipient, std::string mes
 			throw std::invalid_argument("Socket for nickname given can't be found");
 		}
 		else
-			sendPrivmsgToUser(client, recipient, sockRecipient, message);
+		{
+			sendPrivmsgToUser(client, _clients[sockRecipient], message);
+		}
 	}
 }
 
@@ -131,11 +133,12 @@ bool	Server::channelExist( std::string channelName )
 /*
 	Message format: :Angel!wings@irc.org PRIVMSG Wiz :Are you receiving this message!
 */
-void	sendPrivmsgToUser(Client* client, std::string const& target, SOCKET sockTarget, std::string const& message)
+void	sendPrivmsgToUser(Client* client, Client* target, std::string const& message)
 {
-	std::string fullMsg = ":" + client->getFullName() + " PRIVMSG " + target + " :" + message + "\r\n";
-	if (send(sockTarget, fullMsg.c_str(), fullMsg.size(), 0) < 0)
-			std::cerr << "send() error" << std::endl;
+	std::string fullMsg = ":" + client->getFullName() + " PRIVMSG " + client->getNickname() + " :" + message + "\r\n";
+	target->outBuff += fullMsg;
+	// if (send(sockTarget, fullMsg.c_str(), fullMsg.size(), 0) < 0)
+	// 		std::cerr << "send() error" << std::endl;
 }
 
 void	sendPrivmsgToChannel(Channel* channel, Client* client, std::string const& message)

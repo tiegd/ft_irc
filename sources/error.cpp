@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/20 16:27:20 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/27 15:29:32 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/06/13 12:28:38 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@
 */
 void	sendError( Client *client, std::string const& msgToClient )
 {
-	send(client->getSocketClient(), msgToClient.c_str(), msgToClient.size(), 0);
+	// send(client->getSocketClient(), msgToClient.c_str(), msgToClient.size(), 0);
+	client->outBuff += msgToClient;
 }
 
 // { -------------- NICK ------------------ }

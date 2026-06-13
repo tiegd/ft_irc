@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   INVITE.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/11 17:33:07 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/27 13:56:53 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/06/13 12:29:25 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ void	Server::INVITE(std::string const& line, Client* client)
 void	sendInviteToUser(Client* client, Client* target, std::string const& channel)
 {
 	std::string fullMsg = ":" + client->getFullName() + " INVITE " + target->getNickname() + SPACE + channel + "\r\n";
-	if (send(target->getSocketClient(), fullMsg.c_str(), fullMsg.size(), 0) < 0)
-			std::cerr << "send() error" << std::endl;
+	target->outBuff += fullMsg;
+	// if (send(target->getSocketClient(), fullMsg.c_str(), fullMsg.size(), 0) < 0)
+	// 		std::cerr << "send() error" << std::endl;
 }
