@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/15 12:42:23 by amerzone          #+#    #+#             */
-/*   Updated: 2026/06/13 13:05:16 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/06/19 10:27:36 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@ void	Server::runServer( void )
 					continue ;
 				}
 
-				int bytes = recv(_fds[i].fd, buff, sizeof(buff), 0);
+				ssize_t bytes = recv(_fds[i].fd, buff, sizeof(buff), 0);
 				if (bytes <= 0)
 				{
 					QUIT("", _clients[_fds[i].fd]);

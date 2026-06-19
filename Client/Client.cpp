@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Client.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/16 17:03:42 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/28 15:04:47 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/06/19 10:54:40 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,14 +44,6 @@ std::string	Client::getFullName( void ) const // ":nick!user@host"
 {
 	std::string	fullName = _nickname + "!" + _username + "@" + _hostname;
 	return fullName;
-}
-
-void		Client::sendNotif( std::string notification )
-{
-	if (send(_clientSocket, notification.c_str(), notification.size(), 0) < 0)
-	{
-		std::cout << "sendNotif() error" << std::endl;
-	}
 }
 
 void		Client::broadcastToMyChannels( std::string notification )

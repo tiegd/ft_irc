@@ -6,14 +6,14 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/23 14:21:16 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/06/13 12:29:37 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/06/19 10:38:40 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 
-void	sendNoticeToUser(Client* client, std::string const& target, SOCKET sockTarget, std::string const& message);
-void	sendNoticeToChannel(Channel* channel, std::string const& target, Client* client, std::string const& message);
+void	sendNoticeToUser(Client* client, Client* target, std::string const& message);
+void	sendNoticeToChannel(Channel* channel, Client* client, std::string const& message);
 
 void	Server::NOTICE( std::string const& line, Client* client)
 {
@@ -64,7 +64,7 @@ void	Server::sendNotice( Client *client, std::string recipient, std::string mess
 		{
 			if (_channels[recipient]->clientIsOnChannel(client))
 			{
-				sendNoticeToChannel(_channels[recipient], recipient, client, message);
+				sendNoticeToChannel(_channels[recipient], client, message);
 			}
 			else
 			{
@@ -82,24 +82,22 @@ void	Server::sendNotice( Client *client, std::string recipient, std::string mess
 		{
 			throw std::invalid_argument("Socket for nickname given can't be found");
 		}
-		sendNoticeToUser(client, recipient, sockRecipient, message);
+		sendNoticeToUser(client, _clients[sockRecipient], message);
 	}
 }
 
 /*
-	Message format: :Angel!wings@irc.org PRIVMSG Wiz :Are you receiving this message!
+	Message format: :Angel!wings@irc.org NOTICE Wiz :Are you receiving this message!
 */
-void	sendNoticeToUser(Client* client, std::string const& target, SOCKET sockTarget, std::string const& message)
+void	sendNoticeToUser(Client* client, Client* target, std::string const& message)
 {
-	std::string fullMsg = ":" + client->getFullName() + " NOTICE " + target + " :" + message + "\r\n";
-	// std::cout << fullMsg << std::endl;
-	if (send(sockTarget, fullMsg.c_str(), fullMsg.size(), 0) < 0)
-			std::cerr << "send() error" << std::endl;
+	std::string fullMsg = ":" + client->getFullName() + " NOTICE " + target->getNickname() + " :" + message + "\r\n";
+	target->outBuff += fullMsg;
 }
 
-void	sendNoticeToChannel(Channel* channel, std::string const& target, Client* client, std::string const& message)
+void	sendNoticeToChannel(Channel* channel, Client* client, std::string const& message)
 {
-	std::string fullMsg = ":" + client->getFullName() + " NOTICE " + target + " :" + message + "\r\n";
+	std::string fullMsg = ":" + client->getFullName() + " NOTICE " + channel->getName() + " :" + message + "\r\n";
 	channel->broadcastToAll(fullMsg, client);
 }
 

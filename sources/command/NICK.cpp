@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   NICK.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gaducurt <gaducurt@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/20 18:34:09 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/05/19 16:35:53 by gaducurt         ###   ########.fr       */
+/*   Updated: 2026/06/19 10:52:42 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int	Server::NICK( std::string const & line, Client* client )
 		}
 	}
 	std::string	notification = ":" + client->getNickname() + "!" + client->getUsername() + "@" + client->getHostname() + " NICK " + temp + "\r\n";
-	client->sendNotif(notification);
+	client->outBuff += notification;
 	client->broadcastToMyChannels(notification);
 	client->setNickname(temp);
 	_nicknameAlreadyUsed.push_back(temp);

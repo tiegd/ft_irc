@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 11:34:51 by gaducurt          #+#    #+#             */
-/*   Updated: 2026/06/13 12:28:03 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/06/19 10:29:26 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -357,17 +357,12 @@ void	Channel::broadcastToAll( std::string const& message, Client* sender )
 		if ((*it)->getSocketClient() == sender->getSocketClient())
 			continue;
 		(*it)->outBuff += message;
-		// if (send((*it)->getSocketClient(), message.c_str(), message.size(), 0) < 0)
-		// 	std::cout << "send() error" << std::endl;
-
 	}
 	for (std::vector<Client*>::iterator it = _operator.begin(); it != _operator.end(); it++)
 	{
 		if ((*it)->getSocketClient() == sender->getSocketClient())
 			continue;
 		(*it)->outBuff += message;
-		// if (send((*it)->getSocketClient(), message.c_str(), message.size(), 0) < 0)
-		// 	std::cout << "send() error" << std::endl;
 	}
 }
 

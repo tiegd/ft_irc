@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/11 17:33:07 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/06/13 12:29:25 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/06/19 10:51:01 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,4 @@ void	sendInviteToUser(Client* client, Client* target, std::string const& channel
 {
 	std::string fullMsg = ":" + client->getFullName() + " INVITE " + target->getNickname() + SPACE + channel + "\r\n";
 	target->outBuff += fullMsg;
-	// if (send(target->getSocketClient(), fullMsg.c_str(), fullMsg.size(), 0) < 0)
-	// 		std::cerr << "send() error" << std::endl;
 }

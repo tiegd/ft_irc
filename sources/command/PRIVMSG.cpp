@@ -6,7 +6,7 @@
 /*   By: jpiquet <jpiquet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/22 18:33:23 by jpiquet           #+#    #+#             */
-/*   Updated: 2026/06/13 13:05:42 by jpiquet          ###   ########.fr       */
+/*   Updated: 2026/06/19 10:35:02 by jpiquet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,10 +135,8 @@ bool	Server::channelExist( std::string channelName )
 */
 void	sendPrivmsgToUser(Client* client, Client* target, std::string const& message)
 {
-	std::string fullMsg = ":" + client->getFullName() + " PRIVMSG " + client->getNickname() + " :" + message + "\r\n";
+	std::string fullMsg = ":" + client->getFullName() + " PRIVMSG " + target->getNickname() + " :" + message + "\r\n";
 	target->outBuff += fullMsg;
-	// if (send(sockTarget, fullMsg.c_str(), fullMsg.size(), 0) < 0)
-	// 		std::cerr << "send() error" << std::endl;
 }
 
 void	sendPrivmsgToChannel(Channel* channel, Client* client, std::string const& message)
